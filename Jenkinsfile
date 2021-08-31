@@ -71,7 +71,7 @@ if (BRANCH == "main" || BRANCH == "test-acc") {
                     parameters: [
                         [$class: "StringParameterValue", name: "INVENTORY", value: "acceptance"],
                         [$class: "StringParameterValue", name: "PLAYBOOK", value: "deploy.yml"],
-                        [$class: "StringParameterValue", name: "PLAYBOOKPARAMS", value: "-e cmdb_id=app_krefia"]
+                        [$class: "StringParameterValue", name: "PLAYBOOKPARAMS", value: "-e cmdb_id=app_mijn-krefia"]
                     ]
             }
         }
