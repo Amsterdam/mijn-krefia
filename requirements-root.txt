@@ -1,0 +1,17 @@
+# flask and plugins
+flask
+Flask-Testing
+
+# testing / formatting tools
+flake8
+coverage
+black
+
+# error reporting
+sentry-sdk[flask]
+
+# Tma lib
+tma-saml>=0.4.2
+
+# SOAP service
+zeep

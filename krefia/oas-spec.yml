@@ -1,0 +1,116 @@
+openapi: 3.0.3
+info:
+  title: Krefia[Allegro] koppel api
+  description: Verbinding tussen Mijn Amsterdam en het Allegro systeem van Krefia
+  version: 1.0.0
+  contact:
+    email: datapunt@amsterdam.nl
+    name: Datapunt Support
+    url: https://data.amsterdam.nl/
+servers:
+  - url: http://localhost
+    description: Development server
+  - url: https://mijn.acc.amsterdam.nl/api
+    description: Acceptance server
+  - url: https://mijn.amsterdam.nl/api
+    description: Production server
+paths:
+  /status/health:
+    get:
+      description: Endpoint for checking wheter the server has started.
+      responses:
+        "200":
+          description: Returns "OK" when server is started
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthyResponse"
+  /krefia/all:
+    get:
+      description: Returns a collection of items related to a BSN number
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AllResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    HealthyResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - OK
+        content:
+          type: string
+          enum:
+            - OK
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - ERROR
+        message:
+          type: string
+          enum:
+            - TMA error occurred
+            - Server error occurred
+            - Request error occurred
+    DeepLinks:
+      type: object
+      properties:
+        budgetbeheer:
+          $ref: "#/components/schemas/LinkProps"
+        schuldhulpregeling:
+          $ref: "#/components/schemas/LinkProps"
+        lening:
+          $ref: "#/components/schemas/LinkProps"
+    KrefiaContent:
+      type: object
+      properties:
+        deepLinks:
+          $ref: "#/components/schemas/DeepLinks"
+        notificationTriggers:
+          type: object
+          properties:
+            fibu:
+              $ref: "#/components/schemas/NotificationTrigger"
+            krediet:
+              $ref: "#/components/schemas/NotificationTrigger"
+    AllResponse:
+      type: object
+      properties:
+        content:
+          $ref: "#/components/schemas/KrefiaContent"
+        status:
+          type: string
+          enum:
+            - OK
+    NotificationTrigger:
+      type: object
+      properties:
+        datePublished:
+          $ref: "#/components/schemas/DateTime"
+        url:
+          type: string
+    LinkProps:
+      type: object
+      properties:
+        url:
+          type: string
+        title:
+          type: string
+    DateTime:
+      type: string
+      format: date-time
