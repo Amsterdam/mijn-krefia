@@ -24,6 +24,7 @@ TMAException = (SamlVerificationException, InvalidBSNException, SamlExpiredExcep
 logger = logging.getLogger(__name__)
 
 WSDL_PATH = ""
+ALLEGRO_SOAP_ENDPOINT = os.getenv("ALLEGRO_SOAP_ENDPOINT", None)
 
 
 def get_sentry_dsn():
