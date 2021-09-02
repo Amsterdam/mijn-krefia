@@ -15,9 +15,9 @@ COPY uwsgi.ini /app/
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
 COPY test.sh /app/
+COPY docker-entrypoint.sh /app/
 COPY .flake8 /app/
 
 COPY krefia /app/krefia
 
-USER datapunt
-CMD uwsgi --ini /app/uwsgi.ini
+ENTRYPOINT /app/docker-entrypoint.sh
