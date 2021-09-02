@@ -1,4 +1,4 @@
-FROM amsterdam/python:3.8-buster
+FROM amsterdam/python:3.8-buster as base-app
 
 LABEL maintainer=datapunt@amsterdam.nl
 
@@ -19,5 +19,7 @@ COPY .flake8 /app/
 
 COPY krefia /app/krefia
 
-USER datapunt
-CMD uwsgi --ini /app/uwsgi.ini
+FROM base-app as prod-app
+
+COPY docker-entrypoint.sh /app/
+ENTRYPOINT /app/docker-entrypoint.sh

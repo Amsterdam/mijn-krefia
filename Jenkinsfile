@@ -32,7 +32,7 @@ node {
     stage("Test") {
         tryStep "test", {
             docker.withRegistry("${DOCKER_REGISTRY_HOST}", "docker_registry_auth") {
-                docker.build("mijnams/krefia:${env.BUILD_NUMBER}")
+                docker.build("mijnams/krefia:${env.BUILD_NUMBER}", "--target=base-app .")
                 sh "docker run --rm mijnams/krefia:${env.BUILD_NUMBER} /app/test.sh"
             }
         }
