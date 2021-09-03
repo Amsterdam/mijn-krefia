@@ -40,24 +40,24 @@
             <xs:simpleType name="eSoortRelatie">
                 <xs:annotation>
                     <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                        1e positie: Klant
-                        2e positie: Opdrachtgever
-                        3e positie: Hulpverlener
-                        4e positie: Schuldeiser
-                        5e positie: Eigen organisatie
-                        6e positie: Andere instantie.
+               
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				1e positie: Klant
+2e positie: Opdrachtgever
+3e positie: Hulpverlener
+4e positie: Schuldeiser
+5e positie: Eigen organisatie
+6e positie: Andere instantie.
                     </xs:documentation>
                 </xs:annotation>
                 <xs:restriction base="xs:string">
@@ -97,16 +97,16 @@
             <xs:simpleType name="eSoortDocument">
                 <xs:annotation>
                     <xs:documentation>
-
-
-
-
-
-
-
-
-
-                        AW_aSoortDocument in AllegroWebPortierConst
+               
+				
+				
+				
+				
+				
+				
+				
+				
+				AW_aSoortDocument in AllegroWebPortierConst
                     </xs:documentation>
                 </xs:annotation>
                 <xs:restriction base="xs:string">
@@ -233,21 +233,21 @@
             <xs:complexType name="TTest">
                 <xs:annotation>
                     <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                        Struct met 2 properties:
-                        1) Veld1 van het type WideString
-                        2) Veld2 van het type Integer
+            
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				Struct met 2 properties:
+1) Veld1 van het type WideString
+2) Veld2 van het type Integer
                     </xs:documentation>
                 </xs:annotation>
                 <xs:sequence>
@@ -260,19 +260,19 @@
             <xs:complexType name="AWUserInfo">
                 <xs:annotation>
                     <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                        Een meer uitgebreid UserInfo struct om extra informatie in kwijt te kunnen.
+            
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				Een meer uitgebreid UserInfo struct om extra informatie in kwijt te kunnen.
                     </xs:documentation>
                 </xs:annotation>
                 <xs:complexContent>
@@ -389,35 +389,35 @@
             <xs:complexType name="TCasusHeader">
                 <xs:annotation>
                     <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                        TCasusHeader bevat :
-                        - Relatiecode
-                        - Volgnummer
-                        - Aanmaakdatum
-                        - CasusStatus
-                        * Aanmelding (aanmelding &apos;in progress&apos;)
-                        * Aanmelding voltooid (aanmelding voltooid)
-                        * Inventarisatie (inventarisatie bezig)
-                        * Analyse (analyse bezig)
-                        * Plan Van Aanpak (plan van aanpak bezig)
-                        * Fiattering (fiattering bezig)
-                        * Slapend (laatste plan van aanpak gefiatteerd)
-                        * Crisis (crisis)
-                        * Afwijzing (casus zit in afwijzingsfase)
-                        * Einde (casus zit in beeindigingsfase)
-                        * Inactief (casus niet meer actief)
-                        * Geen status
+            
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				TCasusHeader bevat : 
+- Relatiecode
+- Volgnummer
+- Aanmaakdatum
+- CasusStatus
+  * Aanmelding (aanmelding &apos;in progress&apos;)
+  * Aanmelding voltooid (aanmelding voltooid)
+  * Inventarisatie (inventarisatie bezig)
+  * Analyse (analyse bezig)
+  * Plan Van Aanpak (plan van aanpak bezig)
+  * Fiattering (fiattering bezig)
+  * Slapend (laatste plan van aanpak gefiatteerd)
+  * Crisis (crisis)
+  * Afwijzing (casus zit in afwijzingsfase)
+  * Einde (casus zit in beeindigingsfase)
+  * Inactief (casus niet meer actief)
+  * Geen status
                     </xs:documentation>
                 </xs:annotation>
                 <xs:sequence>
@@ -438,19 +438,19 @@
             <xs:complexType name="TCasusInfo">
                 <xs:annotation>
                     <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                        Bevat volledige info over een casus.
+            
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				Bevat volledige info over een casus.
                     </xs:documentation>
                 </xs:annotation>
                 <xs:sequence>
@@ -1291,19 +1291,19 @@
             <xs:complexType name="TPRSAfschrift">
                 <xs:annotation>
                     <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                        Tbv. PRS Online Afschriften
+            
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				Tbv. PRS Online Afschriften
                     </xs:documentation>
                 </xs:annotation>
                 <xs:sequence>
@@ -1316,114 +1316,114 @@
                     <xs:element name="SaldoPrs" type="xs:double">
                         <xs:annotation>
                             <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                                Saldo Prs op moment vervaardiging afschrift
+                  
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						Saldo Prs op moment vervaardiging afschrift
                             </xs:documentation>
                         </xs:annotation>
                     </xs:element>
                     <xs:element name="TotaalBedragBijMutaties" type="xs:double">
                         <xs:annotation>
                             <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                                Conform vervaardiging afschrift
+                  
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						Conform vervaardiging afschrift
                             </xs:documentation>
                         </xs:annotation>
                     </xs:element>
                     <xs:element name="TotaalBedragAfMutaties" type="xs:double">
                         <xs:annotation>
                             <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                                Conform vervaardiging afschrift
+                  
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						Conform vervaardiging afschrift
                             </xs:documentation>
                         </xs:annotation>
                     </xs:element>
                     <xs:element name="TotaalInReserveringen" type="xs:double">
                         <xs:annotation>
                             <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                                Conform vervaardiging afschrift
+                  
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						Conform vervaardiging afschrift
                             </xs:documentation>
                         </xs:annotation>
                     </xs:element>
                     <xs:element name="TotaalUitReserveringen" type="xs:double">
                         <xs:annotation>
                             <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                                Conform vervaardiging afschrift
+                  
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						Conform vervaardiging afschrift
                             </xs:documentation>
                         </xs:annotation>
                     </xs:element>
                     <xs:element name="TotaalSaldoReserveringen" type="xs:double">
                         <xs:annotation>
                             <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                                Totaal saldo reserveringen op moment vervaardiging afschrift
+                  
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						Totaal saldo reserveringen op moment vervaardiging afschrift
                             </xs:documentation>
                         </xs:annotation>
                     </xs:element>
@@ -1440,76 +1440,76 @@
             <xs:complexType name="TPRSAfschriftMutatie">
                 <xs:annotation>
                     <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                        tbv. PRS Online Afschrift mutaties
+            
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				tbv. PRS Online Afschrift mutaties
                     </xs:documentation>
                 </xs:annotation>
                 <xs:sequence>
                     <xs:element name="VolgnummerMutatie" type="xs:int">
                         <xs:annotation>
                             <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                                Uniek volgnummer van de mutatie
+                  
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						Uniek volgnummer van de mutatie
                             </xs:documentation>
                         </xs:annotation>
                     </xs:element>
                     <xs:element name="Contractcode" type="xs:int">
                         <xs:annotation>
                             <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                                Eventueel de relatiecode van het contract waarop de mutatie betrekking heeft.
+                  
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						Eventueel de relatiecode van het contract waarop de mutatie betrekking heeft.
                             </xs:documentation>
                         </xs:annotation>
                     </xs:element>
                     <xs:element name="ContractVolgnummer" type="xs:int">
                         <xs:annotation>
                             <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                                Eventueel het volgnummer van het contract waarop de mutatie betrekking heeft.
+                  
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						Eventueel het volgnummer van het contract waarop de mutatie betrekking heeft.
                             </xs:documentation>
                         </xs:annotation>
                     </xs:element>
@@ -1524,23 +1524,23 @@
                     <xs:element name="Omschrijving" type="xs:string">
                         <xs:annotation>
                             <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                                Afhankelijk van de waarde van bestaande parameter 757 van Allegro
-                                wordt in deze omschrijving de eventuele toevoeging &apos;BBR: &apos; weggelaten.
-                                Afhankelijk van de waarde van bestaande parameter 758 van Allegro
-                                wordt in deze omschrijving het eventuele saldo van een reservering
-                                al dan niet weggelaten.
+                  
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						Afhankelijk van de waarde van bestaande parameter 757 van Allegro
+wordt in deze omschrijving de eventuele toevoeging &apos;BBR: &apos; weggelaten.
+Afhankelijk van de waarde van bestaande parameter 758 van Allegro
+wordt in deze omschrijving het eventuele saldo van een reservering
+al dan niet weggelaten.
                             </xs:documentation>
                         </xs:annotation>
                     </xs:element>
@@ -1551,22 +1551,22 @@
                     <xs:element name="Reservering" type="xs:boolean">
                         <xs:annotation>
                             <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                                indicatie of dit een mutatie op een reservering betreft
-                                (in/uit reservering - van/naar prs: indien het een mutatie is
-                                uit een reservering die direct is doorbetaald, krijgt deze
-                                mutatie dus niet de indicatie &apos;reservering&apos;).
+                  
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						indicatie of dit een mutatie op een reservering betreft
+(in/uit reservering - van/naar prs: indien het een mutatie is
+uit een reservering die direct is doorbetaald, krijgt deze
+mutatie dus niet de indicatie &apos;reservering&apos;).
                             </xs:documentation>
                         </xs:annotation>
                     </xs:element>
@@ -1575,19 +1575,19 @@
             <xs:complexType name="TPRSAfschriftReservering">
                 <xs:annotation>
                     <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                        tbv. PRS Online Afschrift reserveringen
+            
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				tbv. PRS Online Afschrift reserveringen
                     </xs:documentation>
                 </xs:annotation>
                 <xs:sequence>
@@ -1598,19 +1598,19 @@
                     <xs:element name="Saldo" type="xs:double">
                         <xs:annotation>
                             <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                                Het saldo van de reservering op datum vervaardiging afschrift.
+                  
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						Het saldo van de reservering op datum vervaardiging afschrift.
                             </xs:documentation>
                         </xs:annotation>
                     </xs:element>
@@ -1619,19 +1619,19 @@
             <xs:complexType name="TPRSAfschriften">
                 <xs:annotation>
                     <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                        Array van TPRSAfschrift
+            
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				Array van TPRSAfschrift
                     </xs:documentation>
                 </xs:annotation>
                 <xs:sequence>
@@ -1774,24 +1774,24 @@
             <xs:complexType name="TCasusToelichting">
                 <xs:annotation>
                     <xs:documentation>
+            
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				Als toelichting 4 met subtitel 0 wordt opgevraagd van een casus, en toelichting 4 bestaat uit 7 subtitels, komen dus 7 resultaten terug in de array:
+  - Toelichting 4 met subtitel 1
+  - Toelichting 4 met subtitel 2
+  - Etc.
 
-
-
-
-
-
-
-
-
-
-
-
-                        Als toelichting 4 met subtitel 0 wordt opgevraagd van een casus, en toelichting 4 bestaat uit 7 subtitels, komen dus 7 resultaten terug in de array:
-                        - Toelichting 4 met subtitel 1
-                        - Toelichting 4 met subtitel 2
-                        - Etc.
-
-                        Bij deze resultaten zullen de gegevens Titel, TitelTitel, Medewerker en Datum allemaal gelijk zijn (ze betreffen immers allemaal toelichting 4).
+Bij deze resultaten zullen de gegevens Titel, TitelTitel, Medewerker en Datum allemaal gelijk zijn (ze betreffen immers allemaal toelichting 4).
                     </xs:documentation>
                 </xs:annotation>
                 <xs:sequence>
@@ -2804,19 +2804,19 @@
             <xs:complexType name="TestArray">
                 <xs:annotation>
                     <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                        Array van TTest.
+            
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				Array van TTest.
                     </xs:documentation>
                 </xs:annotation>
                 <xs:sequence>
@@ -2831,19 +2831,19 @@
             <xs:complexType name="CasusHeaderArray">
                 <xs:annotation>
                     <xs:documentation>
-
-
-
-
-
-
-
-
-
-
-
-
-                        Deze array bevat TCasusHeader items.
+            
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				Deze array bevat TCasusHeader items.
                     </xs:documentation>
                 </xs:annotation>
                 <xs:sequence>
@@ -3190,7 +3190,27 @@
                     <xs:element name="anyType" minOccurs="0" maxOccurs="unbounded" type="xs:anyType" />
                 </xs:sequence>
             </xs:complexType>
-            <xs:element name="SchuldHulpService___GetSBOverzicht">
+            <xs:element name="LoginService___AllegroWebLogin">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="aUsername" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                        <xs:element name="aPassword" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="LoginService___AllegroWebLoginResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Result" minOccurs="1" maxOccurs="1" type="xs:boolean">
+                        </xs:element>
+                        <xs:element name="aUserInfo" minOccurs="1" maxOccurs="1" type="tns:AWUserInfo">
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="LoginService___AllegroWebMagAanmelden">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="aRelatieCode" minOccurs="1" maxOccurs="1" type="xs:int">
@@ -3198,106 +3218,41 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="SchuldHulpService___GetSBOverzichtResponse">
+            <xs:element name="LoginService___AllegroWebMagAanmeldenResponse">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="Result" minOccurs="1" maxOccurs="1" type="tns:SBHeaderArray">
+                        <xs:element name="Result" minOccurs="1" maxOccurs="1" type="xs:boolean">
+                        </xs:element>
+                        <xs:element name="aUserInfo" minOccurs="1" maxOccurs="1" type="tns:AWUserInfo">
                         </xs:element>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="SchuldHulpService___GetSB">
+            <xs:element name="LoginService___AllegroWebLoginTijdelijk">
+                <xs:complexType />
+            </xs:element>
+            <xs:element name="LoginService___AllegroWebLoginTijdelijkResponse">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="aHeader" minOccurs="1" maxOccurs="1" type="tns:TSBHeader">
+                        <xs:element name="Result" minOccurs="1" maxOccurs="1" type="xs:boolean">
+                        </xs:element>
+                        <xs:element name="aUserInfo" minOccurs="1" maxOccurs="1" type="tns:AWUserInfo">
                         </xs:element>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="SchuldHulpService___GetSBResponse">
+            <xs:element name="LoginService___BSNNaarRelatie">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="Result" minOccurs="1" maxOccurs="1" type="tns:TSB">
+                        <xs:element name="BSN" minOccurs="1" maxOccurs="1" type="xs:int">
                         </xs:element>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="SchuldHulpService___GetSBEisers">
+            <xs:element name="LoginService___BSNNaarRelatieResponse">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="aHeader" minOccurs="1" maxOccurs="1" type="tns:TSBHeader">
-                        </xs:element>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="SchuldHulpService___GetSBEisersResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="Result" minOccurs="1" maxOccurs="1" type="tns:TSBEisers">
-                        </xs:element>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="SchuldHulpService___GetSRVOverzicht">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="aRelatieCode" minOccurs="1" maxOccurs="1" type="xs:int">
-                        </xs:element>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="SchuldHulpService___GetSRVOverzichtResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="Result" minOccurs="1" maxOccurs="1" type="tns:SRVAanvraagHeaderArray">
-                        </xs:element>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="SchuldHulpService___GetSRVAanvraag">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="aHeader" minOccurs="1" maxOccurs="1" type="tns:TSRVAanvraagHeader">
-                        </xs:element>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="SchuldHulpService___GetSRVAanvraagResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="Result" minOccurs="1" maxOccurs="1" type="tns:TSRVAanvraag">
-                        </xs:element>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="SchuldHulpService___GetSRVEisers">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="aHeader" minOccurs="1" maxOccurs="1" type="tns:TSRVAanvraagHeader">
-                        </xs:element>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="SchuldHulpService___GetSRVEisersResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="Result" minOccurs="1" maxOccurs="1" type="tns:TSRVEisers">
-                        </xs:element>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="SchuldHulpService___GetLijstSchuldeisers">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="aZoekargument" minOccurs="1" maxOccurs="1" type="xs:string">
-                        </xs:element>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="SchuldHulpService___GetLijstSchuldeisersResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="Result" minOccurs="1" maxOccurs="1" type="tns:OrganisatieArray">
+                        <xs:element name="Result" minOccurs="1" maxOccurs="1" type="xs:int">
                         </xs:element>
                         <xs:element name="ExtraInfo" minOccurs="1" maxOccurs="1" type="xs:int">
                         </xs:element>
@@ -3306,15 +3261,15 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="SchuldHulpService___AanvraagSR">
+            <xs:element name="LoginService___GenereerWachtwoord">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="aAanvraagSR" minOccurs="1" maxOccurs="1" type="tns:TAanvraagSR">
+                        <xs:element name="Email" minOccurs="1" maxOccurs="1" type="xs:string">
                         </xs:element>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="SchuldHulpService___AanvraagSRResponse">
+            <xs:element name="LoginService___GenereerWachtwoordResponse">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="Result" minOccurs="1" maxOccurs="1" type="xs:boolean">
@@ -3326,18 +3281,164 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="SchuldHulpService___Aanvraag2SR">
+            <xs:element name="LoginService___NieuweRegistratie">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="aAanvraag2SR" minOccurs="1" maxOccurs="1" type="tns:TAanvraag2SR">
+                        <xs:element name="RelatieCode" minOccurs="1" maxOccurs="1" type="xs:int">
+                        </xs:element>
+                        <xs:element name="GeboorteDatum" minOccurs="1" maxOccurs="1" type="xs:int">
+                        </xs:element>
+                        <xs:element name="Achternaam" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                        <xs:element name="Email" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                        <xs:element name="Wachtwoord" minOccurs="1" maxOccurs="1" type="xs:string">
                         </xs:element>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="SchuldHulpService___Aanvraag2SRResponse">
+            <xs:element name="LoginService___NieuweRegistratieResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Result" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                        <xs:element name="ExtraInfo" minOccurs="1" maxOccurs="1" type="xs:int">
+                        </xs:element>
+                        <xs:element name="ExtraInfoOmschrijving" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="LoginService___ActiveerRegistratie">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="RelatieCode" minOccurs="1" maxOccurs="1" type="xs:int">
+                        </xs:element>
+                        <xs:element name="RegistratieCode" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="LoginService___ActiveerRegistratieResponse">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="Result" minOccurs="1" maxOccurs="1" type="xs:boolean">
+                        </xs:element>
+                        <xs:element name="ExtraInfo" minOccurs="1" maxOccurs="1" type="xs:int">
+                        </xs:element>
+                        <xs:element name="ExtraInfoOmschrijving" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="LoginService___NieuwContact">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="OrganisatieCode" minOccurs="1" maxOccurs="1" type="xs:int">
+                        </xs:element>
+                        <xs:element name="Achternaam" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                        <xs:element name="Voorvoegsels" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                        <xs:element name="Voornaam" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                        <xs:element name="Voorletters" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                        <xs:element name="Geslacht" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                        <xs:element name="GeboorteDatum" minOccurs="1" maxOccurs="1" type="xs:int">
+                        </xs:element>
+                        <xs:element name="Telefoonnummer" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                        <xs:element name="EmailAdres" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                        <xs:element name="Wachtwoord" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="LoginService___NieuwContactResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Result" minOccurs="1" maxOccurs="1" type="xs:boolean">
+                        </xs:element>
+                        <xs:element name="ExtraInfo" minOccurs="1" maxOccurs="1" type="xs:int">
+                        </xs:element>
+                        <xs:element name="ExtraInfoOmschrijving" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="LoginService___CheckWachtwoord">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="sEmailAdres" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="LoginService___CheckWachtwoordResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Result" minOccurs="1" maxOccurs="1" type="xs:boolean">
+                        </xs:element>
+                        <xs:element name="bIndicatie" minOccurs="1" maxOccurs="1" type="xs:boolean">
+                        </xs:element>
+                        <xs:element name="ExtraInfo" minOccurs="1" maxOccurs="1" type="xs:int">
+                        </xs:element>
+                        <xs:element name="ExtraInfoOmschrijving" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="LoginService___NieuweRegistratieBSN">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="RelatieCode" minOccurs="1" maxOccurs="1" type="xs:int">
+                        </xs:element>
+                        <xs:element name="GeboorteDatum" minOccurs="1" maxOccurs="1" type="xs:int">
+                        </xs:element>
+                        <xs:element name="BSN" minOccurs="1" maxOccurs="1" type="xs:int">
+                        </xs:element>
+                        <xs:element name="Achternaam" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                        <xs:element name="Email" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                        <xs:element name="Wachtwoord" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="LoginService___NieuweRegistratieBSNResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Result" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                        <xs:element name="ExtraInfo" minOccurs="1" maxOccurs="1" type="xs:int">
+                        </xs:element>
+                        <xs:element name="ExtraInfoOmschrijving" minOccurs="1" maxOccurs="1" type="xs:string">
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="LoginService___Logout">
+                <xs:complexType />
+            </xs:element>
+            <xs:element name="LoginService___LogoutResponse">
+                <xs:complexType />
+            </xs:element>
+            <xs:element name="LoginService___BSNNaarRelatieMetBedrijf">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="BSN" minOccurs="1" maxOccurs="1" type="xs:int">
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="LoginService___BSNNaarRelatieMetBedrijfResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Result" minOccurs="1" maxOccurs="1" type="tns:RelatiecodeBedrijfcodeArray">
                         </xs:element>
                         <xs:element name="ExtraInfo" minOccurs="1" maxOccurs="1" type="xs:int">
                         </xs:element>
@@ -3355,109 +3456,135 @@
             </xs:element>
         </xs:schema>
     </wsdl:types>
-    <wsdl:message name="SchuldHulpService___GetSBOverzichtRequest">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___GetSBOverzicht" />
+    <wsdl:message name="LoginService___AllegroWebLoginRequest">
+        <wsdl:part name="parameters" element="tns:LoginService___AllegroWebLogin" />
     </wsdl:message>
-    <wsdl:message name="SchuldHulpService___GetSBOverzichtResponse">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___GetSBOverzichtResponse" />
+    <wsdl:message name="LoginService___AllegroWebLoginResponse">
+        <wsdl:part name="parameters" element="tns:LoginService___AllegroWebLoginResponse" />
     </wsdl:message>
-    <wsdl:message name="SchuldHulpService___GetSBRequest">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___GetSB" />
+    <wsdl:message name="LoginService___AllegroWebMagAanmeldenRequest">
+        <wsdl:part name="parameters" element="tns:LoginService___AllegroWebMagAanmelden" />
     </wsdl:message>
-    <wsdl:message name="SchuldHulpService___GetSBResponse">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___GetSBResponse" />
+    <wsdl:message name="LoginService___AllegroWebMagAanmeldenResponse">
+        <wsdl:part name="parameters" element="tns:LoginService___AllegroWebMagAanmeldenResponse" />
     </wsdl:message>
-    <wsdl:message name="SchuldHulpService___GetSBEisersRequest">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___GetSBEisers" />
+    <wsdl:message name="LoginService___AllegroWebLoginTijdelijkRequest">
+        <wsdl:part name="parameters" element="tns:LoginService___AllegroWebLoginTijdelijk" />
     </wsdl:message>
-    <wsdl:message name="SchuldHulpService___GetSBEisersResponse">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___GetSBEisersResponse" />
+    <wsdl:message name="LoginService___AllegroWebLoginTijdelijkResponse">
+        <wsdl:part name="parameters" element="tns:LoginService___AllegroWebLoginTijdelijkResponse" />
     </wsdl:message>
-    <wsdl:message name="SchuldHulpService___GetSRVOverzichtRequest">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___GetSRVOverzicht" />
+    <wsdl:message name="LoginService___BSNNaarRelatieRequest">
+        <wsdl:part name="parameters" element="tns:LoginService___BSNNaarRelatie" />
     </wsdl:message>
-    <wsdl:message name="SchuldHulpService___GetSRVOverzichtResponse">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___GetSRVOverzichtResponse" />
+    <wsdl:message name="LoginService___BSNNaarRelatieResponse">
+        <wsdl:part name="parameters" element="tns:LoginService___BSNNaarRelatieResponse" />
     </wsdl:message>
-    <wsdl:message name="SchuldHulpService___GetSRVAanvraagRequest">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___GetSRVAanvraag" />
+    <wsdl:message name="LoginService___GenereerWachtwoordRequest">
+        <wsdl:part name="parameters" element="tns:LoginService___GenereerWachtwoord" />
     </wsdl:message>
-    <wsdl:message name="SchuldHulpService___GetSRVAanvraagResponse">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___GetSRVAanvraagResponse" />
+    <wsdl:message name="LoginService___GenereerWachtwoordResponse">
+        <wsdl:part name="parameters" element="tns:LoginService___GenereerWachtwoordResponse" />
     </wsdl:message>
-    <wsdl:message name="SchuldHulpService___GetSRVEisersRequest">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___GetSRVEisers" />
+    <wsdl:message name="LoginService___NieuweRegistratieRequest">
+        <wsdl:part name="parameters" element="tns:LoginService___NieuweRegistratie" />
     </wsdl:message>
-    <wsdl:message name="SchuldHulpService___GetSRVEisersResponse">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___GetSRVEisersResponse" />
+    <wsdl:message name="LoginService___NieuweRegistratieResponse">
+        <wsdl:part name="parameters" element="tns:LoginService___NieuweRegistratieResponse" />
     </wsdl:message>
-    <wsdl:message name="SchuldHulpService___GetLijstSchuldeisersRequest">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___GetLijstSchuldeisers" />
+    <wsdl:message name="LoginService___ActiveerRegistratieRequest">
+        <wsdl:part name="parameters" element="tns:LoginService___ActiveerRegistratie" />
     </wsdl:message>
-    <wsdl:message name="SchuldHulpService___GetLijstSchuldeisersResponse">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___GetLijstSchuldeisersResponse" />
+    <wsdl:message name="LoginService___ActiveerRegistratieResponse">
+        <wsdl:part name="parameters" element="tns:LoginService___ActiveerRegistratieResponse" />
     </wsdl:message>
-    <wsdl:message name="SchuldHulpService___AanvraagSRRequest">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___AanvraagSR" />
+    <wsdl:message name="LoginService___NieuwContactRequest">
+        <wsdl:part name="parameters" element="tns:LoginService___NieuwContact" />
     </wsdl:message>
-    <wsdl:message name="SchuldHulpService___AanvraagSRResponse">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___AanvraagSRResponse" />
+    <wsdl:message name="LoginService___NieuwContactResponse">
+        <wsdl:part name="parameters" element="tns:LoginService___NieuwContactResponse" />
     </wsdl:message>
-    <wsdl:message name="SchuldHulpService___Aanvraag2SRRequest">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___Aanvraag2SR" />
+    <wsdl:message name="LoginService___CheckWachtwoordRequest">
+        <wsdl:part name="parameters" element="tns:LoginService___CheckWachtwoord" />
     </wsdl:message>
-    <wsdl:message name="SchuldHulpService___Aanvraag2SRResponse">
-        <wsdl:part name="parameters" element="tns:SchuldHulpService___Aanvraag2SRResponse" />
+    <wsdl:message name="LoginService___CheckWachtwoordResponse">
+        <wsdl:part name="parameters" element="tns:LoginService___CheckWachtwoordResponse" />
+    </wsdl:message>
+    <wsdl:message name="LoginService___NieuweRegistratieBSNRequest">
+        <wsdl:part name="parameters" element="tns:LoginService___NieuweRegistratieBSN" />
+    </wsdl:message>
+    <wsdl:message name="LoginService___NieuweRegistratieBSNResponse">
+        <wsdl:part name="parameters" element="tns:LoginService___NieuweRegistratieBSNResponse" />
+    </wsdl:message>
+    <wsdl:message name="LoginService___LogoutRequest">
+        <wsdl:part name="parameters" element="tns:LoginService___Logout" />
+    </wsdl:message>
+    <wsdl:message name="LoginService___LogoutResponse">
+        <wsdl:part name="parameters" element="tns:LoginService___LogoutResponse" />
+    </wsdl:message>
+    <wsdl:message name="LoginService___BSNNaarRelatieMetBedrijfRequest">
+        <wsdl:part name="parameters" element="tns:LoginService___BSNNaarRelatieMetBedrijf" />
+    </wsdl:message>
+    <wsdl:message name="LoginService___BSNNaarRelatieMetBedrijfResponse">
+        <wsdl:part name="parameters" element="tns:LoginService___BSNNaarRelatieMetBedrijfResponse" />
     </wsdl:message>
     <wsdl:message name="ROClientIDHeaderMessage">
         <wsdl:part name="ROClientID" element="tns:ROClientIDHeader" />
     </wsdl:message>
-    <wsdl:portType name="SchuldHulpService">
-        <wsdl:operation name="GetSBOverzicht">
-            <wsdl:input message="tns:SchuldHulpService___GetSBOverzichtRequest" />
-            <wsdl:output message="tns:SchuldHulpService___GetSBOverzichtResponse" />
+    <wsdl:portType name="LoginService">
+        <wsdl:operation name="AllegroWebLogin">
+            <wsdl:input message="tns:LoginService___AllegroWebLoginRequest" />
+            <wsdl:output message="tns:LoginService___AllegroWebLoginResponse" />
         </wsdl:operation>
-        <wsdl:operation name="GetSB">
-            <wsdl:input message="tns:SchuldHulpService___GetSBRequest" />
-            <wsdl:output message="tns:SchuldHulpService___GetSBResponse" />
+        <wsdl:operation name="AllegroWebMagAanmelden">
+            <wsdl:input message="tns:LoginService___AllegroWebMagAanmeldenRequest" />
+            <wsdl:output message="tns:LoginService___AllegroWebMagAanmeldenResponse" />
         </wsdl:operation>
-        <wsdl:operation name="GetSBEisers">
-            <wsdl:input message="tns:SchuldHulpService___GetSBEisersRequest" />
-            <wsdl:output message="tns:SchuldHulpService___GetSBEisersResponse" />
+        <wsdl:operation name="AllegroWebLoginTijdelijk">
+            <wsdl:input message="tns:LoginService___AllegroWebLoginTijdelijkRequest" />
+            <wsdl:output message="tns:LoginService___AllegroWebLoginTijdelijkResponse" />
         </wsdl:operation>
-        <wsdl:operation name="GetSRVOverzicht">
-            <wsdl:input message="tns:SchuldHulpService___GetSRVOverzichtRequest" />
-            <wsdl:output message="tns:SchuldHulpService___GetSRVOverzichtResponse" />
+        <wsdl:operation name="BSNNaarRelatie">
+            <wsdl:input message="tns:LoginService___BSNNaarRelatieRequest" />
+            <wsdl:output message="tns:LoginService___BSNNaarRelatieResponse" />
         </wsdl:operation>
-        <wsdl:operation name="GetSRVAanvraag">
-            <wsdl:input message="tns:SchuldHulpService___GetSRVAanvraagRequest" />
-            <wsdl:output message="tns:SchuldHulpService___GetSRVAanvraagResponse" />
+        <wsdl:operation name="GenereerWachtwoord">
+            <wsdl:input message="tns:LoginService___GenereerWachtwoordRequest" />
+            <wsdl:output message="tns:LoginService___GenereerWachtwoordResponse" />
         </wsdl:operation>
-        <wsdl:operation name="GetSRVEisers">
-            <wsdl:input message="tns:SchuldHulpService___GetSRVEisersRequest" />
-            <wsdl:output message="tns:SchuldHulpService___GetSRVEisersResponse" />
+        <wsdl:operation name="NieuweRegistratie">
+            <wsdl:input message="tns:LoginService___NieuweRegistratieRequest" />
+            <wsdl:output message="tns:LoginService___NieuweRegistratieResponse" />
         </wsdl:operation>
-        <wsdl:operation name="GetLijstSchuldeisers">
-            <wsdl:input message="tns:SchuldHulpService___GetLijstSchuldeisersRequest" />
-            <wsdl:output message="tns:SchuldHulpService___GetLijstSchuldeisersResponse" />
+        <wsdl:operation name="ActiveerRegistratie">
+            <wsdl:input message="tns:LoginService___ActiveerRegistratieRequest" />
+            <wsdl:output message="tns:LoginService___ActiveerRegistratieResponse" />
         </wsdl:operation>
-        <wsdl:operation name="AanvraagSR">
-            <wsdl:documentation>
-
-                deprecated Allegro 3.26.1
-            </wsdl:documentation>
-            <wsdl:input message="tns:SchuldHulpService___AanvraagSRRequest" />
-            <wsdl:output message="tns:SchuldHulpService___AanvraagSRResponse" />
+        <wsdl:operation name="NieuwContact">
+            <wsdl:input message="tns:LoginService___NieuwContactRequest" />
+            <wsdl:output message="tns:LoginService___NieuwContactResponse" />
         </wsdl:operation>
-        <wsdl:operation name="Aanvraag2SR">
-            <wsdl:input message="tns:SchuldHulpService___Aanvraag2SRRequest" />
-            <wsdl:output message="tns:SchuldHulpService___Aanvraag2SRResponse" />
+        <wsdl:operation name="CheckWachtwoord">
+            <wsdl:input message="tns:LoginService___CheckWachtwoordRequest" />
+            <wsdl:output message="tns:LoginService___CheckWachtwoordResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="NieuweRegistratieBSN">
+            <wsdl:input message="tns:LoginService___NieuweRegistratieBSNRequest" />
+            <wsdl:output message="tns:LoginService___NieuweRegistratieBSNResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="Logout">
+            <wsdl:input message="tns:LoginService___LogoutRequest" />
+            <wsdl:output message="tns:LoginService___LogoutResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="BSNNaarRelatieMetBedrijf">
+            <wsdl:input message="tns:LoginService___BSNNaarRelatieMetBedrijfRequest" />
+            <wsdl:output message="tns:LoginService___BSNNaarRelatieMetBedrijfResponse" />
         </wsdl:operation>
     </wsdl:portType>
-    <wsdl:binding name="SchuldHulpServiceBinding" type="tns:SchuldHulpService">
+    <wsdl:binding name="LoginServiceBinding" type="tns:LoginService">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-        <wsdl:operation name="GetSBOverzicht">
-            <soap:operation soapAction="urn:KreditLibrary-SchuldHulpService#GetSBOverzicht" style="document" />
+        <wsdl:operation name="AllegroWebLogin">
+            <soap:operation soapAction="urn:KreditLibrary-LoginService#AllegroWebLogin" style="document" />
             <wsdl:input>
                 <soap:body use="literal" />
                 <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
@@ -3467,8 +3594,8 @@
                 <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="GetSB">
-            <soap:operation soapAction="urn:KreditLibrary-SchuldHulpService#GetSB" style="document" />
+        <wsdl:operation name="AllegroWebMagAanmelden">
+            <soap:operation soapAction="urn:KreditLibrary-LoginService#AllegroWebMagAanmelden" style="document" />
             <wsdl:input>
                 <soap:body use="literal" />
                 <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
@@ -3478,8 +3605,8 @@
                 <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="GetSBEisers">
-            <soap:operation soapAction="urn:KreditLibrary-SchuldHulpService#GetSBEisers" style="document" />
+        <wsdl:operation name="AllegroWebLoginTijdelijk">
+            <soap:operation soapAction="urn:KreditLibrary-LoginService#AllegroWebLoginTijdelijk" style="document" />
             <wsdl:input>
                 <soap:body use="literal" />
                 <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
@@ -3489,8 +3616,8 @@
                 <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="GetSRVOverzicht">
-            <soap:operation soapAction="urn:KreditLibrary-SchuldHulpService#GetSRVOverzicht" style="document" />
+        <wsdl:operation name="BSNNaarRelatie">
+            <soap:operation soapAction="urn:KreditLibrary-LoginService#BSNNaarRelatie" style="document" />
             <wsdl:input>
                 <soap:body use="literal" />
                 <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
@@ -3500,8 +3627,8 @@
                 <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="GetSRVAanvraag">
-            <soap:operation soapAction="urn:KreditLibrary-SchuldHulpService#GetSRVAanvraag" style="document" />
+        <wsdl:operation name="GenereerWachtwoord">
+            <soap:operation soapAction="urn:KreditLibrary-LoginService#GenereerWachtwoord" style="document" />
             <wsdl:input>
                 <soap:body use="literal" />
                 <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
@@ -3511,8 +3638,8 @@
                 <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="GetSRVEisers">
-            <soap:operation soapAction="urn:KreditLibrary-SchuldHulpService#GetSRVEisers" style="document" />
+        <wsdl:operation name="NieuweRegistratie">
+            <soap:operation soapAction="urn:KreditLibrary-LoginService#NieuweRegistratie" style="document" />
             <wsdl:input>
                 <soap:body use="literal" />
                 <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
@@ -3522,8 +3649,8 @@
                 <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="GetLijstSchuldeisers">
-            <soap:operation soapAction="urn:KreditLibrary-SchuldHulpService#GetLijstSchuldeisers" style="document" />
+        <wsdl:operation name="ActiveerRegistratie">
+            <soap:operation soapAction="urn:KreditLibrary-LoginService#ActiveerRegistratie" style="document" />
             <wsdl:input>
                 <soap:body use="literal" />
                 <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
@@ -3533,8 +3660,8 @@
                 <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="AanvraagSR">
-            <soap:operation soapAction="urn:KreditLibrary-SchuldHulpService#AanvraagSR" style="document" />
+        <wsdl:operation name="NieuwContact">
+            <soap:operation soapAction="urn:KreditLibrary-LoginService#NieuwContact" style="document" />
             <wsdl:input>
                 <soap:body use="literal" />
                 <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
@@ -3544,8 +3671,41 @@
                 <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
             </wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="Aanvraag2SR">
-            <soap:operation soapAction="urn:KreditLibrary-SchuldHulpService#Aanvraag2SR" style="document" />
+        <wsdl:operation name="CheckWachtwoord">
+            <soap:operation soapAction="urn:KreditLibrary-LoginService#CheckWachtwoord" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+                <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+                <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="NieuweRegistratieBSN">
+            <soap:operation soapAction="urn:KreditLibrary-LoginService#NieuweRegistratieBSN" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+                <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+                <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="Logout">
+            <soap:operation soapAction="urn:KreditLibrary-LoginService#Logout" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+                <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+                <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="BSNNaarRelatieMetBedrijf">
+            <soap:operation soapAction="urn:KreditLibrary-LoginService#BSNNaarRelatieMetBedrijf" style="document" />
             <wsdl:input>
                 <soap:body use="literal" />
                 <soap:header message="tns:ROClientIDHeaderMessage" use="literal" part="ROClientID" />
@@ -3556,9 +3716,9 @@
             </wsdl:output>
         </wsdl:operation>
     </wsdl:binding>
-    <wsdl:service name="SchuldHulpService">
-        <wsdl:port name="SchuldHulpServicePort" binding="tns:SchuldHulpServiceBinding">
-            <soap:address location="https://schuldhulp-ft.sociaal.amsterdam.nl:8084/SOAP?service=SchuldHulpService" />
+    <wsdl:service name="LoginService">
+        <wsdl:port name="LoginServicePort" binding="tns:LoginServiceBinding">
+            <soap:address location="https://10.205.130.12:8084/SOAP?service=LoginService" />
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>
