@@ -1,7 +1,11 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from krefia.allegro_client import connect, get_all, get_service
+from krefia.allegro_client import (
+    get_client_service,
+    get_allegro_service_description,
+    get_relatienummer,
+)
 
 
 class ClientTests(TestCase):
