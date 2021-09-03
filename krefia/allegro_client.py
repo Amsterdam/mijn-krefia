@@ -1,8 +1,10 @@
-from krefia.config import ALLEGRO_SOAP_ENDPOINT
-from zeep import Client
-from flask import g, request
 import inspect
 from pprint import pprint
+
+from flask import g
+from zeep import Client
+
+from krefia.config import get_allegro_service_description
 
 
 def get_user_attributes(cls):
@@ -11,7 +13,7 @@ def get_user_attributes(cls):
 
 
 def connect():
-    client = Client(wsdl=ALLEGRO_SOAP_ENDPOINT)
+    client = Client(wsdl=get_allegro_service_description())
     print("==service==")
     pprint(get_user_attributes(client.service))
     return client.service

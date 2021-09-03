@@ -26,6 +26,10 @@ logger = logging.getLogger(__name__)
 ALLEGRO_SOAP_ENDPOINT = os.getenv("ALLEGRO_SOAP_ENDPOINT", None)
 
 
+def get_allegro_service_description(service_name: str = "LoginService"):
+    return ALLEGRO_SOAP_ENDPOINT + "?service=" + service_name
+
+
 def get_sentry_dsn():
     return os.getenv("SENTRY_DSN", None)
 
