@@ -1,4 +1,4 @@
-from krefia.config import ALLEGRO_SOAP_ENDPOINT, WSDL_PATH
+from krefia.config import ALLEGRO_SOAP_ENDPOINT
 from zeep import Client
 from flask import g, request
 import inspect
