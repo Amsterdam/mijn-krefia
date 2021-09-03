@@ -1,5 +1,7 @@
 import logging
+import logging.config
 import os
+import sys
 import os.path
 from datetime import date, time
 
@@ -22,6 +24,12 @@ TMAException = (SamlVerificationException, InvalidBSNException, SamlExpiredExcep
 
 
 logger = logging.getLogger(__name__)
+stdout_handler = logging.StreamHandler(sys.stdout)
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s",
+    handlers=[stdout_handler],
+)
 
 ALLEGRO_SOAP_ENDPOINT = os.getenv("ALLEGRO_SOAP_ENDPOINT", None)
 
@@ -42,3 +50,30 @@ class CustomJSONEncoder(JSONEncoder):
             return obj.isoformat()
 
         return JSONEncoder.default(self, obj)
+
+
+# logging.config.dictConfig(
+#     {
+#         "version": 1,
+#         "formatters": {
+#             "verbose": {
+#                 "format": "(%(process)d) %(asctime)s %(name)s (line %(lineno)s) | %(levelname)s %(message)s"
+#             }
+#         },
+#         "handlers": {
+#             "console": {
+#                 "level": "DEBUG",
+#                 "class": "logging.StreamHandler",
+#                 "formatter": "verbose",
+#                 "stream": sys.stdout,
+#             },
+#         },
+#         "loggers": {
+#             "zeep.transports": {
+#                 "level": "DEBUG",
+#                 "propagate": True,
+#                 "handlers": ["console"],
+#             },
+#         },
+#     }
+# )
