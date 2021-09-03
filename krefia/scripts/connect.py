@@ -5,7 +5,7 @@ from krefia.allegro_client import connect
 
 bsn = sys.argv[1]
 
-client = connect()
+service = connect()
 
 print("=====client=====", bsn)
-pprint(client)
+pprint(service)
