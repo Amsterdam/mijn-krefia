@@ -1,9 +1,11 @@
 import sys
 from pprint import pprint
 
-from krefia.allegro_client import get_relatienummer
+from krefia.allegro_client import login_tijdelijk
 
 bsn = sys.argv[1]
 
 
-get_relatienummer(bsn)
+response = login_tijdelijk()
+
+pprint(response)

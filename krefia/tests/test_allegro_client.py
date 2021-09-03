@@ -1,3 +1,6 @@
+from krefia.helpers import get_user_attributes
+from zeep.helpers import serialize_object
+from krefia.tests.mocks import MockClient
 from unittest import TestCase
 from unittest.mock import patch
 
@@ -5,12 +8,22 @@ from krefia.allegro_client import (
     get_client_service,
     get_allegro_service_description,
     get_relatienummer,
+    login_tijdelijk,
 )
+import pprint
+
+pp = pprint.PrettyPrinter(indent=4)
 
 
 class ClientTests(TestCase):
-    def test_connect(self):
-        self.assertEqual([], [])
+    @patch("krefia.config.ALLEGRO_SOAP_ENDPOINT", "http://none?")
+    @patch("krefia.allegro_client.Client", new=MockClient)
+    def test_get_client(self):
+        response = login_tijdelijk()
+        pp.pprint(
+            response,
+        )
+        # self.assertEqual()
 
     def test_get_service(self):
         self.assertEqual(True, True)

@@ -1,9 +1,15 @@
+import inspect
 import os
 from functools import wraps
+from pprint import pprint
 
 from flask import g, request
-from tma_saml import HR_KVK_NUMBER_KEY
-from tma_saml import SamlVerificationException, get_digi_d_bsn, get_e_herkenning_attribs
+from tma_saml import (
+    HR_KVK_NUMBER_KEY,
+    SamlVerificationException,
+    get_digi_d_bsn,
+    get_e_herkenning_attribs,
+)
 from tma_saml.tma_saml import get_user_type
 from tma_saml.user_type import UserType
 
@@ -87,3 +93,8 @@ def success_response_json(response_content):
 
 def error_response_json(message: str, code: int = 500):
     return {"status": "ERROR", "message": message}, code
+
+
+def get_user_attributes(cls):
+    boring = dir(type("dummy", (object,), {}))
+    return [item for item in inspect.getmembers(cls) if item[0] not in boring]
