@@ -5,7 +5,7 @@ from flask import g, request
 
 def connect():
     client = Client(wsdl=WSDL_PATH)
-    print(client.service.Method1("Zeep", "is cool"))
+    print("client:", client.service.LoginService.AllegroWebLoginTijdelijk())
     return client
 
 
