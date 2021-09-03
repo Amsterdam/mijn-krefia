@@ -11,13 +11,16 @@ def get_user_attributes(cls):
 
 
 def connect():
-    client = Client(wsdl=WSDL_PATH)
-    service = client.create_service(
-        "{http://tempuri.org/}LoginServiceBinding", ALLEGRO_SOAP_ENDPOINT
-    )
-    pprint(get_user_attributes(service))
-    print("service:", service.AllegroWebLoginTijdelijk())
-    return service
+    client = Client(wsdl=ALLEGRO_SOAP_ENDPOINT)
+    print("==client==")
+    pprint(get_user_attributes(client))
+    print("==service==")
+    pprint(get_user_attributes(client.service))
+    print("service:", client.service.AllegroWebLoginTijdelijk())
+    factory = client.type_factory("ns0")
+    print("==factory==")
+    pprint(get_user_attributes(factory))
+    return client.service
 
 
 def get_service():

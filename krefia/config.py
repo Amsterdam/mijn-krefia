@@ -23,7 +23,6 @@ TMAException = (SamlVerificationException, InvalidBSNException, SamlExpiredExcep
 
 logger = logging.getLogger(__name__)
 
-WSDL_PATH = "krefia/Allegro-KreditLibrary.wsdl"
 ALLEGRO_SOAP_ENDPOINT = os.getenv("ALLEGRO_SOAP_ENDPOINT", None)
 
 
