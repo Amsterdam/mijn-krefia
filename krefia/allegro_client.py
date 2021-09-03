@@ -94,8 +94,8 @@ def login_tijdelijk():
     if not response["v1:aUserInfo"]["v1:SessionID"]:
         return None
 
-    session_id = re.compile(r"[\{\}]")
-    session_id = re.sub(session_id, "", response["v1:aUserInfo"]["v1:SessionID"])
+    curly_braces = re.compile(r"[\{\}]")
+    session_id = re.sub(curly_braces, "", response["v1:aUserInfo"]["v1:SessionID"])
 
     return {"session_id": session_id}
 
