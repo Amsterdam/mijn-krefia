@@ -66,7 +66,7 @@ def get_service(service_name):
     return allegro_service
 
 
-def call_service_method(method_name: str, service_name: str = "LoginService", **kwargs):
+def call_service_method(method_name: str, service_name: str = "LoginService", *args):
     service = get_client_service(service_name)
 
     if not service:
@@ -76,7 +76,7 @@ def call_service_method(method_name: str, service_name: str = "LoginService", **
     response = None
 
     try:
-        response = getattr(service, method_name)(**kwargs)
+        response = getattr(service, method_name)(*args)
     except Exception as error:
         logger.error(error)
 
