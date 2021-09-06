@@ -22,6 +22,28 @@ class MockClient:
 
 class MockService:
     def AllegroWebLoginTijdelijk(self):
+        # {
+        #     "header": {"ROClientID": {"ID": "{6BE0FE0C-E54D-498D-B15A-9AABBA567114}"}},
+        #     "body": {
+        #         "Result": True,
+        #         "aUserInfo": {
+        #             "SessionID": "{6BE0FE0C-E54D-498D-B15A-9AABBA567114}",
+        #             "UserID": "AnonymousLoginNA",
+        #             "Privileges": None,
+        #             "Attributes": None,
+        #             "UserData": None,
+        #             "LoginType": None,
+        #             "RelatieCode": 0,
+        #             "Naam": "Tijdelijke Login",
+        #             "LaatsteLogin": datetime.datetime(2021, 9, 6, 16, 46, 15, 731000),
+        #             "Autorisaties": None,
+        #             "ExtraInfo": 0,
+        #             "ExtraInfoOmschrijving": None,
+        #             "WachtwoordWijzigen": False,
+        #         },
+        #     },
+        # }
+        # TODO: Parse Response with zeep
         return MockResponse(reply=load_fixture_as_bytes("AllegroWebLoginTijdelijk.xml"))
 
 

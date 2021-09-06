@@ -77,12 +77,6 @@ def call_service_method(method_name: str, service_name: str = "LoginService", *k
 
     try:
         response = getattr(service, method_name)(*kwargs)
-        response_xml = response.content.replace("\n", "")
-        response_key = "v1:%s___%sResponse" % (service_name, method_name)
-        match = re.search(
-            r"<" + response_key + ">.*</" + response_key + ">", response_xml
-        )
-        response = xmltodict.parse(match.group(0))[response_key]
     except Exception as error:
         logger.error(error)
 
@@ -92,13 +86,10 @@ def call_service_method(method_name: str, service_name: str = "LoginService", *k
 def login_tijdelijk():
     response = call_service_method("AllegroWebLoginTijdelijk")
 
-    if not response["v1:aUserInfo"]["v1:SessionID"]:
+    if not response["body"]["Result"]:
         return None
 
-    curly_braces = re.compile(r"[\{\}]")
-    session_id = re.sub(curly_braces, "", response["v1:aUserInfo"]["v1:SessionID"])
-
-    return {"session_id": session_id}
+    return {"session_id": response["body"]["aUserInfo"]["SessionID"]}
 
 
 def get_relatienummer(bsn=None):
