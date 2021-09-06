@@ -104,6 +104,70 @@ def get_relatienummer(bsn=None):
     return call_service_method("BSNNaarRelatie", bsn=bsn)
 
 
+def get_schuldhulp_link():
+    response = call_service_method("")
+
+    if not response[""]:
+        return None
+
+    url = ""
+    title = ""
+
+    return {"title": title, "url": url}
+
+
+def get_budgetbeheer_link():
+    response = call_service_method("")
+
+    if not response[""]:
+        return None
+
+    url = ""
+    title = ""
+
+    return {"title": title, "url": url}
+
+
+def get_lening_link():
+    response = call_service_method("")
+
+    if not response[""]:
+        return None
+
+    url = ""
+    title = ""
+
+    return {"title": title, "url": url}
+
+
+def get_notification_triggers():
+
+    fibu_notification = None
+    krediet_notification = None
+
+    response = call_service_method("")
+
+    if not response[""]:
+        return None
+
+    return {
+        "fibu": fibu_notification,
+        "krediet": krediet_notification,
+    }
+
+
 def get_all(user_id: str):
-    # get_service().service.get()
-    return []
+    schuldhulp = get_schuldhulp_link()
+    lening = get_lening_link()
+    budgetbeheer = get_budgetbeheer_link()
+
+    notification_triggers = get_notification_triggers()
+
+    return {
+        "deepLinks": {
+            "schuldhulp": schuldhulp,
+            "lening": lening,
+            "budgetbeheer": budgetbeheer,
+        },
+        "notificationTriggers": notification_triggers,
+    }
