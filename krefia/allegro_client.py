@@ -51,7 +51,8 @@ def get_client(service_name: str = "LoginService"):
 def get_client_service(service_name):
     client = get_client(service_name)
     if client:
-        return client.service
+        with client.settings(raw_response=True):
+            return client.service
 
     return None
 

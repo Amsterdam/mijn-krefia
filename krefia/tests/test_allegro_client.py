@@ -19,7 +19,11 @@ class ClientTests(TestCase):
     @patch("krefia.config.ALLEGRO_SOAP_ENDPOINT", "http://none?")
     @patch("krefia.allegro_client.Client", new=MockClient)
     def test_get_client(self):
-        self.assertEqual(True, True)
+        # response = login_tijdelijk()
+        # pp.pprint(
+        #     response,
+        # )
+        self.assertEqual(None, None)
 
     def test_get_service(self):
         self.assertEqual(True, True)
