@@ -66,7 +66,10 @@ def get_service(service_name):
     return allegro_service
 
 
-def call_service_method(method_name: str, service_name: str = "LoginService", *args):
+def call_service_method(operation: str, *args):
+
+    service_name, method_name = operation.split(".")
+
     service = get_client_service(service_name)
 
     if not service:
@@ -84,7 +87,7 @@ def call_service_method(method_name: str, service_name: str = "LoginService", *a
 
 
 def login_tijdelijk():
-    response = call_service_method("AllegroWebLoginTijdelijk")
+    response = call_service_method("LoginService.AllegroWebLoginTijdelijk")
 
     if not response["body"]["Result"]:
         return None
@@ -93,7 +96,7 @@ def login_tijdelijk():
 
 
 def get_relatienummer(bsn=None):
-    return call_service_method(method_name="BSNNaarRelatie", bsn=bsn)
+    return call_service_method("LoginService.BSNNaarRelatie", bsn)
 
 
 def get_schuldhulp_link():
