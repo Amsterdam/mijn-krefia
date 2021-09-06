@@ -20,7 +20,7 @@ class ClientTests(TestCase):
     @patch("krefia.allegro_client.Client", new=MockClient)
     def test_get_client(self):
         # response = login_tijdelijk()
-        response = get_relatienummer(bsn="123")
+        # response = get_relatienummer(bsn="123")
         # pp.pprint(
         #     response,
         # )
