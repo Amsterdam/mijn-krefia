@@ -1,6 +1,4 @@
 # Mock the soap client
-import base64
-import json
 import os
 
 from krefia.config import BASE_PATH

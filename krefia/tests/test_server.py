@@ -33,8 +33,17 @@ class ApiTests(FlaskServerTMATestCase):
         self.assertEqual(response.status_code, 200)
         data = response.get_json()
 
+        expected_content = {
+            "deepLinks": {
+                "schuldhulp": None,
+                "lening": None,
+                "budgetbeheer": None,
+            },
+            "notificationTriggers": None,
+        }
+
         self.assertEqual(data["status"], "OK")
-        self.assertEqual(data["content"], [])
+        self.assertEqual(data["content"], expected_content)
 
     def test_not_authenticated(self):
         response = self.client.get("/krefia/all")

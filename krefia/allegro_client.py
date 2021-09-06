@@ -69,7 +69,7 @@ def call_service_method(method_name: str, service_name: str = "LoginService", *k
     service = get_client_service(service_name)
 
     if not service:
-        logger.error(f"%s, no service." % method_name)
+        logger.error("%s, no service." % method_name)
         return
 
     response = None
@@ -79,7 +79,7 @@ def call_service_method(method_name: str, service_name: str = "LoginService", *k
         response_xml = response.content.replace("\n", "")
         response_key = "v1:%s___%sResponse" % (service_name, method_name)
         match = re.search(
-            r"<" + response_key + ">.*<\/" + response_key + ">", response_xml
+            r"<" + response_key + ">.*</" + response_key + ">", response_xml
         )
         response = xmltodict.parse(match.group(0))[response_key]
     except Exception as error:
@@ -157,11 +157,11 @@ def get_notification_triggers():
 
 
 def get_all(user_id: str):
-    schuldhulp = get_schuldhulp_link()
-    lening = get_lening_link()
-    budgetbeheer = get_budgetbeheer_link()
+    schuldhulp = None  # get_schuldhulp_link()
+    lening = None  # get_lening_link()
+    budgetbeheer = None  # get_budgetbeheer_link()
 
-    notification_triggers = get_notification_triggers()
+    notification_triggers = None  # get_notification_triggers()
 
     return {
         "deepLinks": {
