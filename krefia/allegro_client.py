@@ -78,10 +78,9 @@ def get_session_header():
     </ROClientIDHeader>
     """
 
-    session_header = header(
-        ID=session_id,
-    )
-
+    # session_header = header(
+    #     ID=session_id,
+    # )
     # print(session_header)
 
     # return [session_header]
