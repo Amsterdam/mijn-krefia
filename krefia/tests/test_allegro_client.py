@@ -8,7 +8,9 @@ from krefia.allegro_client import (
     get_client_service,
     get_allegro_service_description,
     get_relatienummer,
+    get_session_header,
     login_tijdelijk,
+    set_session_id,
 )
 import pprint
 
@@ -16,9 +18,10 @@ pp = pprint.PrettyPrinter(indent=4)
 
 
 class ClientTests(TestCase):
-    @patch("krefia.config.ALLEGRO_SOAP_ENDPOINT", "http://none?")
-    @patch("krefia.allegro_client.Client", new=MockClient)
     def test_get_client(self):
+        # set_session_id("123123")
+        # h = get_session_header()
+        # print(h)
         # response = login_tijdelijk()
         # response = get_relatienummer(bsn="123")
         # pp.pprint(

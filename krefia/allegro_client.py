@@ -1,36 +1,32 @@
-from requests import Session, ConnectionError
+import zeep
+from requests import ConnectionError, Session
 from requests.auth import HTTPBasicAuth
-
-from flask import g
 from zeep import Client
 from zeep.transports import Transport
-import re
+
 from krefia.config import (
     ALLEGRO_SOAP_UA_STRING,
     get_allegro_service_description,
     logger,
 )
 
-import xmltodict
+session_id = None
+allegro_service = None
 
 
-def get_client(service_name: str = "LoginService"):
+def get_client():
     logger.info("Establishing a connection with Allegro")
 
-    session = Session()
-    session.headers["User-Agent"] = ALLEGRO_SOAP_UA_STRING
+    # session = Session()
+    # session.headers["User-Agent"] = ALLEGRO_SOAP_UA_STRING
     # session.auth = HTTPBasicAuth()
 
     timeout = 9  # Timeout period for getting WSDL and operations in seconds
 
     try:
-        transport = Transport(
-            session=session, timeout=timeout, operation_timeout=timeout
-        )
+        transport = Transport(timeout=timeout, operation_timeout=timeout)
 
-        client = Client(
-            wsdl=get_allegro_service_description(service_name), transport=transport
-        )
+        client = Client(wsdl=get_allegro_service_description(), transport=transport)
 
         return client
     except ConnectionError as e:
@@ -48,29 +44,55 @@ def get_client(service_name: str = "LoginService"):
         return None
 
 
-def get_client_service(service_name):
-    client = get_client(service_name)
-    if client:
-        with client.settings(raw_response=True):
-            return client.service
+def get_client_service():
+    client = get_client()
 
-    return None
+    # if client:
+    #     with client.settings(raw_response=True):
+
+    return client.service
 
 
-def get_service(service_name):
-    allegro_service = g.get("allegro_service" + service_name, None)
+def get_service():
+    global allegro_service
+
     if not allegro_service:
-        service = get_client_service(service_name)
-        if service:
-            allegro_service = g["allegro_service" + service_name] = service
+        allegro_service = get_client_service()
+
     return allegro_service
+
+
+def set_session_id(id: str):
+    global session_id
+    session_id = id
+
+
+def get_session_header():
+    client = get_client()
+    header = client.get_element("ns0:ROClientIDHeader")
+
+    """"
+    <ROClientIDHeader SOAP-ENV:mustUnderstand="0"
+        xmlns="http://tempuri.org/">
+        <ID>{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}</ID>
+    </ROClientIDHeader>
+    """
+
+    session_header = header(
+        ID=session_id,
+    )
+
+    # print(session_header)
+
+    # return [session_header]
+    return {"ROClientID": session_id}
 
 
 def call_service_method(operation: str, *args):
 
     service_name, method_name = operation.split(".")
 
-    service = get_client_service(service_name)
+    service = get_service(service_name)
 
     if not service:
         logger.error("%s, no service." % method_name)
@@ -79,7 +101,9 @@ def call_service_method(operation: str, *args):
     response = None
 
     try:
-        response = getattr(service, method_name)(*args)
+        response = getattr(service, method_name)(
+            _soapheaders=get_session_header(), *args
+        )
     except Exception as error:
         logger.error(error)
 
@@ -89,10 +113,12 @@ def call_service_method(operation: str, *args):
 def login_tijdelijk():
     response = call_service_method("LoginService.AllegroWebLoginTijdelijk")
 
-    if not response["body"]["Result"]:
-        return None
+    result = response["body"]["Result"]
 
-    return {"session_id": response["body"]["aUserInfo"]["SessionID"]}
+    if result:
+        set_session_id(response["body"]["aUserInfo"]["SessionID"])
+
+    return result
 
 
 def get_relatienummer(bsn=None):
