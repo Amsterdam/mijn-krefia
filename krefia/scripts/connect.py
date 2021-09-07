@@ -20,11 +20,10 @@ pprint(response)
 
 # response = get_relatienummer(bsn)
 # pprint(response)
-
-relatiecode = response["body"]["Result"]["TRelatiecodeBedrijfcode"][0]
+print("\n\n-----\n\n")
+relatiecode = response["body"]["Result"]["TRelatiecodeBedrijfcode"][0]["Relatiecode"]
 response = login_allowed(relatiecode)
 pprint(response)
-
-# relatienummer = None
-# response = get_relatienummer(relatienummer)
-# pprint(response)
+print("\n\n-----\n\n")
+response = get_relatienummer(relatiecode)
+pprint(response)
