@@ -35,8 +35,12 @@ ALLEGRO_SOAP_ENDPOINT = os.getenv("ALLEGRO_SOAP_ENDPOINT", None)
 ALLEGRO_SOAP_UA_STRING = "Mijn Amsterdam Krefia API"
 
 
-def get_allegro_service_description():
-    return "krefia/soap-api-definition-modified.xml"
+def get_allegro_service_description(service_name: str):
+    return "krefia/Allegro-%s-modified.wsdl" % service_name
+
+
+def get_allegro_service_endpoint(service_name: str):
+    return ALLEGRO_SOAP_ENDPOINT + "?service=%s" % service_name
 
 
 def get_sentry_dsn():

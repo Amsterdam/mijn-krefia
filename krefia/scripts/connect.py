@@ -7,9 +7,7 @@ bsn = None
 if len(sys.argv) >= 2:
     bsn = sys.argv[1]
 
-if bsn:
-    response = get_relatienummer(bsn)
-else:
-    response = login_tijdelijk()
+response = login_tijdelijk()
+response = get_relatienummer(bsn)
 
 pprint(response)

@@ -1,20 +1,19 @@
-import zeep
-from requests import ConnectionError, Session
-from requests.auth import HTTPBasicAuth
+from attr import s
+from requests import ConnectionError
 from zeep import Client
 from zeep.transports import Transport
 
 from krefia.config import (
-    ALLEGRO_SOAP_UA_STRING,
     get_allegro_service_description,
+    get_allegro_service_endpoint,
     logger,
 )
 
 session_id = None
-allegro_service = None
+allegro_service = {}
 
 
-def get_client():
+def get_client(service_name: str):
     logger.info("Establishing a connection with Allegro")
 
     # session = Session()
@@ -26,7 +25,9 @@ def get_client():
     try:
         transport = Transport(timeout=timeout, operation_timeout=timeout)
 
-        client = Client(wsdl=get_allegro_service_description(), transport=transport)
+        client = Client(
+            wsdl=get_allegro_service_description(service_name), transport=transport
+        )
 
         return client
     except ConnectionError as e:
@@ -44,30 +45,39 @@ def get_client():
         return None
 
 
-def get_client_service():
-    client = get_client()
+def get_client_service(service_name: str):
+    client = get_client(service_name)
 
-    # if client:
-    #     with client.settings(raw_response=True):
+    service = client.create_service(
+        "{http://tempuri.org/}%sBinding" % service_name,
+        get_allegro_service_endpoint(service_name),
+    )
 
-    return client.service
+    return service
 
 
-def get_service():
+def get_service(service_name: str):
     global allegro_service
 
-    if not allegro_service:
-        allegro_service = get_client_service()
+    if service_name not in allegro_service:
+        allegro_service[service_name] = get_client_service(service_name)
 
-    return allegro_service
+    return allegro_service[service_name]
 
 
 def set_session_id(id: str):
     global session_id
+
+    logger.info("Set session-id %s" % id)
+
     session_id = id
 
 
-def get_session_header():
+def get_session_id():
+    return session_id
+
+
+def get_session_header(service_name: str):
     """
     <ROClientIDHeader SOAP-ENV:mustUnderstand="0"
         xmlns="http://tempuri.org/">
@@ -75,15 +85,24 @@ def get_session_header():
     </ROClientIDHeader>
     """
 
-    # client = get_client()
-    # header = client.get_element("ns0:ROClientIDHeader")
-    # session_header = header(
-    #     ID=session_id,
-    # )
-    # print(session_header)
-    # return [session_header]
+    if not session_id:
+        return []
 
-    return {"ROClientID": session_id}
+    client = get_client(service_name)
+    header = client.get_element("ns0:ROClientIDHeader")
+    session_header = header(
+        ID=session_id,
+    )
+    return [session_header]
+
+    # return {"ROClientID": session_id}
+
+
+# def test_message():
+#     client = get_client("LoginService")
+#     node = client.create_message(
+#         client.service, "result", taskId="0000015ca2e45f838136c6b6000a0000000000ab"
+#     )
 
 
 def call_service_method(operation: str, *args):
@@ -100,7 +119,7 @@ def call_service_method(operation: str, *args):
 
     try:
         response = getattr(service, method_name)(
-            _soapheaders=get_session_header(), *args
+            _soapheaders=get_session_header(service_name), *args
         )
     except Exception as error:
         logger.error(error)

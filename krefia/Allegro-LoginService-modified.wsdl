@@ -3718,7 +3718,7 @@ Bij deze resultaten zullen de gegevens Titel, TitelTitel, Medewerker en Datum al
     </wsdl:binding>
     <wsdl:service name="LoginService">
         <wsdl:port name="LoginServicePort" binding="tns:LoginServiceBinding">
-            <soap:address location="https://schuldhulp-ft.sociaal.amsterdam.nl:8084/SOAP?service=LoginService" />
+            <soap:address location="https://fake.host/SOAP?service=LoginService" />
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>

@@ -1,33 +1,30 @@
-from krefia.helpers import get_user_attributes
-from zeep.helpers import serialize_object
-from krefia.tests.mocks import MockClient
-from unittest import TestCase
-from unittest.mock import patch
+import pprint
+from unittest import TestCase, mock
 
 from krefia.allegro_client import (
-    get_client_service,
     get_allegro_service_description,
+    get_client_service,
     get_relatienummer,
     get_session_header,
+    get_session_id,
     login_tijdelijk,
     set_session_id,
 )
-import pprint
+from krefia.tests.mocks import mock_soap_response
 
 pp = pprint.PrettyPrinter(indent=4)
 
 
 class ClientTests(TestCase):
-    def test_get_client(self):
-        # set_session_id("123123")
-        # h = get_session_header()
-        # print(h)
-        # response = login_tijdelijk()
-        # response = get_relatienummer(bsn="123")
-        # pp.pprint(
-        #     response,
-        # )
-        self.assertEqual(None, None)
+    @mock.patch("krefia.config.ALLEGRO_SOAP_ENDPOINT", "https://example.org/SOAP")
+    @mock.patch(
+        "zeep.transports.Transport.post",
+        side_effect=mock_soap_response("AllegroWebLoginTijdelijk.xml"),
+    )
+    def test_login_tijdelijk(self, magicMock):
+        response = login_tijdelijk()
+        self.assertEqual(response, True)
+        self.assertEqual(get_session_id(), "{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}")
 
     def test_get_service(self):
         self.assertEqual(True, True)
