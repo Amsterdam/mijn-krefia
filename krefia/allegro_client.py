@@ -138,16 +138,20 @@ def login_tijdelijk():
     return result
 
 
-def get_relatienummer(bsn=None):
+def login_allowed(relatiecode: str = None):
+    return call_service_method("LoginService.AllegroWebMagAanmelden", relatiecode)
+
+
+def get_relatienummer(bsn: str = None):
     return call_service_method("LoginService.BSNNaarRelatie", bsn)
 
 
-def get_relatienummer_bedrijf(bsn=None):
+def get_relatienummer_bedrijf(bsn: str = None):
     return call_service_method("LoginService.BSNNaarRelatieMetBedrijf", bsn)
 
 
-def get_schuldhulp_aanvragen(relatienummer=None):
-    return call_service_method("SchuldHulpService.GetSRVOverzicht", relatienummer)
+def get_schuldhulp_aanvragen(relatiecode: str = None):
+    return call_service_method("SchuldHulpService.GetSRVOverzicht", relatiecode)
 
 
 def get_schuldhulp_link():
