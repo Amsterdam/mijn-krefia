@@ -68,22 +68,21 @@ def set_session_id(id: str):
 
 
 def get_session_header():
-    client = get_client()
-    header = client.get_element("ns0:ROClientIDHeader")
-
-    """"
+    """
     <ROClientIDHeader SOAP-ENV:mustUnderstand="0"
         xmlns="http://tempuri.org/">
         <ID>{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}</ID>
     </ROClientIDHeader>
     """
 
+    # client = get_client()
+    # header = client.get_element("ns0:ROClientIDHeader")
     # session_header = header(
     #     ID=session_id,
     # )
     # print(session_header)
-
     # return [session_header]
+
     return {"ROClientID": session_id}
 
 
