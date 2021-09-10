@@ -71,10 +71,13 @@ components:
       type: object
       properties:
         budgetbeheer:
+          nullable: true
           $ref: "#/components/schemas/LinkProps"
         schuldhulpregeling:
+          nullable: true
           $ref: "#/components/schemas/LinkProps"
         lening:
+          nullable: true
           $ref: "#/components/schemas/LinkProps"
     KrefiaContent:
       type: object
@@ -85,13 +88,16 @@ components:
           type: object
           properties:
             fibu:
+              nullable: true
               $ref: "#/components/schemas/NotificationTrigger"
             krediet:
+              nullable: true
               $ref: "#/components/schemas/NotificationTrigger"
     AllResponse:
       type: object
       properties:
         content:
+          nullable: true
           $ref: "#/components/schemas/KrefiaContent"
         status:
           type: string

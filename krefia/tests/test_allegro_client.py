@@ -4,7 +4,6 @@ from unittest import TestCase, mock
 from krefia.allegro_client import (
     get_allegro_service_description,
     get_client_service,
-    get_relatienummer,
     get_session_header,
     get_session_id,
     login_tijdelijk,
@@ -16,10 +15,10 @@ pp = pprint.PrettyPrinter(indent=4)
 
 
 class ClientTests(TestCase):
-    @mock.patch("krefia.config.ALLEGRO_SOAP_ENDPOINT", "https://example.org/SOAP")
+    @mock.patch("krefia.config.ALLEGRO_SOAP_ENDPOINT", "https://localhost/SOAP")
     @mock.patch(
-        "zeep.transports.Transport.post",
-        side_effect=mock_soap_response("AllegroWebLoginTijdelijk.xml"),
+        "krefia.allegro_client.Transport.post",
+        side_effect=mock_soap_response("LoginService.AllegroWebLoginTijdelijk.xml"),
     )
     def test_login_tijdelijk(self, magicMock):
         response = login_tijdelijk()
