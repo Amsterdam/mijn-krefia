@@ -19,8 +19,7 @@ IS_PRODUCTION = os.getenv("SENTRY_ENVIRONMENT") == "production"
 IS_ACCEPTANCE = os.getenv("SENTRY_ENVIRONMENT") == "acceptance"
 IS_AP = IS_PRODUCTION or IS_ACCEPTANCE
 IS_DEV = os.getenv("FLASK_ENV") == "development" and not IS_AP
-IS_DEBUG = False
-LOG_LEVEL = logging.DEBUG if IS_DEBUG else logging.ERROR
+LOG_LEVEL = logging.DEBUG if IS_DEV else logging.ERROR
 
 
 TMAException = (SamlVerificationException, InvalidBSNException, SamlExpiredException)
@@ -36,13 +35,7 @@ logging.basicConfig(
 
 
 def set_debug(enabled: bool = False):
-    global LOG_LEVEL
-    global IS_DEBUG
-
-    IS_DEBUG = enabled
-    LOG_LEVEL = logging.DEBUG if enabled else logging.ERROR
-
-    logging.getLogger().setLevel(LOG_LEVEL)
+    logging.getLogger().setLevel(logging.DEBUG if enabled else logging.ERROR)
 
 
 ALLEGRO_SOAP_ENDPOINT = os.getenv("ALLEGRO_SOAP_ENDPOINT", None)
@@ -72,30 +65,3 @@ class CustomJSONEncoder(JSONEncoder):
             return obj.isoformat()
 
         return JSONEncoder.default(self, obj)
-
-
-# logging.config.dictConfig(
-#     {
-#         "version": 1,
-#         "formatters": {
-#             "verbose": {
-#                 "format": "(%(process)d) %(asctime)s %(name)s (line %(lineno)s) | %(levelname)s %(message)s"
-#             }
-#         },
-#         "handlers": {
-#             "console": {
-#                 "level": "DEBUG",
-#                 "class": "logging.StreamHandler",
-#                 "formatter": "verbose",
-#                 "stream": sys.stdout,
-#             },
-#         },
-#         "loggers": {
-#             "zeep.transports": {
-#                 "level": "DEBUG",
-#                 "propagate": True,
-#                 "handlers": ["console"],
-#             },
-#         },
-#     }
-# )

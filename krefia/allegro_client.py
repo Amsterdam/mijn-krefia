@@ -1,3 +1,6 @@
+from logging import log
+import logging
+from pprint import pprint
 from typing import List, Union
 from zeep.proxy import ServiceProxy
 
@@ -9,7 +12,6 @@ from zeep import Client
 from zeep.transports import Transport
 
 from krefia.config import (
-    IS_DEBUG,
     get_allegro_service_description,
     get_allegro_service_endpoint,
     logger,
@@ -130,8 +132,8 @@ def call_service_method(operation: str, *args) -> Union[dict, None]:
         response = getattr(service, method_name)(
             _soapheaders=get_session_header(service_name), *args
         )
-        if IS_DEBUG:
-            logger.debug(f"{operation} response", response)
+
+        logger.debug(response)
 
         return response["body"]
     except Exception as error:
@@ -210,7 +212,7 @@ def get_schuldhulp_aanvraag(aanvraag_header: dict):
         "SchuldHulpService.GetSRVAanvraag", aanvraag_header
     )
 
-    aanvraag_source = response_body["TSRVAanvraag"]
+    aanvraag_source = response_body["Result"]["TSRVAanvraag"]
     aanvraag = None
 
     if aanvraag_source:
@@ -227,7 +229,7 @@ def get_schuldhulp_aanvragen(relatiecode_fibu: str) -> List[dict]:
 
     schuldhulp_aanvragen = []
 
-    for aanvraag_header in response_body["TSRVAanvraagHeader"]:
+    for aanvraag_header in response_body["Result"]["TSRVAanvraagHeader"]:
         aanvraag = get_schuldhulp_aanvraag(aanvraag_header)
         schuldhulp_aanvragen.append(aanvraag)
 
@@ -237,7 +239,7 @@ def get_schuldhulp_aanvragen(relatiecode_fibu: str) -> List[dict]:
 def get_lening(tpl_header: dict) -> dict:
     response_body = call_service_method("FinancieringService.GetPL", tpl_header)
 
-    lening_source = response_body["TPL"]
+    lening_source = response_body["Result"]["TPL"]
     lening = None
 
     if lening_source:
@@ -255,7 +257,7 @@ def get_leningen(relatiecode_kredietbank: str) -> List[dict]:
         "FinancieringService.GetPLOverzicht", relatiecode_kredietbank
     )
 
-    tpl_headers = response_body["TPLHeader"]
+    tpl_headers = response_body["Result"]["TPLHeader"]
 
     leningen = [get_lening(tpl_header) for tpl_header in tpl_headers]
 
@@ -265,7 +267,7 @@ def get_leningen(relatiecode_kredietbank: str) -> List[dict]:
 def get_budgetbeheer(relatiecode_fibu: str) -> List[dict]:
     response_body = call_service_method("BBRService.GetBBROverzicht", relatiecode_fibu)
 
-    budgetbeheer_headers = response_body["TBBRHeader"]
+    budgetbeheer_headers = response_body["Result"]["TBBRHeader"]
     budgetbeheer = None
 
     if budgetbeheer_headers:
@@ -292,11 +294,11 @@ def get_notification(relatiecode: str, bedrijf: str) -> Union[dict, None]:
             "Gelezen": "Nee",
         }
         response_body = call_service_method("BerichtenboxService.GetBerichten", query)
-        trigger = response_body["TBBoxHeader"]
+        trigger = response_body["Result"]["TBBoxHeader"]
 
         if trigger:
             # TODO: Which notification to take?
-            trigger = response_body["TBBoxHeader"][0]
+            trigger = response_body["Result"]["TBBoxHeader"][0]
             date_published = trigger["Tijdstip"]
 
             notification = {
