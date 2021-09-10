@@ -174,15 +174,16 @@ def login_allowed(relatiecode: str) -> bool:
     return is_allowed
 
 
-def get_schuldhulp_title(header: dict) -> str:
+def get_schuldhulp_title(aanvraag_source: dict) -> str:
     title = ""
-    status = header["Status"]
-    extra_status = header["ExtraStatus"]
+    eind_status = aanvraag_source["Eindstatus"]
+    status = aanvraag_source["Status"]
+    extra_status = aanvraag_source["ExtraStatus"]
 
-    if status == "I":
+    if eind_status == "I":
         title = "Schuldeisers akkoord"
 
-    elif status == "Z":
+    elif eind_status == "Z":
         title = "Aanvraag afgewezen"
 
     elif extra_status == "Voorlopig afgewezen":
@@ -200,6 +201,21 @@ def get_schuldhulp_title(header: dict) -> str:
     return title
 
 
+def get_schuldhulp_aanvraag(aanvraag_header: dict):
+    response_body = call_service_method(
+        "SchuldHulpService.GetSRVAanvraag", aanvraag_header
+    )
+
+    aanvraag_source = response_body["TSRVAanvraag"]
+    aanvraag = None
+
+    if aanvraag_source:
+        title = get_schuldhulp_title(aanvraag_source)
+        aanvraag = {"title": title, "url": SRV_DETAIL_URL.format(**aanvraag_source)}
+
+    return aanvraag
+
+
 def get_schuldhulp_aanvragen(relatiecode_fibu: str) -> List[dict]:
     response_body = call_service_method(
         "SchuldHulpService.GetSRVOverzicht", relatiecode_fibu
@@ -207,15 +223,9 @@ def get_schuldhulp_aanvragen(relatiecode_fibu: str) -> List[dict]:
 
     schuldhulp_aanvragen = []
 
-    for header in response_body["TSRVAanvraagHeader"]:
-        title = get_schuldhulp_title(header)
-
-        if title:
-            aanvraag = {
-                "title": title,
-                "url": SRV_DETAIL_URL.format(**header),
-            }
-            schuldhulp_aanvragen.append(aanvraag)
+    for aanvraag_header in response_body["TSRVAanvraagHeader"]:
+        aanvraag = get_schuldhulp_aanvraag(aanvraag_header)
+        schuldhulp_aanvragen.append(aanvraag)
 
     return schuldhulp_aanvragen
 
