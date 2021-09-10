@@ -9,6 +9,7 @@ from zeep import Client
 from zeep.transports import Transport
 
 from krefia.config import (
+    IS_DEBUG,
     get_allegro_service_description,
     get_allegro_service_endpoint,
     logger,
@@ -129,6 +130,9 @@ def call_service_method(operation: str, *args) -> Union[dict, None]:
         response = getattr(service, method_name)(
             _soapheaders=get_session_header(service_name), *args
         )
+        if IS_DEBUG:
+            logger.debug(f"{operation} response", response)
+
         return response["body"]
     except Exception as error:
         logger.error(error)
@@ -330,8 +334,8 @@ def get_all(bsn: str) -> dict:
         if not relaties:
             return None
 
-        fibu_relatie_code = relaties[bedrijf.FIBU]
-        kredietbank_relatie_code = relaties[bedrijf.KREDIETBANK]
+        fibu_relatie_code = relaties.get(bedrijf.FIBU)
+        kredietbank_relatie_code = relaties.get(bedrijf.KREDIETBANK)
 
         schuldhulp = None
         budgetbeheer = None

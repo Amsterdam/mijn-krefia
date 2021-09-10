@@ -1,3 +1,4 @@
+from krefia import config
 import sys
 from pprint import pprint
 
@@ -15,6 +16,8 @@ from krefia.allegro_client import (
 bsn = None
 if len(sys.argv) >= 2:
     bsn = sys.argv[1]
+
+config.set_debug(True)
 
 is_logged_in = login_tijdelijk()
 

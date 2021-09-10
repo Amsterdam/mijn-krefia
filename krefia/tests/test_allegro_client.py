@@ -1,6 +1,7 @@
 import pprint
 from unittest import TestCase, mock
 
+from krefia import config
 from krefia.allegro_client import (
     get_allegro_service_description,
     get_client_service,
@@ -12,6 +13,8 @@ from krefia.allegro_client import (
 from krefia.tests.mocks import mock_soap_response
 
 pp = pprint.PrettyPrinter(indent=4)
+
+config.set_debug(False)
 
 
 class ClientTests(TestCase):

@@ -19,6 +19,9 @@ IS_PRODUCTION = os.getenv("SENTRY_ENVIRONMENT") == "production"
 IS_ACCEPTANCE = os.getenv("SENTRY_ENVIRONMENT") == "acceptance"
 IS_AP = IS_PRODUCTION or IS_ACCEPTANCE
 IS_DEV = os.getenv("FLASK_ENV") == "development" and not IS_AP
+IS_DEBUG = False
+LOG_LEVEL = logging.DEBUG if IS_DEBUG else logging.ERROR
+
 
 TMAException = (SamlVerificationException, InvalidBSNException, SamlExpiredException)
 
@@ -26,10 +29,21 @@ TMAException = (SamlVerificationException, InvalidBSNException, SamlExpiredExcep
 logger = logging.getLogger(__name__)
 stdout_handler = logging.StreamHandler(sys.stdout)
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=LOG_LEVEL,
     format="[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s",
     handlers=[stdout_handler],
 )
+
+
+def set_debug(enabled: bool = False):
+    global LOG_LEVEL
+    global IS_DEBUG
+
+    IS_DEBUG = enabled
+    LOG_LEVEL = logging.DEBUG if enabled else logging.ERROR
+
+    logging.getLogger().setLevel(LOG_LEVEL)
+
 
 ALLEGRO_SOAP_ENDPOINT = os.getenv("ALLEGRO_SOAP_ENDPOINT", None)
 ALLEGRO_SOAP_UA_STRING = "Mijn Amsterdam Krefia API"
