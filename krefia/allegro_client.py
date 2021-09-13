@@ -213,6 +213,7 @@ def get_result(response_body: dict, key: str, return_type: Any = None):
     try:
         result = response_body["Result"][key]
     except:
+        logger.info("No result.%s", key)
         pass
 
     return result
