@@ -5,7 +5,6 @@ from unittest import TestCase, mock
 from krefia import config
 from krefia.allegro_client import (
     get_allegro_service_description,
-    get_client_service,
     get_session_header,
     get_session_id,
     login_tijdelijk,
