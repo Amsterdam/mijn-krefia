@@ -288,12 +288,12 @@ def get_notification(relatiecode: str, bedrijf: str) -> Union[dict, None]:
 
         response_body = call_service_method(
             "BerichtenBoxService.GetBerichten",
-            Relatiecode=relatiecode,
-            DatumVan=date(2020, 1, 1),
-            DatumTotEnMet=date.today(),
-            OntvangenVerzonden="ovBeide",
-            Gelezen="Nee",
-            Gearchiveerd="Nee",
+            relatiecode,
+            date(2020, 1, 1),
+            date.today(),
+            "ovBeide",
+            "Nee",
+            "Nee",
         )
 
         tbbox_headers = get_result(response_body, "TBBoxHeader", [])
