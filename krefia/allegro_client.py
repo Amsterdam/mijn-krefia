@@ -1,22 +1,18 @@
-from logging import log
-import logging
-from pprint import pprint
+from datetime import date
 from typing import Any, List, Union
-from zeep.proxy import ServiceProxy
 
-from zeep.xsd.elements.element import Element
-from krefia.helpers import enum
-from attr import s
 from requests import ConnectionError
-from zeep import Client, xsd
-from zeep.transports import Transport
+from zeep import Client
+from zeep.proxy import ServiceProxy
 from zeep.settings import Settings
+from zeep.transports import Transport
+from zeep.xsd.elements.element import Element
 
 from krefia.config import (
     get_allegro_service_description,
-    get_allegro_service_endpoint,
     logger,
 )
+from krefia.helpers import enum
 
 session_id = None
 allegro_service = {}
@@ -287,11 +283,11 @@ def get_notification(relatiecode: str, bedrijf: str) -> Union[dict, None]:
     if relatiecode:
         query = {
             "Relatiecode": relatiecode,
-            "DatumVan": xsd.SkipValue,
-            "DatumTotEnMet": xsd.SkipValue,
-            "OntvangenVerzonden": xsd.SkipValue,
+            "DatumVan": date(2020, 1, 1),
+            "DatumTotEnMet": date.today(),
+            "OntvangenVerzonden": "ovBeide",
             "Gelezen": "Nee",
-            "Gearchiveerd": xsd.SkipValue,
+            "Gearchiveerd": "Nee",
         }
         response_body = call_service_method("BerichtenBoxService.GetBerichten", query)
         tbbox_headers = get_result(response_body, "TBBoxHeader", [])
