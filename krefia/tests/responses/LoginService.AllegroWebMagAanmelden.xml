@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SOAP-ENV:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:HNS="http://tempuri.org/"
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:v1="http://tempuri.org/">
+    <SOAP-ENV:Header>
+        <ROClientIDHeader SOAP-ENV:mustUnderstand="0"
+            xmlns="http://tempuri.org/">
+            <ID>{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}</ID>
+        </ROClientIDHeader>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body xmlns:ro="http://tempuri.org/">
+        <v1:LoginService___AllegroWebMagAanmeldenResponse>
+            <v1:Result>true</v1:Result>
+            <v1:aUserInfo>
+                <v1:SessionID>{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}</v1:SessionID>
+                <v1:UserID>321321</v1:UserID>
+                <v1:LoginType>100000</v1:LoginType>
+                <v1:RelatieCode>321321</v1:RelatieCode>
+                <v1:Naam>W.R. Boerjasing</v1:Naam>
+                <v1:LaatsteLogin>2021-08-30T15:32:46.373</v1:LaatsteLogin>
+                <v1:Autorisaties>00000100000000000000000000</v1:Autorisaties>
+                <v1:ExtraInfo>0</v1:ExtraInfo>
+                <v1:ExtraInfoOmschrijving></v1:ExtraInfoOmschrijving>
+                <v1:WachtwoordWijzigen>false</v1:WachtwoordWijzigen>
+            </v1:aUserInfo>
+        </v1:LoginService___AllegroWebMagAanmeldenResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

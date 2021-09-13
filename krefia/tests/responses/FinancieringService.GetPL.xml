@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SOAP-ENV:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:HNS="http://tempuri.org/"
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:v1="http://tempuri.org/">
+    <SOAP-ENV:Header>
+        <ROClientIDHeader SOAP-ENV:mustUnderstand="0"
+            xmlns="http://tempuri.org/">
+            <ID>{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}</ID>
+        </ROClientIDHeader>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body xmlns:ro="http://tempuri.org/">
+        <v1:FinancieringService___GetPLResponse>
+            <v1:Result>
+                <v1:InfoHeader>
+                    <v1:RelatieCode>321321</v1:RelatieCode>
+                    <v1:Volgnummer>1</v1:Volgnummer>
+                    <v1:Startdatum>2019-04-09T00:00:00</v1:Startdatum>
+                </v1:InfoHeader>
+                <v1:Opdrachtgever>55667788</v1:Opdrachtgever>
+                <v1:OpdrachtgeverContact>0</v1:OpdrachtgeverContact>
+                <v1:TheoEinddatum>2022-08-01T00:00:00</v1:TheoEinddatum>
+                <v1:NettoKredietsom>1600</v1:NettoKredietsom>
+                <v1:BrutoKredietsom>1689.12</v1:BrutoKredietsom>
+                <v1:Kredietvergoeding>89.1199999999999</v1:Kredietvergoeding>
+                <v1:MaandTermijn>46.92</v1:MaandTermijn>
+                <v1:KwartaalTermijn>0</v1:KwartaalTermijn>
+                <v1:AantalMaanden>36</v1:AantalMaanden>
+                <v1:AantalKwartalen>0</v1:AantalKwartalen>
+                <v1:DatumEersteAflossing>2019-09-01T00:00:00</v1:DatumEersteAflossing>
+                <v1:Betaald>0</v1:Betaald>
+                <v1:SaldoLening>1679.66</v1:SaldoLening>
+                <v1:Achterstand>1173</v1:Achterstand>
+                <v1:ResterendeLooptijd>11</v1:ResterendeLooptijd>
+                <v1:EffectiefJaarpercentage>3</v1:EffectiefJaarpercentage>
+                <v1:DatumLaatsteBetaling>1899-12-30T00:00:00</v1:DatumLaatsteBetaling>
+                <v1:BedragLaatsteBetaling>0</v1:BedragLaatsteBetaling>
+                <v1:VolledigVervroegdeAflossing>1680.14</v1:VolledigVervroegdeAflossing>
+                <v1:Medewerker>Incasso        </v1:Medewerker>
+                <v1:MedelenerCode>0</v1:MedelenerCode>
+                <v1:OpenstaandeVertragingsrente>0</v1:OpenstaandeVertragingsrente>
+                <v1:OpenstaandeKredietvergoeding>79.66</v1:OpenstaandeKredietvergoeding>
+                <v1:BetaaldeVertragingsrente>0</v1:BetaaldeVertragingsrente>
+                <v1:BetaaldeBoeterente>0</v1:BetaaldeBoeterente>
+                <v1:KostenVVA>0</v1:KostenVVA>
+                <v1:Voorstand>0</v1:Voorstand>
+                <v1:LeningSoort>SL</v1:LeningSoort>
+                <v1:MaandPercentage>0.246</v1:MaandPercentage>
+                <v1:BetaaldeKredietvergoeding>0</v1:BetaaldeKredietvergoeding>
+            </v1:Result>
+        </v1:FinancieringService___GetPLResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SOAP-ENV:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:HNS="http://tempuri.org/"
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:v1="http://tempuri.org/">
+    <SOAP-ENV:Header>
+        <ROClientIDHeader SOAP-ENV:mustUnderstand="0"
+            xmlns="http://tempuri.org/">
+            <ID>{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}</ID>
+        </ROClientIDHeader>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body xmlns:ro="http://tempuri.org/">
+        <v1:LoginService___BSNNaarRelatieMetBedrijfResponse>
+            <v1:Result>
+                <v1:TRelatiecodeBedrijfcode>
+                    <v1:Relatiecode>123123</v1:Relatiecode>
+                    <v1:Bedrijfscode>2</v1:Bedrijfscode>
+                    <v1:Bedrijfsnaam>Kredietbank, Gemeente Amsterdam</v1:Bedrijfsnaam>
+                </v1:TRelatiecodeBedrijfcode>
+                <v1:TRelatiecodeBedrijfcode>
+                    <v1:Relatiecode>321321</v1:Relatiecode>
+                    <v1:Bedrijfscode>10</v1:Bedrijfscode>
+                    <v1:Bedrijfsnaam>FiBu, Gemeente Amsterdam</v1:Bedrijfsnaam>
+                </v1:TRelatiecodeBedrijfcode>
+            </v1:Result>
+            <v1:ExtraInfo>0</v1:ExtraInfo>
+            <v1:ExtraInfoOmschrijving></v1:ExtraInfoOmschrijving>
+        </v1:LoginService___BSNNaarRelatieMetBedrijfResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

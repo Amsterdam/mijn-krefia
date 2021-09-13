@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SOAP-ENV:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:HNS="http://tempuri.org/"
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:v1="http://tempuri.org/">
+    <SOAP-ENV:Header>
+        <ROClientIDHeader SOAP-ENV:mustUnderstand="0"
+            xmlns="http://tempuri.org/">
+            <ID>{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}</ID>
+        </ROClientIDHeader>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body xmlns:ro="http://tempuri.org/">
+        <v1:BBRService___GetBBROverzichtResponse>
+            <v1:Result>
+                <v1:TBBRHeader>
+                    <v1:RelatieCode>2064866</v1:RelatieCode>
+                    <v1:Volgnummer>3</v1:Volgnummer>
+                    <v1:Medewerker>JKL-Test       </v1:Medewerker>
+                    <v1:Opdrachtgever>2161621</v1:Opdrachtgever>
+                    <v1:OpdrachtgeverContact>0</v1:OpdrachtgeverContact>
+                    <v1:VormCode>T</v1:VormCode>
+                    <v1:VormNaam>Totaal</v1:VormNaam>
+                    <v1:ProductNaam></v1:ProductNaam>
+                    <v1:ProductOmschrijving></v1:ProductOmschrijving>
+                    <v1:Team></v1:Team>
+                </v1:TBBRHeader>
+            </v1:Result>
+            <v1:ExtraInfo>70184444</v1:ExtraInfo>
+            <v1:ExtraInfoOmschrijving></v1:ExtraInfoOmschrijving>
+        </v1:BBRService___GetBBROverzichtResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

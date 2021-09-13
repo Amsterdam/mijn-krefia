@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SOAP-ENV:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:HNS="http://tempuri.org/"
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:v1="http://tempuri.org/">
+    <SOAP-ENV:Header>
+        <ROClientIDHeader SOAP-ENV:mustUnderstand="0"
+            xmlns="http://tempuri.org/">
+            <ID>{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}</ID>
+        </ROClientIDHeader>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body xmlns:ro="http://tempuri.org/">
+        <v1:FinancieringService___GetPLOverzichtResponse>
+            <v1:Result>
+                <v1:TPLHeader>
+                    <v1:RelatieCode>321321</v1:RelatieCode>
+                    <v1:Volgnummer>1</v1:Volgnummer>
+                    <v1:Startdatum>2019-04-09T00:00:00</v1:Startdatum>
+                </v1:TPLHeader>
+            </v1:Result>
+        </v1:FinancieringService___GetPLOverzichtResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
