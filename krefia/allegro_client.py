@@ -10,6 +10,7 @@ from attr import s
 from requests import ConnectionError
 from zeep import Client
 from zeep.transports import Transport
+from zeep.settings import Settings
 
 from krefia.config import (
     get_allegro_service_description,
@@ -45,10 +46,7 @@ def get_client(service_name: str) -> Union[Client, None]:
         client = Client(
             wsdl=get_allegro_service_description(service_name),
             transport=transport,
-            settings={
-                "xsd_ignore_sequence_order": True,
-                "strict": False,
-            },
+            settings=Settings(xsd_ignore_sequence_order=True, strict=False),
         )
 
         return client
