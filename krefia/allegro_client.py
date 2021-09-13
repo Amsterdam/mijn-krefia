@@ -67,13 +67,7 @@ def get_client(service_name: str) -> Union[Client, None]:
 
 def get_client_service(service_name: str) -> ServiceProxy:
     client = get_client(service_name)
-
-    service = client.create_service(
-        "{http://tempuri.org/}%sBinding" % service_name,
-        get_allegro_service_endpoint(service_name),
-    )
-
-    return service
+    return client.service
 
 
 def get_service(service_name: str) -> ServiceProxy:
