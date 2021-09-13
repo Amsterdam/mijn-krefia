@@ -305,7 +305,7 @@ def get_notification(relatiecode: str, bedrijf: str) -> Union[dict, None]:
             # "OntvangenVerzonden": "ovOntvangen",
             "Gelezen": "Nee",
         }
-        response_body = call_service_method("BerichtenboxService.GetBerichten", query)
+        response_body = call_service_method("BerichtenBoxService.GetBerichten", query)
         tbbox_headers = get_result(response_body, "TBBoxHeader", [])
 
         # TODO: Which notification to take?
