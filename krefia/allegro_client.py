@@ -20,7 +20,7 @@ from krefia.config import (
 session_id = None
 allegro_service = {}
 
-bedrijf = enum({"FIBU": "FIBU", "KRED": "Kredietbank"})
+bedrijf = enum({"FIBU": "FIBU", "KREDIETBANK": "Kredietbank"})
 bedrijf_code = enum({bedrijf.FIBU: 10, bedrijf.KREDIETBANK: 2})
 
 SRV_DETAIL_URL = "http://host/srv/{RelatieCode}/{Volgnummer}"
@@ -344,13 +344,11 @@ def get_all(bsn: str) -> dict:
         lening = None
 
         if fibu_relatie_code:
-            logger.info("FIBU relatiecide %s", fibu_relatie_code)
             if login_allowed(fibu_relatie_code):
                 schuldhulp = get_schuldhulp_aanvragen(fibu_relatie_code)
                 budgetbeheer = get_budgetbeheer(fibu_relatie_code)
 
         if kredietbank_relatie_code:
-            logger.info("Kredietbank relatiecide %s", kredietbank_relatie_code)
             if login_allowed(kredietbank_relatie_code):
                 lening = get_leningen(kredietbank_relatie_code)
 
