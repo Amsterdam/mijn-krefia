@@ -36,12 +36,7 @@ notification_urls = {
 
 
 def get_client(service_name: str) -> Union[Client, None]:
-    logger.info("Establishing a connection with Allegro")
-
-    # session = Session()
-    # session.headers["User-Agent"] = ALLEGRO_SOAP_UA_STRING
-    # session.auth = HTTPBasicAuth()
-
+    logger.info("Establishing a connection with Allegro service %s", service_name)
     timeout = 9  # Timeout period for getting WSDL and operations in seconds
 
     try:
@@ -100,13 +95,6 @@ def get_session_id() -> str:
 
 
 def get_session_header(service_name: str) -> List[Element]:
-    """
-    <ROClientIDHeader SOAP-ENV:mustUnderstand="0"
-        xmlns="http://tempuri.org/">
-        <ID>{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}</ID>
-    </ROClientIDHeader>
-    """
-
     if not session_id:
         return []
 
@@ -125,7 +113,7 @@ def call_service_method(operation: str, *args) -> Union[dict, None]:
     service = get_service(service_name)
 
     if not service:
-        logger.error("%s, no service." % method_name)
+        logger.error("%s, no service.", operation)
         return
 
     try:
@@ -133,7 +121,7 @@ def call_service_method(operation: str, *args) -> Union[dict, None]:
             _soapheaders=get_session_header(service_name), *args
         )
 
-        logger.debug("Response for %s", operation)
+        logger.debug("\n\nResponse for %s", operation)
         logger.debug(response)
 
         return response["body"]
@@ -157,16 +145,16 @@ def login_tijdelijk() -> bool:
 def get_relatiecode_bedrijf(bsn: str) -> Union[dict, None]:
     response_body = call_service_method("LoginService.BSNNaarRelatieMetBedrijf", bsn)
 
-    result = response_body["Result"]
-    relatiecodes = None
+    tr_relatiecodes = get_result(response_body, "TRelatiecodeBedrijfcode", [])
+    relatiecodes = {}
 
-    if result:
-        relatiecodes = {}
-        for relatie in result["TRelatiecodeBedrijfcode"]:
-            if relatie["Bedrijfscode"] == bedrijf_code.FIBU:
-                relatiecodes[bedrijf.FIBU] = relatie["Relatiecode"]
-            elif relatie["Bedrijfscode"] == bedrijf_code.KREDIETBANK:
-                relatiecodes[bedrijf.KREDIETBANK] = relatie["Relatiecode"]
+    for relatie in tr_relatiecodes:
+        if relatie["Bedrijfscode"] == bedrijf_code.FIBU:
+            relatiecodes[bedrijf.FIBU] = relatie["Relatiecode"]
+        elif relatie["Bedrijfscode"] == bedrijf_code.KREDIETBANK:
+            relatiecodes[bedrijf.KREDIETBANK] = relatie["Relatiecode"]
+
+    logger.debug(relatiecodes)
 
     return relatiecodes
 
@@ -356,11 +344,13 @@ def get_all(bsn: str) -> dict:
         lening = None
 
         if fibu_relatie_code:
+            logger.info("FIBU relatiecide %s", fibu_relatie_code)
             if login_allowed(fibu_relatie_code):
                 schuldhulp = get_schuldhulp_aanvragen(fibu_relatie_code)
                 budgetbeheer = get_budgetbeheer(fibu_relatie_code)
 
         if kredietbank_relatie_code:
+            logger.info("Kredietbank relatiecide %s", kredietbank_relatie_code)
             if login_allowed(kredietbank_relatie_code):
                 lening = get_leningen(kredietbank_relatie_code)
 
