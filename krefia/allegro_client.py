@@ -228,7 +228,7 @@ def get_schuldhulp_aanvraag(aanvraag_header: dict):
 
     if aanvraag_source:
         title = get_schuldhulp_title(aanvraag_source)
-        aanvraag = {"title": title, "url": SRV_DETAIL_URL.format(**aanvraag_source)}
+        aanvraag = {"title": title, "url": SRV_DETAIL_URL.format({})}
 
     return aanvraag
 
@@ -258,7 +258,7 @@ def get_lening(tpl_header: dict) -> dict:
         current = 0
         title = f"Kredietsom {total}  met openstaand termijnbedrag {current}"
 
-        lening = {"title": title, "url": PL_DETAIL_URL.format(**lening_source)}
+        lening = {"title": title, "url": PL_DETAIL_URL.format({})}
 
     return lening
 
@@ -288,7 +288,7 @@ def get_budgetbeheer(relatiecode_fibu: str) -> List[dict]:
     for header in tbbr_headers:
         budgetbeheer_link = {
             "title": title,
-            "url": BBR_DETAIL_URL.format(**header),
+            "url": BBR_DETAIL_URL.format({}),
         }
         budgetbeheer.append(budgetbeheer_link)
 
@@ -314,7 +314,7 @@ def get_notification(relatiecode: str, bedrijf: str) -> Union[dict, None]:
             date_published = trigger["Tijdstip"]
 
             notification = {
-                "url": notification_urls[bedrijf].format(**trigger),
+                "url": notification_urls[bedrijf].format({}),
                 "datePublished": date_published,
             }
 
