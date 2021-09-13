@@ -1,7 +1,7 @@
 from logging import log
 import logging
 from pprint import pprint
-from typing import List, Union
+from typing import Any, List, Union
 from zeep.proxy import ServiceProxy
 
 from zeep.xsd.elements.element import Element
@@ -133,6 +133,7 @@ def call_service_method(operation: str, *args) -> Union[dict, None]:
             _soapheaders=get_session_header(service_name), *args
         )
 
+        logger.debug("Response for %s", operation)
         logger.debug(response)
 
         return response["body"]
@@ -207,12 +208,21 @@ def get_schuldhulp_title(aanvraag_source: dict) -> str:
     return title
 
 
+def get_result(response_body: dict, key: str, return_type: Any = None):
+    result = return_type
+    try:
+        result = response_body["Result"][key]
+    except:
+        pass
+
+    return result
+
+
 def get_schuldhulp_aanvraag(aanvraag_header: dict):
     response_body = call_service_method(
         "SchuldHulpService.GetSRVAanvraag", aanvraag_header
     )
-
-    aanvraag_source = response_body["Result"]["TSRVAanvraag"]
+    aanvraag_source = get_result(response_body, "TSRVAanvraag")
     aanvraag = None
 
     if aanvraag_source:
@@ -226,20 +236,20 @@ def get_schuldhulp_aanvragen(relatiecode_fibu: str) -> List[dict]:
     response_body = call_service_method(
         "SchuldHulpService.GetSRVOverzicht", relatiecode_fibu
     )
-
+    tsrv_headers = get_result(response_body, "TSRVAanvraagHeader", [])
     schuldhulp_aanvragen = []
 
-    for aanvraag_header in response_body["Result"]["TSRVAanvraagHeader"]:
+    for aanvraag_header in tsrv_headers:
         aanvraag = get_schuldhulp_aanvraag(aanvraag_header)
-        schuldhulp_aanvragen.append(aanvraag)
+        if aanvraag:
+            schuldhulp_aanvragen.append(aanvraag)
 
     return schuldhulp_aanvragen
 
 
 def get_lening(tpl_header: dict) -> dict:
     response_body = call_service_method("FinancieringService.GetPL", tpl_header)
-
-    lening_source = response_body["Result"]["TPL"]
+    lening_source = get_result(response_body, "TPL")
     lening = None
 
     if lening_source:
@@ -256,29 +266,30 @@ def get_leningen(relatiecode_kredietbank: str) -> List[dict]:
     response_body = call_service_method(
         "FinancieringService.GetPLOverzicht", relatiecode_kredietbank
     )
+    tpl_headers = get_result(response_body, "TPLHeader", [])
+    leningen = []
 
-    tpl_headers = response_body["Result"]["TPLHeader"]
-
-    leningen = [get_lening(tpl_header) for tpl_header in tpl_headers]
+    for tpl_header in tpl_headers:
+        lening = get_lening(tpl_header)
+        if lening:
+            leningen.append(lening)
 
     return leningen
 
 
 def get_budgetbeheer(relatiecode_fibu: str) -> List[dict]:
     response_body = call_service_method("BBRService.GetBBROverzicht", relatiecode_fibu)
+    tbbr_headers = get_result(response_body, "TBBRHeader", [])
+    budgetbeheer = []
 
-    budgetbeheer_headers = response_body["Result"]["TBBRHeader"]
-    budgetbeheer = None
+    title = "Beheer uw budget op FiBu"
 
-    if budgetbeheer_headers:
-        title = "Beheer uw budget op FiBu"
-
-        for header in budgetbeheer_headers:
-            budgetbeheer_link = {
-                "title": title,
-                "url": BBR_DETAIL_URL.format(**header),
-            }
-            budgetbeheer.append(budgetbeheer_link)
+    for header in tbbr_headers:
+        budgetbeheer_link = {
+            "title": title,
+            "url": BBR_DETAIL_URL.format(**header),
+        }
+        budgetbeheer.append(budgetbeheer_link)
 
     return budgetbeheer
 
@@ -294,11 +305,11 @@ def get_notification(relatiecode: str, bedrijf: str) -> Union[dict, None]:
             "Gelezen": "Nee",
         }
         response_body = call_service_method("BerichtenboxService.GetBerichten", query)
-        trigger = response_body["Result"]["TBBoxHeader"]
+        tbbox_headers = get_result(response_body, "TBBoxHeader", [])
 
-        if trigger:
-            # TODO: Which notification to take?
-            trigger = response_body["Result"]["TBBoxHeader"][0]
+        # TODO: Which notification to take?
+        if tbbox_headers:
+            trigger = tbbox_headers[0]
             date_published = trigger["Tijdstip"]
 
             notification = {
@@ -306,17 +317,17 @@ def get_notification(relatiecode: str, bedrijf: str) -> Union[dict, None]:
                 "datePublished": date_published,
             }
 
-            return notification
+    return notification
 
 
 def get_notification_triggers(relaties: dict) -> dict:
     fibu_notification = None
     kredietbank_notification = None
 
-    if relaties[bedrijf.FIBU]:
+    if bedrijf.FIBU in relaties:
         fibu_notification = get_notification(relaties[bedrijf.FIBU], bedrijf.FIBU)
 
-    if relaties[bedrijf.KREDIETBANK]:
+    if bedrijf.KREDIETBANK in relaties:
         kredietbank_notification = get_notification(
             relaties[bedrijf.KREDIETBANK], bedrijf.KREDIETBANK
         )
