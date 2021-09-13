@@ -8,7 +8,7 @@ from zeep.xsd.elements.element import Element
 from krefia.helpers import enum
 from attr import s
 from requests import ConnectionError
-from zeep import Client
+from zeep import Client, xsd
 from zeep.transports import Transport
 from zeep.settings import Settings
 
@@ -287,8 +287,11 @@ def get_notification(relatiecode: str, bedrijf: str) -> Union[dict, None]:
     if relatiecode:
         query = {
             "Relatiecode": relatiecode,
-            # "OntvangenVerzonden": "ovOntvangen",
+            "DatumVan": xsd.SkipValue,
+            "DatumTotEnMet": xsd.SkipValue,
+            "OntvangenVerzonden": xsd.SkipValue,
             "Gelezen": "Nee",
+            "Gearchiveerd": xsd.SkipValue,
         }
         response_body = call_service_method("BerichtenBoxService.GetBerichten", query)
         tbbox_headers = get_result(response_body, "TBBoxHeader", [])
