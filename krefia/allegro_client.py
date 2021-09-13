@@ -20,7 +20,7 @@ from krefia.config import (
 session_id = None
 allegro_service = {}
 
-bedrijf = enum({"FIBU": "FIBU", "KREDIETBANK": "Kredietbank"})
+bedrijf = enum({"FIBU": "FIBU", "KREDIETBANK": "KREDIETBANK"})
 bedrijf_code = enum({bedrijf.FIBU: 10, bedrijf.KREDIETBANK: 2})
 
 SRV_DETAIL_URL = "http://host/srv/{RelatieCode}/{Volgnummer}"
