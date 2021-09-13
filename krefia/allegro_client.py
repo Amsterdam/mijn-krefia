@@ -43,7 +43,12 @@ def get_client(service_name: str) -> Union[Client, None]:
         transport = Transport(timeout=timeout, operation_timeout=timeout)
 
         client = Client(
-            wsdl=get_allegro_service_description(service_name), transport=transport
+            wsdl=get_allegro_service_description(service_name),
+            transport=transport,
+            settings={
+                "xsd_ignore_sequence_order": True,
+                "strict": False,
+            },
         )
 
         return client
