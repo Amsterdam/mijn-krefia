@@ -212,7 +212,7 @@ def get_result(response_body: dict, key: str, return_type: Any = None):
     result = return_type
     try:
         result = response_body["Result"][key]
-    except:
+    except Exception:
         logger.info("No result.%s", key)
         pass
 
