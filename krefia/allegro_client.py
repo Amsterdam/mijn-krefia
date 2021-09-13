@@ -15,7 +15,7 @@ from krefia.config import (
 from krefia.helpers import enum
 
 session_id = None
-allegro_service = {}
+allegro_client = {}
 
 bedrijf = enum({"FIBU": "FIBU", "KREDIETBANK": "KREDIETBANK"})
 bedrijf_code = enum({bedrijf.FIBU: 10, bedrijf.KREDIETBANK: 2})
@@ -33,46 +33,42 @@ notification_urls = {
 
 
 def get_client(service_name: str) -> Union[Client, None]:
-    logger.info("Establishing a connection with Allegro service %s", service_name)
-    timeout = 9  # Timeout period for getting WSDL and operations in seconds
+    global allegro_client
 
-    try:
-        transport = Transport(timeout=timeout, operation_timeout=timeout)
+    if service_name not in allegro_client:
+        logger.info("Establishing a connection with Allegro service %s", service_name)
+        timeout = 9  # Timeout period for getting WSDL and operations in seconds
 
-        client = Client(
-            wsdl=get_allegro_service_description(service_name),
-            transport=transport,
-            settings=Settings(xsd_ignore_sequence_order=True, strict=False),
-        )
+        try:
+            transport = Transport(timeout=timeout, operation_timeout=timeout)
 
-        return client
-    except ConnectionError as e:
-        # do not relog the error, because the error has a object address in it, it is a new error every time.
-        logger.error(
-            f"Failed to establish a connection with Allegro: Connection Timeout ({type(e)})"
-        )
-        return None
-    except Exception as error:
-        logger.error(
-            "Failed to establish a connection with Allegro: {} {}".format(
-                type(error), str(error)
+            client = Client(
+                wsdl=get_allegro_service_description(service_name),
+                transport=transport,
+                settings=Settings(xsd_ignore_sequence_order=True, strict=False),
             )
-        )
-        return None
+            allegro_client[service_name] = client
+            return client
+        except ConnectionError as e:
+            # do not relog the error, because the error has a object address in it, it is a new error every time.
+            logger.error(
+                f"Failed to establish a connection with Allegro: Connection Timeout ({type(e)})"
+            )
+            return None
+        except Exception as error:
+            logger.error(
+                "Failed to establish a connection with Allegro: {} {}".format(
+                    type(error), str(error)
+                )
+            )
+            return None
 
-
-def get_client_service(service_name: str) -> ServiceProxy:
-    client = get_client(service_name)
-    return client.service
+    return allegro_client[service_name]
 
 
 def get_service(service_name: str) -> ServiceProxy:
-    global allegro_service
-
-    if service_name not in allegro_service:
-        allegro_service[service_name] = get_client_service(service_name)
-
-    return allegro_service[service_name]
+    client = get_client(service_name)
+    return client.service
 
 
 def set_session_id(id: str) -> None:
@@ -281,15 +277,25 @@ def get_notification(relatiecode: str, bedrijf: str) -> Union[dict, None]:
     response_body = None
 
     if relatiecode:
-        query = {
-            "Relatiecode": relatiecode,
-            "DatumVan": date(2020, 1, 1),
-            "DatumTotEnMet": date.today(),
-            "OntvangenVerzonden": "ovBeide",
-            "Gelezen": "Nee",
-            "Gearchiveerd": "Nee",
-        }
-        response_body = call_service_method("BerichtenBoxService.GetBerichten", query)
+        # query = {
+        #     "Relatiecode": relatiecode,
+        #     "DatumVan": date(2020, 1, 1),
+        #     "DatumTotEnMet": date.today(),
+        #     "OntvangenVerzonden": "ovBeide",
+        #     "Gelezen": "Nee",
+        #     "Gearchiveerd": "Nee",
+        # }
+
+        response_body = call_service_method(
+            "BerichtenBoxService.GetBerichten",
+            Relatiecode=relatiecode,
+            DatumVan=date(2020, 1, 1),
+            DatumTotEnMet=date.today(),
+            OntvangenVerzonden="ovBeide",
+            Gelezen="Nee",
+            Gearchiveerd="Nee",
+        )
+
         tbbox_headers = get_result(response_body, "TBBoxHeader", [])
 
         # TODO: Which notification to take?
