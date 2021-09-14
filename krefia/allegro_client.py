@@ -248,7 +248,7 @@ def get_leningen(relatiecode_kredietbank: str) -> List[dict]:
     leningen = []
 
     for tpl_header in tpl_headers:
-        lening = get_lening(tpl_header["InfoHeader"])
+        lening = get_lening(tpl_header)
         if lening:
             leningen.append(lening)
 
