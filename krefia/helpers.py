@@ -100,7 +100,7 @@ def get_user_attributes(cls):
     return [item for item in inspect.getmembers(cls) if item[0] not in boring]
 
 
-class enum(dict):
+class dotdict(dict):
     """dot.notation access to dictionary attributes"""
 
     __getattr__ = dict.get

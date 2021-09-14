@@ -12,13 +12,13 @@ from krefia.config import (
     get_allegro_service_description,
     logger,
 )
-from krefia.helpers import enum
+from krefia.helpers import dotdict
 
 session_id = None
 allegro_client = {}
 
-bedrijf = enum({"FIBU": "FIBU", "KREDIETBANK": "KREDIETBANK"})
-bedrijf_code = enum({bedrijf.FIBU: 10, bedrijf.KREDIETBANK: 2})
+bedrijf = dotdict({"FIBU": "FIBU", "KREDIETBANK": "KREDIETBANK"})
+bedrijf_code = dotdict({bedrijf.FIBU: 10, bedrijf.KREDIETBANK: 2})
 
 SRV_DETAIL_URL = "http://host/srv/{RelatieCode}/{Volgnummer}"
 PL_DETAIL_URL = "http://?"
@@ -36,7 +36,7 @@ def get_client(service_name: str) -> Union[Client, None]:
     global allegro_client
 
     if service_name not in allegro_client:
-        logger.info("Establishing a connection with Allegro service %s", service_name)
+        logger.info(f"Establishing a connection with Allegro service {service_name}")
         timeout = 9  # Timeout period for getting WSDL and operations in seconds
 
         try:
@@ -68,7 +68,10 @@ def get_client(service_name: str) -> Union[Client, None]:
 
 def get_service(service_name: str) -> ServiceProxy:
     client = get_client(service_name)
-    return client.service
+    try:
+        return client.service
+    except Exception:
+        return None
 
 
 def set_session_id(id: str) -> None:
@@ -92,6 +95,7 @@ def get_session_header(service_name: str) -> List[Element]:
     session_header = header(
         ID=session_id,
     )
+
     return [session_header]
 
 
@@ -102,7 +106,7 @@ def call_service_method(operation: str, *args) -> Union[dict, None]:
     service = get_service(service_name)
 
     if not service:
-        logger.error("%s, no service.", operation)
+        logger.error(f"{operation}, no service.")
         return
 
     try:
@@ -115,7 +119,7 @@ def call_service_method(operation: str, *args) -> Union[dict, None]:
 
         return response["body"]
     except Exception as error:
-        logger.error(error)
+        logger.error(f"Could not execute service method: {error}")
 
     return None
 
@@ -231,8 +235,8 @@ def get_lening(tpl_header: dict) -> dict:
     lening = None
 
     if lening_source:
-        total = 0
-        current = 0
+        total = lening_source["BrutoKredietvergoeding"]
+        current = lening_source["OpenstaandeKredietvergoeding"]
         title = f"Kredietsom {total}  met openstaand termijnbedrag {current}"
 
         lening = {"title": title, "url": PL_DETAIL_URL.format({})}
