@@ -248,7 +248,7 @@ def get_leningen(relatiecode_kredietbank: str) -> List[dict]:
     leningen = []
 
     for tpl_header in tpl_headers:
-        lening = get_lening(tpl_header)
+        lening = get_lening(tpl_header["InfoHeader"])
         if lening:
             leningen.append(lening)
 
@@ -277,14 +277,13 @@ def get_notification(relatiecode: str, bedrijf: str) -> Union[dict, None]:
     response_body = None
 
     if relatiecode:
-        # query = {
-        #     "Relatiecode": relatiecode,
-        #     "DatumVan": date(2020, 1, 1),
-        #     "DatumTotEnMet": date.today(),
-        #     "OntvangenVerzonden": "ovBeide",
-        #     "Gelezen": "Nee",
-        #     "Gearchiveerd": "Nee",
-        # }
+        # "Relatiecode": relatiecode,
+        # "DatumVan": date(2020, 1, 1),
+        # "DatumTotEnMet": date.today(),
+        # "OntvangenVerzonden": "ovBeide",
+        # "Gelezen": "Nee",
+        # "Gearchiveerd": "Nee",
+        # "Sortering": "Oplopend",
 
         response_body = call_service_method(
             "BerichtenBoxService.GetBerichten",
@@ -292,8 +291,9 @@ def get_notification(relatiecode: str, bedrijf: str) -> Union[dict, None]:
             date(2020, 1, 1),
             date.today(),
             "ovBeide",
-            "Nee",
-            "Nee",
+            False,
+            False,
+            "Oplopend",
         )
 
         tbbox_headers = get_result(response_body, "TBBoxHeader", [])
