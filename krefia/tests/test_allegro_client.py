@@ -6,6 +6,7 @@ from krefia import config
 from krefia.allegro_client import (
     call_service_method,
     get_relatiecode_bedrijf,
+    get_result,
     get_schuldhulp_title,
     get_service,
     get_session_header,
@@ -143,6 +144,19 @@ class ClientTests(TestCase):
         title = get_schuldhulp_title(aanvraag_source)
 
         self.assertEqual(title, "Schuldhoogte wordt opgevraagd")
+
+    def test_get_result(self):
+        response_test = {"Result": None}
+        result = get_result(response_test, "Foo")
+        self.assertEqual(result, None)
+
+        response_test = {"Result": None}
+        result = get_result(response_test, "Foo", {})
+        self.assertEqual(result, {})
+
+        response_test = {"Result": {"Foo": "Bar"}}
+        result = get_result(response_test, "Foo")
+        self.assertEqual(result, "Bar")
 
     def test_get_all(self):
         self.assertEqual(True, True)
