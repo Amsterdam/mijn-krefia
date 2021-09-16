@@ -1,17 +1,12 @@
 from datetime import date
-from typing import Any, List, Union
+from typing import Any
 
 from requests import ConnectionError
 from zeep import Client
-from zeep.proxy import ServiceProxy
 from zeep.settings import Settings
 from zeep.transports import Transport
-from zeep.xsd.elements.element import Element
 
-from krefia.config import (
-    get_allegro_service_description,
-    logger,
-)
+from krefia.config import get_allegro_service_description, logger
 from krefia.helpers import dotdict
 
 session_id = None
@@ -32,7 +27,7 @@ notification_urls = {
 }
 
 
-def get_client(service_name: str) -> Union[Client, None]:
+def get_client(service_name: str):
     global allegro_client
 
     if service_name not in allegro_client:
@@ -66,7 +61,7 @@ def get_client(service_name: str) -> Union[Client, None]:
     return allegro_client[service_name]
 
 
-def get_service(service_name: str) -> ServiceProxy:
+def get_service(service_name: str):
     client = get_client(service_name)
     try:
         return client.service
@@ -74,7 +69,7 @@ def get_service(service_name: str) -> ServiceProxy:
         return None
 
 
-def set_session_id(id: str) -> None:
+def set_session_id(id: str):
     global session_id
 
     logger.info(f"Set session-id {id}")
@@ -82,11 +77,11 @@ def set_session_id(id: str) -> None:
     session_id = id
 
 
-def get_session_id() -> str:
+def get_session_id():
     return session_id
 
 
-def get_session_header(service_name: str) -> List[Element]:
+def get_session_header(service_name: str):
     if not session_id:
         return []
 
@@ -99,7 +94,7 @@ def get_session_header(service_name: str) -> List[Element]:
     return [session_header]
 
 
-def call_service_method(operation: str, *args) -> Union[dict, None]:
+def call_service_method(operation: str, *args):
 
     service_name, method_name = operation.split(".")
 
@@ -124,7 +119,7 @@ def call_service_method(operation: str, *args) -> Union[dict, None]:
     return None
 
 
-def login_tijdelijk() -> bool:
+def login_tijdelijk():
     response_body = call_service_method("LoginService.AllegroWebLoginTijdelijk")
 
     result = response_body["Result"]
@@ -135,7 +130,7 @@ def login_tijdelijk() -> bool:
     return result
 
 
-def get_relatiecode_bedrijf(bsn: str) -> Union[dict, None]:
+def get_relatiecode_bedrijf(bsn: str):
     response_body = call_service_method("LoginService.BSNNaarRelatieMetBedrijf", bsn)
 
     tr_relatiecodes = get_result(response_body, "TRelatiecodeBedrijfcode", [])
@@ -152,7 +147,7 @@ def get_relatiecode_bedrijf(bsn: str) -> Union[dict, None]:
     return relatiecodes
 
 
-def login_allowed(relatiecode: str) -> bool:
+def login_allowed(relatiecode: str):
     response_body = call_service_method(
         "LoginService.AllegroWebMagAanmelden", relatiecode
     )
@@ -162,7 +157,7 @@ def login_allowed(relatiecode: str) -> bool:
     return is_allowed
 
 
-def get_schuldhulp_title(aanvraag_source: dict) -> str:
+def get_schuldhulp_title(aanvraag_source: dict):
     title = ""
     eind_status = aanvraag_source["Eindstatus"]
     status = aanvraag_source["Status"]
@@ -222,7 +217,7 @@ def get_schuldhulp_aanvraag(aanvraag_header: dict):
     return aanvraag
 
 
-def get_schuldhulp_aanvragen(relatiecode_fibu: str) -> List[dict]:
+def get_schuldhulp_aanvragen(relatiecode_fibu: str):
     response_body = call_service_method(
         "SchuldHulpService.GetSRVOverzicht", relatiecode_fibu
     )
@@ -237,7 +232,7 @@ def get_schuldhulp_aanvragen(relatiecode_fibu: str) -> List[dict]:
     return schuldhulp_aanvragen
 
 
-def get_lening(tpl_header: dict) -> dict:
+def get_lening(tpl_header: dict):
     response_body = call_service_method("FinancieringService.GetPL", tpl_header)
     lening_source = get_result(response_body, "TPL")
     lening = None
@@ -252,7 +247,7 @@ def get_lening(tpl_header: dict) -> dict:
     return lening
 
 
-def get_leningen(relatiecode_kredietbank: str) -> List[dict]:
+def get_leningen(relatiecode_kredietbank: str):
     response_body = call_service_method(
         "FinancieringService.GetPLOverzicht", relatiecode_kredietbank
     )
@@ -267,7 +262,7 @@ def get_leningen(relatiecode_kredietbank: str) -> List[dict]:
     return leningen
 
 
-def get_budgetbeheer(relatiecode_fibu: str) -> List[dict]:
+def get_budgetbeheer(relatiecode_fibu: str):
     response_body = call_service_method("BBRService.GetBBROverzicht", relatiecode_fibu)
     tbbr_headers = get_result(response_body, "TBBRHeader", [])
     budgetbeheer = []
@@ -284,7 +279,7 @@ def get_budgetbeheer(relatiecode_fibu: str) -> List[dict]:
     return budgetbeheer
 
 
-def get_notification(relatiecode: str, bedrijf: str) -> Union[dict, None]:
+def get_notification(relatiecode: str, bedrijf: str):
     notification = None
     response_body = None
 
@@ -323,7 +318,7 @@ def get_notification(relatiecode: str, bedrijf: str) -> Union[dict, None]:
     return notification
 
 
-def get_notification_triggers(relaties: dict) -> dict:
+def get_notification_triggers(relaties: dict):
     fibu_notification = None
     kredietbank_notification = None
 
@@ -341,7 +336,7 @@ def get_notification_triggers(relaties: dict) -> dict:
     }
 
 
-def get_all(bsn: str) -> dict:
+def get_all(bsn: str):
     is_logged_in = login_tijdelijk()
 
     if is_logged_in:
