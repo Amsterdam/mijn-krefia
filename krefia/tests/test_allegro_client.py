@@ -6,9 +6,11 @@ from krefia import config
 from krefia.allegro_client import (
     call_service_method,
     get_relatiecode_bedrijf,
+    get_schuldhulp_title,
     get_service,
     get_session_header,
     get_session_id,
+    login_allowed,
     login_tijdelijk,
     set_session_id,
 )
@@ -98,6 +100,49 @@ class ClientTests(TestCase):
         response_expected = {"FIBU": "321321", "KREDIETBANK": "123123"}
 
         self.assertEqual(response, response_expected)
+
+    @mock.patch(
+        "krefia.allegro_client.allegro_client",
+        mock_client("LoginService", ["AllegroWebMagAanmelden"]),
+    )
+    def test_login_allowed(self):
+        relatiecode = "123__123"
+        response = login_allowed(relatiecode)
+
+        self.assertEqual(response, True)
+
+    def test_get_schuldhulp_title(self):
+        aanvraag_source = {
+            "Eindstatus": None,
+            "Status": None,
+            "ExtraStatus": None,
+        }
+        title = get_schuldhulp_title(aanvraag_source)
+
+        aanvraag_source = {
+            "Eindstatus": "Z",
+            "Status": "E",
+            "ExtraStatus": "Voorlopig afgewezen",
+        }
+        title = get_schuldhulp_title(aanvraag_source)
+
+        aanvraag_source = {
+            "Eindstatus": None,
+            "Status": "C",
+            "ExtraStatus": "Voorlopig afgewezen",
+        }
+        title = get_schuldhulp_title(aanvraag_source)
+
+        self.assertEqual(title, "Dwangprocedure loopt")
+
+        aanvraag_source = {
+            "Eindstatus": None,
+            "Status": "C",
+            "ExtraStatus": "Aanvraag beperkt",
+        }
+        title = get_schuldhulp_title(aanvraag_source)
+
+        self.assertEqual(title, "Schuldhoogte wordt opgevraagd")
 
     def test_get_all(self):
         self.assertEqual(True, True)
