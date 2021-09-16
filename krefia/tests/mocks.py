@@ -2,7 +2,8 @@
 import os
 import pprint
 import re
-from typing import List, Tuple
+from types import FunctionType, LambdaType
+from typing import List, Tuple, Union
 from unittest.mock import Mock
 from lxml import etree
 
@@ -61,11 +62,24 @@ def load_response_file(service_name: str, method_name: str):
 
 
 class MockService:
-    def __init__(self, service_name: str, method_names: List[str]):
+    def __init__(
+        self,
+        service_name: str,
+        method_names: List[Union[str, Tuple[str, FunctionType]]],
+    ):
         for method_name in method_names:
-            setattr(self, method_name, self.respond_with(service_name, method_name))
+            response_handler = None
 
-    def respond_with(self, service_name: str, method_name: str, *args):
+            if isinstance(method_name, tuple):
+                (method_name_unpacked, response_handler_unpacked) = method_name
+                response_handler = response_handler_unpacked
+                method_name = method_name_unpacked
+            else:
+                response_handler = self.respond_with(service_name, method_name)
+
+            setattr(self, method_name, response_handler)
+
+    def respond_with(self, service_name: str, method_name: str, *args, **kwargs):
         def r(*args, **kwargs):
             response_dict = lxml_to_dict(
                 load_xml(load_response_file(service_name, method_name))
@@ -94,18 +108,26 @@ class MockClient:
     service = None
     args = []
 
-    def __init__(self, service_name: str, method_names: List[str]):
+    def __init__(
+        self,
+        service_name: str,
+        method_names: List[Union[str, Tuple[str, FunctionType]]],
+    ):
         self.service = MockService(service_name, method_names)
 
     def get_element(self, el_name: str, *args):
         return MockElement
 
 
-def mock_client(service_name: str, method_names: List[str]):
+def mock_client(
+    service_name: str, method_names: List[Union[str, Tuple[str, FunctionType]]]
+):
     return {service_name: MockClient(service_name, method_names)}
 
 
-def mock_clients(operations: List[Tuple[str, List[str]]]):
+def mock_clients(
+    operations: List[Tuple[str, List[Union[str, Tuple[str, FunctionType]]]]]
+):
     mocked_services = {}
     for (service_name, method_names) in operations:
         mocked_services.update(mock_client(service_name, method_names))

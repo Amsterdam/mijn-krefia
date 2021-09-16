@@ -45,7 +45,7 @@ def get_client(service_name: str):
             allegro_client[service_name] = client
             return client
         except ConnectionError as e:
-            # do not relog the error, because the error has a object address in it, it is a new error every time.
+            # do not rethrow the error, because the error has a object address in it, it is a new error every time.
             logger.error(
                 f"Failed to establish a connection with Allegro: Connection Timeout ({type(e)})"
             )
@@ -212,7 +212,7 @@ def get_schuldhulp_aanvraag(aanvraag_header: dict):
 
     if aanvraag_source:
         title = get_schuldhulp_title(aanvraag_source)
-        aanvraag = {"title": title, "url": SRV_DETAIL_URL.format({})}
+        aanvraag = {"title": title, "url": SRV_DETAIL_URL.format(**aanvraag_source)}
 
     return aanvraag
 

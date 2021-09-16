@@ -160,25 +160,75 @@ class ClientTests(TestCase):
         result = get_result(response_test, "Foo")
         self.assertEqual(result, "Bar")
 
+    srv_aanvraag_result = mock.Mock(
+        return_value={
+            "body": {
+                "Result": {
+                    "TSRVAanvraag": {
+                        "Volgnummer": 1,
+                        "RelatieCode": "blap",
+                        "Eindstatus": None,
+                        "Status": "C",
+                        "ExtraStatus": "Voorlopig afgewezen",
+                    }
+                }
+            }
+        }
+    )
+
     @mock.patch(
         "krefia.allegro_client.allegro_client",
-        mock_client("SchuldHulpService", ["GetSRVAanvraag"]),
+        mock_client("SchuldHulpService", [("GetSRVAanvraag", srv_aanvraag_result)]),
     )
     def test_get_schuldhulp_aanvraag(self):
         aanvraag_header = {"Foo": "Bar"}
         response = get_schuldhulp_aanvraag(aanvraag_header)
 
-        self.assertEqual(response, None)
+        self.srv_aanvraag_result.assert_called_with(aanvraag_header, _soapheaders=[])
+
+        self.assertEqual(
+            response, {"title": "Dwangprocedure loopt", "url": "http://host/srv/blap/1"}
+        )
+
+    srv_overzicht_result = mock.Mock(
+        return_value={
+            "body": {"Result": {"TSRVAanvraagHeader": [{"ID": 1}, {"ID": 2}]}}
+        }
+    )
 
     @mock.patch(
         "krefia.allegro_client.allegro_client",
-        mock_client("SchuldHulpService", ["GetSRVOverzicht", "GetSRVAanvraag"]),
+        mock_client(
+            "SchuldHulpService",
+            [
+                ("GetSRVOverzicht", srv_overzicht_result),
+                ("GetSRVAanvraag", srv_aanvraag_result),
+            ],
+        ),
     )
     def test_get_schuldhulp_aanvragen(self):
+        self.srv_aanvraag_result.reset_mock()
+
         relatiecode_fibu = "__456__456__"
         response = get_schuldhulp_aanvragen(relatiecode_fibu)
 
-        self.assertEqual(response, [])
+        self.srv_overzicht_result.assert_called_with(relatiecode_fibu, _soapheaders=[])
+        self.assertEqual(self.srv_aanvraag_result.call_count, 2)
+        self.assertEqual(
+            self.srv_aanvraag_result.call_args_list,
+            [
+                mock.call({"ID": 1}, _soapheaders=[]),
+                mock.call({"ID": 2}, _soapheaders=[]),
+            ],
+        )
+
+        self.assertEqual(
+            response,
+            [
+                {"title": "Dwangprocedure loopt", "url": "http://host/srv/blap/1"},
+                {"title": "Dwangprocedure loopt", "url": "http://host/srv/blap/1"},
+            ],
+        )
 
     def test_get_all(self):
         self.assertEqual(True, True)
