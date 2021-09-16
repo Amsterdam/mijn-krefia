@@ -5,6 +5,7 @@ from unittest import TestCase, mock
 from krefia import config
 from krefia.allegro_client import (
     call_service_method,
+    get_relatiecode_bedrijf,
     get_service,
     get_session_header,
     get_session_id,
@@ -20,15 +21,6 @@ config.ALLEGRO_SOAP_ENDPOINT = "https://localhost/SOAP"
 
 
 class ClientTests(TestCase):
-    @mock.patch(
-        "krefia.allegro_client.allegro_client",
-        mock_client("LoginService", ["AllegroWebLoginTijdelijk"]),
-    )
-    def test_login_tijdelijk(self):
-        response = login_tijdelijk()
-        self.assertEqual(response, True)
-        self.assertEqual(get_session_id(), "{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}")
-
     def get_service_mocks():
         return {
             "service1": dotdict({"service": "Foo"}),
@@ -85,6 +77,27 @@ class ClientTests(TestCase):
         response = call_service_method("service3b.method2")
         logger_mock.error.assert_called_with("service3b.method2, no service.")
         self.assertIsNone(response)
+
+    @mock.patch(
+        "krefia.allegro_client.allegro_client",
+        mock_client("LoginService", ["AllegroWebLoginTijdelijk"]),
+    )
+    def test_login_tijdelijk(self):
+        response = login_tijdelijk()
+        self.assertEqual(response, True)
+        self.assertEqual(get_session_id(), "{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}")
+
+    @mock.patch(
+        "krefia.allegro_client.allegro_client",
+        mock_client("LoginService", ["BSNNaarRelatieMetBedrijf"]),
+    )
+    def test_get_relatiecode_bedrijf(self):
+        bsn = "__test_bsn_123__"
+        response = get_relatiecode_bedrijf(bsn)
+
+        response_expected = {"FIBU": "321321", "KREDIETBANK": "123123"}
+
+        self.assertEqual(response, response_expected)
 
     def test_get_all(self):
         self.assertEqual(True, True)
