@@ -189,10 +189,18 @@ def get_schuldhulp_title(aanvraag_source: dict) -> str:
     return title
 
 
-def get_result(response_body: dict, key: str, return_type: Any = None):
-    result = return_type
+def get_result(response_body: dict, key: str, return_default: Any = None):
+    result = return_default
     try:
         result = response_body["Result"][key]
+        # Compensate for XML's weirdness in treating 1 Element = dict, >=1 Element = list
+        if (
+            result
+            and isinstance(return_default, list)
+            and not isinstance(result, type(return_default))
+        ):
+            result = [result]
+
     except Exception:
         logger.info("No result.%s", key)
         pass

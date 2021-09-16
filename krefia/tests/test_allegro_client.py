@@ -7,6 +7,8 @@ from krefia.allegro_client import (
     call_service_method,
     get_relatiecode_bedrijf,
     get_result,
+    get_schuldhulp_aanvraag,
+    get_schuldhulp_aanvragen,
     get_schuldhulp_title,
     get_service,
     get_session_header,
@@ -157,6 +159,26 @@ class ClientTests(TestCase):
         response_test = {"Result": {"Foo": "Bar"}}
         result = get_result(response_test, "Foo")
         self.assertEqual(result, "Bar")
+
+    @mock.patch(
+        "krefia.allegro_client.allegro_client",
+        mock_client("SchuldHulpService", ["GetSRVAanvraag"]),
+    )
+    def test_get_schuldhulp_aanvraag(self):
+        aanvraag_header = {"Foo": "Bar"}
+        response = get_schuldhulp_aanvraag(aanvraag_header)
+
+        self.assertEqual(response, None)
+
+    @mock.patch(
+        "krefia.allegro_client.allegro_client",
+        mock_client("SchuldHulpService", ["GetSRVOverzicht", "GetSRVAanvraag"]),
+    )
+    def test_get_schuldhulp_aanvragen(self):
+        relatiecode_fibu = "__456__456__"
+        response = get_schuldhulp_aanvragen(relatiecode_fibu)
+
+        self.assertEqual(response, [])
 
     def test_get_all(self):
         self.assertEqual(True, True)
