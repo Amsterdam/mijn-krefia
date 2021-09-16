@@ -18,7 +18,7 @@ session_id = None
 allegro_client = {}
 
 bedrijf = dotdict({"FIBU": "FIBU", "KREDIETBANK": "KREDIETBANK"})
-bedrijf_code = dotdict({bedrijf.FIBU: 10, bedrijf.KREDIETBANK: 2})
+bedrijf_code = dotdict({bedrijf.FIBU: "10", bedrijf.KREDIETBANK: "2"})
 
 SRV_DETAIL_URL = "http://host/srv/{RelatieCode}/{Volgnummer}"
 PL_DETAIL_URL = "http://?"
@@ -142,9 +142,9 @@ def get_relatiecode_bedrijf(bsn: str) -> Union[dict, None]:
     relatiecodes = {}
 
     for relatie in tr_relatiecodes:
-        if relatie["Bedrijfscode"] == bedrijf_code.FIBU:
+        if str(relatie["Bedrijfscode"]) == bedrijf_code.FIBU:
             relatiecodes[bedrijf.FIBU] = relatie["Relatiecode"]
-        elif relatie["Bedrijfscode"] == bedrijf_code.KREDIETBANK:
+        elif str(relatie["Bedrijfscode"]) == bedrijf_code.KREDIETBANK:
             relatiecodes[bedrijf.KREDIETBANK] = relatie["Relatiecode"]
 
     logger.debug(relatiecodes)
