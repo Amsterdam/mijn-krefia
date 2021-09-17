@@ -34,10 +34,12 @@ if sentry_dsn:  # pragma: no cover
 @verify_tma_user
 def get_all():
     user = get_tma_user()
+    content = allegro_client.get_all(user["id"])
 
-    zaken = allegro_client.get_all(user["id"])
+    if content is None:
+        return success_response_json(None)
 
-    return success_response_json(zaken)
+    return success_response_json(content)
 
 
 @app.route("/status/health")

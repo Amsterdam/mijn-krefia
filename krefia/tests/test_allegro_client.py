@@ -1,10 +1,9 @@
-from datetime import datetime
-import logging
 import pprint
 from unittest import TestCase, mock
 
 from krefia import config
 from krefia.allegro_client import (
+    bedrijf,
     call_service_method,
     get_all,
     get_budgetbeheer,
@@ -22,9 +21,8 @@ from krefia.allegro_client import (
     get_session_id,
     login_allowed,
     login_tijdelijk,
-    set_session_id,
-    bedrijf,
     notification_urls,
+    set_session_id,
 )
 from krefia.helpers import dotdict
 from krefia.tests.mocks import mock_client, mock_clients
@@ -78,31 +76,31 @@ class ClientTests(TestCase):
     @mock.patch("krefia.allegro_client.logger")
     @mock.patch("krefia.allegro_client.allegro_client", fake_client)
     def test_call_service_method(self, logger_mock):
-        response = call_service_method("service3.method1", "bar")
+        content = call_service_method("service3.method1", "bar")
 
-        self.assertEqual(response, "foo")
+        self.assertEqual(content, "foo")
         self.fake_client.service3.service.method1.assert_called_with(
             "bar", _soapheaders=[]
         )
         logger_mock.debug.assert_called_with({"body": "foo"})
 
-        response = call_service_method("service3.method2", "bar")
+        content = call_service_method("service3.method2", "bar")
         logger_mock.error.assert_called_with(
             "Could not execute service method: 'NoneType' object is not callable"
         )
-        self.assertIsNone(response)
+        self.assertIsNone(content)
 
-        response = call_service_method("service3b.method2")
+        content = call_service_method("service3b.method2")
         logger_mock.error.assert_called_with("service3b.method2, no service.")
-        self.assertIsNone(response)
+        self.assertIsNone(content)
 
     @mock.patch(
         "krefia.allegro_client.allegro_client",
         mock_client("LoginService", ["AllegroWebLoginTijdelijk"]),
     )
     def test_login_tijdelijk(self):
-        response = login_tijdelijk()
-        self.assertEqual(response, True)
+        content = login_tijdelijk()
+        self.assertEqual(content, True)
         self.assertEqual(get_session_id(), "{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}")
 
     @mock.patch(
@@ -111,11 +109,11 @@ class ClientTests(TestCase):
     )
     def test_get_relatiecode_bedrijf(self):
         bsn = "__test_bsn_123__"
-        response = get_relatiecode_bedrijf(bsn)
+        content = get_relatiecode_bedrijf(bsn)
 
-        response_expected = {"FIBU": "321321", "KREDIETBANK": "123123"}
+        content_expected = {"FIBU": "321321", "KREDIETBANK": "123123"}
 
-        self.assertEqual(response, response_expected)
+        self.assertEqual(content, content_expected)
 
     @mock.patch(
         "krefia.allegro_client.allegro_client",
@@ -123,21 +121,21 @@ class ClientTests(TestCase):
     )
     def test_login_allowed(self):
         relatiecode = "123__123"
-        response = login_allowed(relatiecode)
+        content = login_allowed(relatiecode)
 
-        self.assertEqual(response, True)
+        self.assertEqual(content, True)
 
     def test_get_result(self):
-        response_test = {"Result": None}
-        result = get_result(response_test, "Foo")
+        content_test = {"Result": None}
+        result = get_result(content_test, "Foo")
         self.assertEqual(result, None)
 
-        response_test = {"Result": None}
-        result = get_result(response_test, "Foo", {})
+        content_test = {"Result": None}
+        result = get_result(content_test, "Foo", {})
         self.assertEqual(result, {})
 
-        response_test = {"Result": {"Foo": "Bar"}}
-        result = get_result(response_test, "Foo")
+        content_test = {"Result": {"Foo": "Bar"}}
+        result = get_result(content_test, "Foo")
         self.assertEqual(result, "Bar")
 
 
@@ -203,12 +201,12 @@ class SchuldHulpTests(TestCase):
     )
     def test_get_schuldhulp_aanvraag(self):
         aanvraag_header = {"Foo": "Bar"}
-        response = get_schuldhulp_aanvraag(aanvraag_header)
+        content = get_schuldhulp_aanvraag(aanvraag_header)
 
         self.srv_aanvraag_result.assert_called_with(aanvraag_header, _soapheaders=[])
 
         self.assertEqual(
-            response, {"title": "Dwangprocedure loopt", "url": "http://host/srv/blap/1"}
+            content, {"title": "Dwangprocedure loopt", "url": "http://host/srv/blap/1"}
         )
 
     @mock.patch(
@@ -225,7 +223,7 @@ class SchuldHulpTests(TestCase):
         self.srv_aanvraag_result.reset_mock()
 
         relatiecode_fibu = "__456__456__"
-        response = get_schuldhulp_aanvragen(relatiecode_fibu)
+        content = get_schuldhulp_aanvragen(relatiecode_fibu)
 
         self.srv_overzicht_result.assert_called_with(relatiecode_fibu, _soapheaders=[])
         self.assertEqual(self.srv_aanvraag_result.call_count, 2)
@@ -238,7 +236,7 @@ class SchuldHulpTests(TestCase):
         )
 
         self.assertEqual(
-            response,
+            content,
             [
                 {"title": "Dwangprocedure loopt", "url": "http://host/srv/blap/1"},
                 {"title": "Dwangprocedure loopt", "url": "http://host/srv/blap/1"},
@@ -257,13 +255,13 @@ class LeningBudgetbeheerTests(TestCase):
     )
     def test_get_lening(self):
         tpl_header = {}
-        response = get_lening(tpl_header)
+        content = get_lening(tpl_header)
 
-        response_expected = {
+        content_expected = {
             "title": "Kredietsom 1689.12  met openstaand termijnbedrag 79.66",
             "url": "http://host/pl/321321/1",
         }
-        self.assertEqual(response, response_expected)
+        self.assertEqual(content, content_expected)
 
     @mock.patch(
         "krefia.allegro_client.allegro_client",
@@ -273,13 +271,13 @@ class LeningBudgetbeheerTests(TestCase):
     )
     def test_get_leningen(self):
         relatiecode_kredietbank = "__777__888__"
-        response = get_leningen(relatiecode_kredietbank)
+        content = get_leningen(relatiecode_kredietbank)
 
         self.pl_overzicht_result.assert_called_with(
             relatiecode_kredietbank, _soapheaders=[]
         )
 
-        response_expected = [
+        content_expected = [
             {
                 "title": "Kredietsom 1689.12  met openstaand termijnbedrag 79.66",
                 "url": "http://host/pl/321321/1",
@@ -289,7 +287,7 @@ class LeningBudgetbeheerTests(TestCase):
                 "url": "http://host/pl/321321/1",
             },
         ]
-        self.assertEqual(response, response_expected)
+        self.assertEqual(content, content_expected)
 
     @mock.patch(
         "krefia.allegro_client.allegro_client",
@@ -297,15 +295,15 @@ class LeningBudgetbeheerTests(TestCase):
     )
     def test_get_budgetbeheer(self):
         relatiecode_fibu = "__456__456__"
-        response = get_budgetbeheer(relatiecode_fibu)
+        content = get_budgetbeheer(relatiecode_fibu)
 
-        response_expected = [
+        content_expected = [
             {
                 "title": "Beheer uw budget op FiBu",
                 "url": "http://host/bbr/123123123/3",
             }
         ]
-        self.assertEqual(response, response_expected)
+        self.assertEqual(content, content_expected)
 
 
 class ClientTests2(TestCase):
@@ -329,14 +327,14 @@ class ClientTests2(TestCase):
     )
     def test_get_notification(self):
         relatiecode_fibu = "__123_fibu__"
-        response = get_notification(relatiecode_fibu, bedrijf.FIBU)
+        content = get_notification(relatiecode_fibu, bedrijf.FIBU)
 
-        self.assertEqual(response, self.trigger_fibu)
+        self.assertEqual(content, self.trigger_fibu)
 
         relatiecode_kredietbank = "__123_kredietbank__"
-        response = get_notification(relatiecode_kredietbank, bedrijf.KREDIETBANK)
+        content = get_notification(relatiecode_kredietbank, bedrijf.KREDIETBANK)
 
-        self.assertEqual(response, self.trigger_kredietbank)
+        self.assertEqual(content, self.trigger_kredietbank)
 
     @mock.patch(
         "krefia.allegro_client.allegro_client",
@@ -347,14 +345,14 @@ class ClientTests2(TestCase):
             bedrijf.FIBU: "123123",
             bedrijf.KREDIETBANK: "890678",
         }
-        response = get_notification_triggers(relaties)
+        content = get_notification_triggers(relaties)
 
-        response_expected = {
+        content_expected = {
             "fibu": self.trigger_fibu,
             "krediet": self.trigger_kredietbank,
         }
 
-        self.assertEqual(response, response_expected)
+        self.assertEqual(content, content_expected)
 
     @mock.patch(
         "krefia.allegro_client.allegro_client",
@@ -380,9 +378,9 @@ class ClientTests2(TestCase):
         self.maxDiff = None
 
         bsn = "_1_2_3_4_5_6_"
-        response = get_all(bsn)
+        content = get_all(bsn)
 
-        response_expected = {
+        content_expected = {
             "deepLinks": {
                 "budgetbeheer": [
                     {
@@ -410,4 +408,55 @@ class ClientTests2(TestCase):
             },
         }
 
-        self.assertEqual(response, response_expected)
+        self.assertEqual(content, content_expected)
+
+    def mock_content(*args, **kwargs):
+        return {"body": {"FOo": "Barrr"}}
+
+    @mock.patch(
+        "krefia.allegro_client.allegro_client",
+        mock_client(
+            "LoginService",
+            [
+                "AllegroWebLoginTijdelijk",
+                "BSNNaarRelatieMetBedrijf",
+                "AllegroWebMagAanmelden",
+            ],
+        ),
+    )
+    def test_get_all_happy_no_items(self):
+        bsn = "_1_2_3_4_5_6_"
+        content = get_all(bsn)
+
+        expected_content = {
+            "deepLinks": {
+                "schuldhulp": [],
+                "lening": [],
+                "budgetbeheer": [],
+            },
+            "notificationTriggers": {
+                "fibu": None,
+                "krediet": None,
+            },
+        }
+
+        self.assertEqual(content, expected_content)
+
+    @mock.patch(
+        "krefia.allegro_client.allegro_client",
+        mock_client(
+            "LoginService",
+            [
+                "AllegroWebLoginTijdelijk",
+                ("BSNNaarRelatieMetBedrijf", mock_content),
+                "AllegroWebMagAanmelden",
+            ],
+        ),
+    )
+    def test_get_all_no_relaties(self):
+        bsn = "_1_2_3_4_5_6_"
+        content = get_all(bsn)
+
+        expected_content = None
+
+        self.assertEqual(content, expected_content)

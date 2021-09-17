@@ -87,8 +87,8 @@ def get_connection():
     return None
 
 
-def success_response_json(response_content):
-    return {"status": "OK", "content": response_content}, 200
+def success_response_json(response_content, response_code=200):
+    return {"status": "OK", "content": response_content}, response_code
 
 
 def error_response_json(message: str, code: int = 500):

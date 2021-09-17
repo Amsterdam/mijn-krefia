@@ -1,8 +1,13 @@
+from krefia import config
+from unittest import mock
+from krefia.tests.mocks import mock_client
 from unittest.mock import patch
 
 from krefia.server import app
 from tma_saml import FlaskServerTMATestCase, UserType
 from tma_saml.for_tests.cert_and_key import server_crt
+
+config.ALLEGRO_SOAP_ENDPOINT = "https://localhost/SOAP"
 
 
 @patch("krefia.helpers.get_tma_certificate", lambda: server_crt)
@@ -27,23 +32,37 @@ class ApiTests(FlaskServerTMATestCase):
         self.assertEqual(data["status"], "OK")
         self.assertEqual(data["content"], "OK")
 
-    # def test_get_all(self):
-    #     response = self.get_secure("/krefia/all")
+    def mock_response(*args, **kwargs):
+        return {"body": {"FOo": "Barrr"}}
 
-    #     self.assertEqual(response.status_code, 200)
-    #     data = response.get_json()
+    @mock.patch(
+        "krefia.allegro_client.allegro_client",
+        mock_client(
+            "LoginService",
+            [
+                "AllegroWebLoginTijdelijk",
+                ("BSNNaarRelatieMetBedrijf", mock_response),
+                "AllegroWebMagAanmelden",
+            ],
+        ),
+    )
+    def test_get_all_no_relaties(self):
+        response = self.get_secure("/krefia/all")
+        self.assertEqual(response.status_code, 200)
+        data = response.get_json()
 
-    #     expected_content = {
-    #         "deepLinks": {
-    #             "schuldhulp": None,
-    #             "lening": None,
-    #             "budgetbeheer": None,
-    #         },
-    #         "notificationTriggers": None,
-    #     }
+        expected_content = None
 
-    #     self.assertEqual(data["status"], "OK")
-    #     self.assertEqual(data["content"], expected_content)
+        self.assertEqual(data["status"], "OK")
+        self.assertEqual(data["content"], expected_content)
+
+    def test_get_all_no_login(self):
+        response = self.get_secure("/krefia/all")
+        self.assertEqual(response.status_code, 500)
+        data = response.get_json()
+
+        self.assertEqual(data["status"], "ERROR")
+        self.assertFalse("content" in data)
 
     def test_not_authenticated(self):
         response = self.client.get("/krefia/all")

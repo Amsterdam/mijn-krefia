@@ -95,9 +95,7 @@ def get_session_header(service_name: str):
 
 
 def call_service_method(operation: str, *args):
-
     service_name, method_name = operation.split(".")
-
     service = get_service(service_name)
 
     if not service:
@@ -109,10 +107,15 @@ def call_service_method(operation: str, *args):
             _soapheaders=get_session_header(service_name), *args
         )
 
-        logger.debug("\n\nResponse for %s", operation)
-        logger.debug(response)
+        if not response.get("body", False):
+            logger.error("Unexpected response for %s", operation)
+            return None
+        else:
 
-        return response["body"]
+            logger.debug("\n\nResponse for %s", operation)
+            logger.debug(response)
+
+            return response["body"]
     except Exception as error:
         logger.error(f"Could not execute service method: {error}")
 
@@ -122,12 +125,12 @@ def call_service_method(operation: str, *args):
 def login_tijdelijk():
     response_body = call_service_method("LoginService.AllegroWebLoginTijdelijk")
 
-    result = response_body["Result"]
+    result = get_result(response_body)
 
     if result:
         set_session_id(response_body["aUserInfo"]["SessionID"])
 
-    return result
+    return bool(result)
 
 
 def get_relatiecode_bedrijf(bsn: str):
@@ -185,12 +188,16 @@ def get_schuldhulp_title(aanvraag_source: dict):
 
 
 def get_result(response_body: dict, key: str = None, return_default: Any = None):
+    if not response_body:
+        return return_default
+
     result = return_default
-    try:
-        if key:
-            result = response_body["Result"].get(key)
-        else:
-            result = response_body["Result"]
+
+    if response_body.get("Result", False):
+        result = response_body["Result"]
+
+        if result and key:
+            result = result.get(key)
 
         # Compensate for XML's weirdness in treating 1 Element = dict, >=1 Element = list
         if (
@@ -199,10 +206,6 @@ def get_result(response_body: dict, key: str = None, return_default: Any = None)
             and not isinstance(result, type(return_default))
         ):
             result = [result]
-
-    except Exception:
-        logger.info("No result.%s", key)
-        pass
 
     return result
 
@@ -348,15 +351,16 @@ def get_all(bsn: str):
     if is_logged_in:
         relaties = get_relatiecode_bedrijf(bsn)
 
+        schuldhulp = None
+        budgetbeheer = None
+        lening = None
+        notification_triggers = None
+
         if not relaties:
             return None
 
         fibu_relatie_code = relaties.get(bedrijf.FIBU)
         kredietbank_relatie_code = relaties.get(bedrijf.KREDIETBANK)
-
-        schuldhulp = None
-        budgetbeheer = None
-        lening = None
 
         if fibu_relatie_code:
             if login_allowed(fibu_relatie_code):
@@ -377,3 +381,5 @@ def get_all(bsn: str):
             },
             "notificationTriggers": notification_triggers,
         }
+
+    raise "Could not login to Allegro"
