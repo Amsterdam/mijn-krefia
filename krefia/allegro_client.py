@@ -304,8 +304,8 @@ def get_notification(relatiecode: str, bedrijf: str):
             date(2020, 1, 1),
             date.today(),
             "ovBeide",
-            False,
-            False,
+            "Nee",
+            "Nee",
             "Oplopend",
         )
 

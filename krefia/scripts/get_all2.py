@@ -1,3 +1,4 @@
+import logging
 from krefia import config
 import sys
 from pprint import pprint
@@ -18,6 +19,10 @@ if len(sys.argv) >= 2:
     bsn = sys.argv[1]
 
 config.set_debug(True)
+wdsl = logging.getLogger("zeep.wsdl.wsdl")
+schema = logging.getLogger("zeep.xsd.schema")
+wdsl.setLevel(logging.ERROR)
+schema.setLevel(logging.ERROR)
 
 is_logged_in = login_tijdelijk()
 
