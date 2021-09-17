@@ -382,19 +382,15 @@ class ClientTests2(TestCase):
 
         content_expected = {
             "deepLinks": {
-                "budgetbeheer": [
-                    {
-                        "title": "Beheer uw budget op FiBu",
-                        "url": "http://host/bbr/123123123/3",
-                    }
-                ],
-                "lening": [
-                    {
-                        "title": "Kredietsom 1689.12  met openstaand termijnbedrag 79.66",
-                        "url": "http://host/pl/321321/1",
-                    }
-                ],
-                "schuldhulp": [],
+                "budgetbeheer": {
+                    "title": "Beheer uw budget op FiBu",
+                    "url": "http://host/bbr/123123123/3",
+                },
+                "lening": {
+                    "title": "Kredietsom 1689.12  met openstaand termijnbedrag 79.66",
+                    "url": "http://host/pl/321321/1",
+                },
+                "schuldhulp": None,
             },
             "notificationTriggers": {
                 "fibu": {
@@ -430,9 +426,9 @@ class ClientTests2(TestCase):
 
         expected_content = {
             "deepLinks": {
-                "schuldhulp": [],
-                "lening": [],
-                "budgetbeheer": [],
+                "schuldhulp": None,
+                "lening": None,
+                "budgetbeheer": None,
             },
             "notificationTriggers": {
                 "fibu": None,

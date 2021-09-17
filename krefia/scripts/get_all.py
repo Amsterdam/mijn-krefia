@@ -17,4 +17,6 @@ schema = logging.getLogger("zeep.xsd.schema")
 wdsl.setLevel(logging.ERROR)
 schema.setLevel(logging.ERROR)
 
-get_all(bsn)
+content = get_all(bsn)
+
+pprint(content)

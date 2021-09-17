@@ -392,9 +392,9 @@ def get_all(bsn: str):
 
         return {
             "deepLinks": {
-                "schuldhulp": schuldhulp,
-                "lening": lening,
-                "budgetbeheer": budgetbeheer,
+                "schuldhulp": schuldhulp[0] if schuldhulp else None,
+                "lening": lening[0] if lening else None,
+                "budgetbeheer": budgetbeheer[0] if budgetbeheer else None,
             },
             "notificationTriggers": notification_triggers,
         }
