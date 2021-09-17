@@ -15,9 +15,9 @@ allegro_client = {}
 bedrijf = dotdict({"FIBU": "FIBU", "KREDIETBANK": "KREDIETBANK"})
 bedrijf_code = dotdict({bedrijf.FIBU: "10", bedrijf.KREDIETBANK: "2"})
 
-SRV_DETAIL_URL = "http://host/srv/{RelatieCode}/{Volgnummer}"
-PL_DETAIL_URL = "http://host/pl/{RelatieCode}/{Volgnummer}"
-BBR_DETAIL_URL = "http://host/bbr/{RelatieCode}/{Volgnummer}"
+SRV_DETAIL_URL = "http://host/srv/%s/%s"
+PL_DETAIL_URL = "http://host/pl/%s/%s"
+BBR_DETAIL_URL = "http://host/bbr/%s/%s"
 FIBU_NOTIFICATION_URL = "http://host/berichten/fibu"
 KREDIETBANK_NOTIFICATION_URL = "http://host/berichten/kredietbank"
 
@@ -223,7 +223,11 @@ def get_schuldhulp_aanvraag(aanvraag_header: dict):
 
     if aanvraag_source:
         title = get_schuldhulp_title(aanvraag_source)
-        aanvraag = {"title": title, "url": SRV_DETAIL_URL.format(**aanvraag_source)}
+        aanvraag = {
+            "title": title,
+            "url": SRV_DETAIL_URL
+            % (aanvraag_source["RelatieCode"], aanvraag_source["Volgnummer"]),
+        }
 
     return aanvraag
 
@@ -252,9 +256,14 @@ def get_lening(tpl_header: dict):
         total = lening_source["BrutoKredietsom"]
         current = lening_source["OpenstaandeKredietvergoeding"]
         title = f"Kredietsom {total}  met openstaand termijnbedrag {current}"
+
         lening = {
             "title": title,
-            "url": PL_DETAIL_URL.format(**lening_source["InfoHeader"]),
+            "url": PL_DETAIL_URL
+            % (
+                lening_source["InfoHeader"]["RelatieCode"],
+                lening_source["InfoHeader"]["Volgnummer"],
+            ),
         }
 
     return lening
@@ -285,7 +294,11 @@ def get_budgetbeheer(relatiecode_fibu: str):
     for tbbr_header in tbbr_headers:
         budgetbeheer_link = {
             "title": title,
-            "url": BBR_DETAIL_URL.format(**tbbr_header),
+            "url": BBR_DETAIL_URL
+            % (
+                tbbr_header["RelatieCode"],
+                tbbr_header["Volgnummer"],
+            ),
         }
         budgetbeheer.append(budgetbeheer_link)
 
