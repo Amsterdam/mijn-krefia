@@ -193,11 +193,11 @@ def get_result(response_body: dict, key: str = None, return_default: Any = None)
 
     result = return_default
 
-    if response_body.get("Result", False):
+    if "Result" in response_body:
         result = response_body["Result"]
 
         if result and key:
-            result = result.get(key)
+            result = result[key]
 
         # Compensate for XML's weirdness in treating 1 Element = dict, >=1 Element = list
         if (
