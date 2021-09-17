@@ -107,7 +107,7 @@ def call_service_method(operation: str, *args):
             _soapheaders=get_session_header(service_name), *args
         )
 
-        if not response.get("body", False):
+        if "body" not in response:
             logger.error("Unexpected response for %s", operation)
             return None
         else:
@@ -382,4 +382,4 @@ def get_all(bsn: str):
             "notificationTriggers": notification_triggers,
         }
 
-    raise "Could not login to Allegro"
+    raise Exception("Could not login to Allegro")
