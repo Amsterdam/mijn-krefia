@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging
 import pprint
 from unittest import TestCase, mock
@@ -5,6 +6,12 @@ from unittest import TestCase, mock
 from krefia import config
 from krefia.allegro_client import (
     call_service_method,
+    get_all,
+    get_budgetbeheer,
+    get_lening,
+    get_leningen,
+    get_notification,
+    get_notification_triggers,
     get_relatiecode_bedrijf,
     get_result,
     get_schuldhulp_aanvraag,
@@ -16,9 +23,11 @@ from krefia.allegro_client import (
     login_allowed,
     login_tijdelijk,
     set_session_id,
+    bedrijf,
+    notification_urls,
 )
 from krefia.helpers import dotdict
-from krefia.tests.mocks import mock_client
+from krefia.tests.mocks import mock_client, mock_clients
 
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -26,6 +35,10 @@ config.ALLEGRO_SOAP_ENDPOINT = "https://localhost/SOAP"
 
 
 class ClientTests(TestCase):
+    @classmethod
+    def tearDownClass(cls):
+        set_session_id(None)
+
     def get_service_mocks():
         return {
             "service1": dotdict({"service": "Foo"}),
@@ -114,6 +127,43 @@ class ClientTests(TestCase):
 
         self.assertEqual(response, True)
 
+    def test_get_result(self):
+        response_test = {"Result": None}
+        result = get_result(response_test, "Foo")
+        self.assertEqual(result, None)
+
+        response_test = {"Result": None}
+        result = get_result(response_test, "Foo", {})
+        self.assertEqual(result, {})
+
+        response_test = {"Result": {"Foo": "Bar"}}
+        result = get_result(response_test, "Foo")
+        self.assertEqual(result, "Bar")
+
+
+class SchuldHulpTests(TestCase):
+    srv_aanvraag_result = mock.Mock(
+        return_value={
+            "body": {
+                "Result": {
+                    "TSRVAanvraag": {
+                        "Volgnummer": 1,
+                        "RelatieCode": "blap",
+                        "Eindstatus": None,
+                        "Status": "C",
+                        "ExtraStatus": "Voorlopig afgewezen",
+                    }
+                }
+            }
+        }
+    )
+
+    srv_overzicht_result = mock.Mock(
+        return_value={
+            "body": {"Result": {"TSRVAanvraagHeader": [{"ID": 1}, {"ID": 2}]}}
+        }
+    )
+
     def test_get_schuldhulp_title(self):
         aanvraag_source = {
             "Eindstatus": None,
@@ -147,35 +197,6 @@ class ClientTests(TestCase):
 
         self.assertEqual(title, "Schuldhoogte wordt opgevraagd")
 
-    def test_get_result(self):
-        response_test = {"Result": None}
-        result = get_result(response_test, "Foo")
-        self.assertEqual(result, None)
-
-        response_test = {"Result": None}
-        result = get_result(response_test, "Foo", {})
-        self.assertEqual(result, {})
-
-        response_test = {"Result": {"Foo": "Bar"}}
-        result = get_result(response_test, "Foo")
-        self.assertEqual(result, "Bar")
-
-    srv_aanvraag_result = mock.Mock(
-        return_value={
-            "body": {
-                "Result": {
-                    "TSRVAanvraag": {
-                        "Volgnummer": 1,
-                        "RelatieCode": "blap",
-                        "Eindstatus": None,
-                        "Status": "C",
-                        "ExtraStatus": "Voorlopig afgewezen",
-                    }
-                }
-            }
-        }
-    )
-
     @mock.patch(
         "krefia.allegro_client.allegro_client",
         mock_client("SchuldHulpService", [("GetSRVAanvraag", srv_aanvraag_result)]),
@@ -189,12 +210,6 @@ class ClientTests(TestCase):
         self.assertEqual(
             response, {"title": "Dwangprocedure loopt", "url": "http://host/srv/blap/1"}
         )
-
-    srv_overzicht_result = mock.Mock(
-        return_value={
-            "body": {"Result": {"TSRVAanvraagHeader": [{"ID": 1}, {"ID": 2}]}}
-        }
-    )
 
     @mock.patch(
         "krefia.allegro_client.allegro_client",
@@ -230,5 +245,169 @@ class ClientTests(TestCase):
             ],
         )
 
-    def test_get_all(self):
-        self.assertEqual(True, True)
+
+class LeningBudgetbeheerTests(TestCase):
+    pl_overzicht_result = mock.Mock(
+        return_value={"body": {"Result": {"TPLHeader": [{"ID": 99}, {"ID": 88}]}}}
+    )
+
+    @mock.patch(
+        "krefia.allegro_client.allegro_client",
+        mock_client("FinancieringService", ["GetPL"]),
+    )
+    def test_get_lening(self):
+        tpl_header = {}
+        response = get_lening(tpl_header)
+
+        response_expected = {
+            "title": "Kredietsom 1689.12  met openstaand termijnbedrag 79.66",
+            "url": "http://host/pl/321321/1",
+        }
+        self.assertEqual(response, response_expected)
+
+    @mock.patch(
+        "krefia.allegro_client.allegro_client",
+        mock_client(
+            "FinancieringService", [("GetPLOverzicht", pl_overzicht_result), "GetPL"]
+        ),
+    )
+    def test_get_leningen(self):
+        relatiecode_kredietbank = "__777__888__"
+        response = get_leningen(relatiecode_kredietbank)
+
+        self.pl_overzicht_result.assert_called_with(
+            relatiecode_kredietbank, _soapheaders=[]
+        )
+
+        response_expected = [
+            {
+                "title": "Kredietsom 1689.12  met openstaand termijnbedrag 79.66",
+                "url": "http://host/pl/321321/1",
+            },
+            {
+                "title": "Kredietsom 1689.12  met openstaand termijnbedrag 79.66",
+                "url": "http://host/pl/321321/1",
+            },
+        ]
+        self.assertEqual(response, response_expected)
+
+    @mock.patch(
+        "krefia.allegro_client.allegro_client",
+        mock_client("BBRService", ["GetBBROverzicht"]),
+    )
+    def test_get_budgetbeheer(self):
+        relatiecode_fibu = "__456__456__"
+        response = get_budgetbeheer(relatiecode_fibu)
+
+        response_expected = [
+            {
+                "title": "Beheer uw budget op FiBu",
+                "url": "http://host/bbr/123123123/3",
+            }
+        ]
+        self.assertEqual(response, response_expected)
+
+
+class ClientTests2(TestCase):
+    @classmethod
+    def tearDownClass(cls):
+        set_session_id(None)
+
+    trigger_fibu = {
+        "url": notification_urls[bedrijf.FIBU],
+        "datePublished": "2021-07-14T12:34:17",
+    }
+
+    trigger_kredietbank = {
+        "url": notification_urls[bedrijf.KREDIETBANK],
+        "datePublished": "2021-07-14T12:34:17",
+    }
+
+    @mock.patch(
+        "krefia.allegro_client.allegro_client",
+        mock_client("BerichtenBoxService", ["GetBerichten"]),
+    )
+    def test_get_notification(self):
+        relatiecode_fibu = "__123_fibu__"
+        response = get_notification(relatiecode_fibu, bedrijf.FIBU)
+
+        self.assertEqual(response, self.trigger_fibu)
+
+        relatiecode_kredietbank = "__123_kredietbank__"
+        response = get_notification(relatiecode_kredietbank, bedrijf.KREDIETBANK)
+
+        self.assertEqual(response, self.trigger_kredietbank)
+
+    @mock.patch(
+        "krefia.allegro_client.allegro_client",
+        mock_client("BerichtenBoxService", ["GetBerichten"]),
+    )
+    def test_get_notification_triggers(self):
+        relaties = {
+            bedrijf.FIBU: "123123",
+            bedrijf.KREDIETBANK: "890678",
+        }
+        response = get_notification_triggers(relaties)
+
+        response_expected = {
+            "fibu": self.trigger_fibu,
+            "krediet": self.trigger_kredietbank,
+        }
+
+        self.assertEqual(response, response_expected)
+
+    @mock.patch(
+        "krefia.allegro_client.allegro_client",
+        mock_clients(
+            [
+                (
+                    "LoginService",
+                    [
+                        "AllegroWebMagAanmelden",
+                        "BSNNaarRelatieMetBedrijf",
+                        "AllegroWebLoginTijdelijk",
+                    ],
+                ),
+                ("SchuldHulpService", ["GetSRVAanvraag", "GetSRVOverzicht"]),
+                ("FinancieringService", ["GetPLOverzicht", "GetPL"]),
+                ("BBRService", ["GetBBROverzicht"]),
+                ("BerichtenBoxService", ["GetBerichten"]),
+            ]
+        ),
+    )
+    def test_get_all1(self):
+
+        self.maxDiff = None
+
+        bsn = "_1_2_3_4_5_6_"
+        response = get_all(bsn)
+
+        response_expected = {
+            "deepLinks": {
+                "budgetbeheer": [
+                    {
+                        "title": "Beheer uw budget op FiBu",
+                        "url": "http://host/bbr/123123123/3",
+                    }
+                ],
+                "lening": [
+                    {
+                        "title": "Kredietsom 1689.12  met openstaand termijnbedrag 79.66",
+                        "url": "http://host/pl/321321/1",
+                    }
+                ],
+                "schuldhulp": [],
+            },
+            "notificationTriggers": {
+                "fibu": {
+                    "datePublished": "2021-07-14T12:34:17",
+                    "url": "http://host/berichten/fibu",
+                },
+                "krediet": {
+                    "datePublished": "2021-07-14T12:34:17",
+                    "url": "http://host/berichten/kredietbank",
+                },
+            },
+        }
+
+        self.assertEqual(response, response_expected)

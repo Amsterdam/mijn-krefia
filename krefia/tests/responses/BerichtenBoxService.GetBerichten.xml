@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SOAP-ENV:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:HNS="http://tempuri.org/"
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:v1="http://tempuri.org/">
+    <SOAP-ENV:Header>
+        <ROClientIDHeader SOAP-ENV:mustUnderstand="0"
+            xmlns="http://tempuri.org/">
+            <ID>{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}</ID>
+        </ROClientIDHeader>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body xmlns:ro="http://tempuri.org/">
+        <v1:BerichtenBoxService___GetBerichtenResponse>
+            <v1:Result>
+                <v1:TBBoxHeader>
+                    <v1:Code>58</v1:Code>
+                    <v1:AfzenderOntvanger>Aan: H de Bergeracq</v1:AfzenderOntvanger>
+                    <v1:Onderwerp>Gegevens mutatie identificatiebewijs</v1:Onderwerp>
+                    <v1:Tijdstip>2021-07-14T12:34:17</v1:Tijdstip>
+                    <v1:IndicatieOntvangen>false</v1:IndicatieOntvangen>
+                    <v1:IndicatieGelezen>true</v1:IndicatieGelezen>
+                    <v1:IndicatieArchief>false</v1:IndicatieArchief>
+                    <v1:IndicatieBijlage>true</v1:IndicatieBijlage>
+                </v1:TBBoxHeader>
+                <v1:TBBoxHeader>
+                    <v1:Code>12</v1:Code>
+                    <v1:AfzenderOntvanger>Aan: H de Bergeracq</v1:AfzenderOntvanger>
+                    <v1:Onderwerp>Gegevens mutatie identificatiebewijs</v1:Onderwerp>
+                    <v1:Tijdstip>2020-11-26T13:14:02</v1:Tijdstip>
+                    <v1:IndicatieOntvangen>false</v1:IndicatieOntvangen>
+                    <v1:IndicatieGelezen>true</v1:IndicatieGelezen>
+                    <v1:IndicatieArchief>false</v1:IndicatieArchief>
+                    <v1:IndicatieBijlage>true</v1:IndicatieBijlage>
+                </v1:TBBoxHeader>
+                <v1:TBBoxHeader>
+                    <v1:Code>9</v1:Code>
+                    <v1:AfzenderOntvanger>Aan: H de Bergeracq</v1:AfzenderOntvanger>
+                    <v1:Onderwerp>Gegevens mutatie rekeningnummer</v1:Onderwerp>
+                    <v1:Tijdstip>2020-11-17T09:33:05</v1:Tijdstip>
+                    <v1:IndicatieOntvangen>false</v1:IndicatieOntvangen>
+                    <v1:IndicatieGelezen>true</v1:IndicatieGelezen>
+                    <v1:IndicatieArchief>false</v1:IndicatieArchief>
+                    <v1:IndicatieBijlage>true</v1:IndicatieBijlage>
+                </v1:TBBoxHeader>
+                <v1:TBBoxHeader>
+                    <v1:Code>7</v1:Code>
+                    <v1:AfzenderOntvanger>Aan: N. van Tol</v1:AfzenderOntvanger>
+                    <v1:Onderwerp>test2</v1:Onderwerp>
+                    <v1:Tijdstip>2020-10-26T15:21:51.860</v1:Tijdstip>
+                    <v1:IndicatieOntvangen>false</v1:IndicatieOntvangen>
+                    <v1:IndicatieGelezen>false</v1:IndicatieGelezen>
+                    <v1:IndicatieArchief>false</v1:IndicatieArchief>
+                    <v1:IndicatieBijlage>false</v1:IndicatieBijlage>
+                </v1:TBBoxHeader>
+                <v1:TBBoxHeader>
+                    <v1:Code>6</v1:Code>
+                    <v1:AfzenderOntvanger>Aan: N. van Tol</v1:AfzenderOntvanger>
+                    <v1:Onderwerp>test naar wie</v1:Onderwerp>
+                    <v1:Tijdstip>2020-10-26T15:15:50.653</v1:Tijdstip>
+                    <v1:IndicatieOntvangen>false</v1:IndicatieOntvangen>
+                    <v1:IndicatieGelezen>false</v1:IndicatieGelezen>
+                    <v1:IndicatieArchief>false</v1:IndicatieArchief>
+                    <v1:IndicatieBijlage>false</v1:IndicatieBijlage>
+                </v1:TBBoxHeader>
+                <v1:TBBoxHeader>
+                    <v1:Code>5</v1:Code>
+                    <v1:AfzenderOntvanger>Aan: H de Bergeracq</v1:AfzenderOntvanger>
+                    <v1:Onderwerp>RE: gaarne ID partner aanleveren</v1:Onderwerp>
+                    <v1:Tijdstip>2020-10-26T14:46:45</v1:Tijdstip>
+                    <v1:IndicatieOntvangen>false</v1:IndicatieOntvangen>
+                    <v1:IndicatieGelezen>true</v1:IndicatieGelezen>
+                    <v1:IndicatieArchief>false</v1:IndicatieArchief>
+                    <v1:IndicatieBijlage>true</v1:IndicatieBijlage>
+                </v1:TBBoxHeader>
+                <v1:TBBoxHeader>
+                    <v1:Code>2</v1:Code>
+                    <v1:AfzenderOntvanger>Aan: H de Bergeracq</v1:AfzenderOntvanger>
+                    <v1:Onderwerp>RE: gaarne ID partner aanleveren</v1:Onderwerp>
+                    <v1:Tijdstip>2020-10-15T15:19:02</v1:Tijdstip>
+                    <v1:IndicatieOntvangen>false</v1:IndicatieOntvangen>
+                    <v1:IndicatieGelezen>true</v1:IndicatieGelezen>
+                    <v1:IndicatieArchief>false</v1:IndicatieArchief>
+                    <v1:IndicatieBijlage>true</v1:IndicatieBijlage>
+                </v1:TBBoxHeader>
+            </v1:Result>
+            <v1:ExtraInfo>0</v1:ExtraInfo>
+            <v1:ExtraInfoOmschrijving></v1:ExtraInfoOmschrijving>
+        </v1:BerichtenBoxService___GetBerichtenResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

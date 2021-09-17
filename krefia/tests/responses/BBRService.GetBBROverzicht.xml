@@ -14,10 +14,10 @@
         <v1:BBRService___GetBBROverzichtResponse>
             <v1:Result>
                 <v1:TBBRHeader>
-                    <v1:RelatieCode>2064866</v1:RelatieCode>
+                    <v1:RelatieCode>123123123</v1:RelatieCode>
                     <v1:Volgnummer>3</v1:Volgnummer>
                     <v1:Medewerker>JKL-Test       </v1:Medewerker>
-                    <v1:Opdrachtgever>2161621</v1:Opdrachtgever>
+                    <v1:Opdrachtgever>77776666655555</v1:Opdrachtgever>
                     <v1:OpdrachtgeverContact>0</v1:OpdrachtgeverContact>
                     <v1:VormCode>T</v1:VormCode>
                     <v1:VormNaam>Totaal</v1:VormNaam>
@@ -26,7 +26,7 @@
                     <v1:Team></v1:Team>
                 </v1:TBBRHeader>
             </v1:Result>
-            <v1:ExtraInfo>70184444</v1:ExtraInfo>
+            <v1:ExtraInfo>112233311222</v1:ExtraInfo>
             <v1:ExtraInfoOmschrijving></v1:ExtraInfoOmschrijving>
         </v1:BBRService___GetBBROverzichtResponse>
     </SOAP-ENV:Body>

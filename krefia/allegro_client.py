@@ -16,10 +16,10 @@ bedrijf = dotdict({"FIBU": "FIBU", "KREDIETBANK": "KREDIETBANK"})
 bedrijf_code = dotdict({bedrijf.FIBU: "10", bedrijf.KREDIETBANK: "2"})
 
 SRV_DETAIL_URL = "http://host/srv/{RelatieCode}/{Volgnummer}"
-PL_DETAIL_URL = "http://?"
-BBR_DETAIL_URL = "http://?"
-FIBU_NOTIFICATION_URL = "http://?"
-KREDIETBANK_NOTIFICATION_URL = "http://?"
+PL_DETAIL_URL = "http://host/pl/{RelatieCode}/{Volgnummer}"
+BBR_DETAIL_URL = "http://host/bbr/{RelatieCode}/{Volgnummer}"
+FIBU_NOTIFICATION_URL = "http://host/berichten/fibu"
+KREDIETBANK_NOTIFICATION_URL = "http://host/berichten/kredietbank"
 
 notification_urls = {
     bedrijf.FIBU: FIBU_NOTIFICATION_URL,
@@ -184,10 +184,14 @@ def get_schuldhulp_title(aanvraag_source: dict):
     return title
 
 
-def get_result(response_body: dict, key: str, return_default: Any = None):
+def get_result(response_body: dict, key: str = None, return_default: Any = None):
     result = return_default
     try:
-        result = response_body["Result"][key]
+        if key:
+            result = response_body["Result"].get(key)
+        else:
+            result = response_body["Result"]
+
         # Compensate for XML's weirdness in treating 1 Element = dict, >=1 Element = list
         if (
             result
@@ -234,15 +238,17 @@ def get_schuldhulp_aanvragen(relatiecode_fibu: str):
 
 def get_lening(tpl_header: dict):
     response_body = call_service_method("FinancieringService.GetPL", tpl_header)
-    lening_source = get_result(response_body, "TPL")
+    lening_source = get_result(response_body)
     lening = None
 
     if lening_source:
-        total = lening_source["BrutoKredietvergoeding"]
+        total = lening_source["BrutoKredietsom"]
         current = lening_source["OpenstaandeKredietvergoeding"]
         title = f"Kredietsom {total}  met openstaand termijnbedrag {current}"
-
-        lening = {"title": title, "url": PL_DETAIL_URL.format({})}
+        lening = {
+            "title": title,
+            "url": PL_DETAIL_URL.format(**lening_source["InfoHeader"]),
+        }
 
     return lening
 
@@ -269,10 +275,10 @@ def get_budgetbeheer(relatiecode_fibu: str):
 
     title = "Beheer uw budget op FiBu"
 
-    for header in tbbr_headers:
+    for tbbr_header in tbbr_headers:
         budgetbeheer_link = {
             "title": title,
-            "url": BBR_DETAIL_URL.format({}),
+            "url": BBR_DETAIL_URL.format(**tbbr_header),
         }
         budgetbeheer.append(budgetbeheer_link)
 
@@ -311,7 +317,7 @@ def get_notification(relatiecode: str, bedrijf: str):
             date_published = trigger["Tijdstip"]
 
             notification = {
-                "url": notification_urls[bedrijf].format({}),
+                "url": notification_urls[bedrijf],
                 "datePublished": date_published,
             }
 

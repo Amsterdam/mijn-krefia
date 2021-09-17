@@ -36,7 +36,6 @@ def lxml_to_dict(element):
             if ret.get(tag, False) and subtag in ret[tag].keys():
                 # Element tag.subtag is encoutered again, it must be an array
                 if isinstance(ret[tag][subtag], dict):
-                    print("create", tag, subtag)
                     ret[tag][subtag] = [ret[tag][subtag]]
 
                 ret[tag][subtag].append(subdict[subtag])
@@ -75,11 +74,11 @@ class MockService:
                 response_handler = response_handler_unpacked
                 method_name = method_name_unpacked
             else:
-                response_handler = self.respond_with(service_name, method_name)
+                response_handler = self.response_fixture(service_name, method_name)
 
             setattr(self, method_name, response_handler)
 
-    def respond_with(self, service_name: str, method_name: str, *args, **kwargs):
+    def response_fixture(self, service_name: str, method_name: str, *args, **kwargs):
         def r(*args, **kwargs):
             response_dict = lxml_to_dict(
                 load_xml(load_response_file(service_name, method_name))
