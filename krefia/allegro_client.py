@@ -124,7 +124,6 @@ def call_service_method(operation: str, *args):
 
 def login_tijdelijk():
     response_body = call_service_method("LoginService.AllegroWebLoginTijdelijk")
-
     result = get_result(response_body)
 
     if result:
@@ -193,11 +192,13 @@ def get_result(response_body: dict, key: str = None, return_default: Any = None)
 
     result = return_default
 
-    if "Result" in response_body:
+    try:
         result = response_body["Result"]
 
-        if result and key:
+        if key and result is not None:
             result = result[key]
+        elif key:
+            return return_default
 
         # Compensate for XML's weirdness in treating 1 Element = dict, >=1 Element = list
         if (
@@ -206,6 +207,9 @@ def get_result(response_body: dict, key: str = None, return_default: Any = None)
             and not isinstance(result, type(return_default))
         ):
             result = [result]
+    except Exception:
+        logger.error("Unexpected result for key: %s", key)
+        pass
 
     return result
 
