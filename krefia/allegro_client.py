@@ -5,6 +5,7 @@ from requests import ConnectionError
 from zeep import Client, xsd
 from zeep.settings import Settings
 from zeep.transports import Transport
+from zeep.xsd.elements.element import Element
 
 from krefia.config import get_allegro_service_description, logger
 from krefia.helpers import dotdict, format_currency
@@ -214,10 +215,19 @@ def get_result(response_body: dict, key: str = None, return_default: Any = None)
     return result
 
 
+def value_or_default(source: Element, key: str, default_value: Any):
+    return source[key] if key in source and source[key] else default_value
+
+
 def get_schuldhulp_aanvraag(aanvraag_header: dict):
     aanvraag_header_clean = {
         "RelatieCode": aanvraag_header["RelatieCode"],
         "Volgnummer": aanvraag_header["Volgnummer"],
+        "IsNPS": aanvraag_header["IsNPS"],
+        "Status": value_or_default(aanvraag_header, "Status", ""),
+        "Statustekst": aanvraag_header["Statustekst"],
+        "Aanvraagdatum": aanvraag_header["Aanvraagdatum"],
+        "ExtraStatus": value_or_default(aanvraag_header, "ExtraStatus", ""),
     }
 
     response_body = call_service_method(

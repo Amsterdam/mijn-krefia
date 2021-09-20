@@ -1,3 +1,4 @@
+import datetime
 import pprint
 from unittest import TestCase, mock
 
@@ -156,13 +157,22 @@ class SchuldHulpTests(TestCase):
         }
     )
 
+    srv_header = {
+        "RelatieCode": 2442531,
+        "Volgnummer": 2,
+        "IsNPS": False,
+        "Status": "E",
+        "Statustekst": "Derde fiattering akkoord- wacht op accoord client.",
+        "Aanvraagdatum": datetime.datetime(2020, 6, 22, 0, 0),
+        "ExtraStatus": None,
+    }
+
     srv_overzicht_result = mock.Mock(
         return_value={
             "body": {
                 "Result": {
                     "TSRVAanvraagHeader": [
-                        {"RelatieCode": "123", "Volgnummer": "1"},
-                        {"RelatieCode": "123", "Volgnummer": "2"},
+                        srv_header,
                     ]
                 }
             }
@@ -207,10 +217,11 @@ class SchuldHulpTests(TestCase):
         mock_client("SchuldHulpService", [("GetSRVAanvraag", srv_aanvraag_result)]),
     )
     def test_get_schuldhulp_aanvraag(self):
-        aanvraag_header = {"RelatieCode": "123", "Volgnummer": "1"}
-        content = get_schuldhulp_aanvraag(aanvraag_header)
+        content = get_schuldhulp_aanvraag(self.srv_header)
 
-        self.srv_aanvraag_result.assert_called_with(aanvraag_header, _soapheaders=[])
+        self.srv_aanvraag_result.assert_called_with(
+            {**self.srv_header, "ExtraStatus": ""}, _soapheaders=[]
+        )
 
         self.assertEqual(
             content, {"title": "Dwangprocedure loopt", "url": "http://host/srv/123/1"}
@@ -233,19 +244,17 @@ class SchuldHulpTests(TestCase):
         content = get_schuldhulp_aanvragen(relatiecode_fibu)
 
         self.srv_overzicht_result.assert_called_with(relatiecode_fibu, _soapheaders=[])
-        self.assertEqual(self.srv_aanvraag_result.call_count, 2)
+        self.assertEqual(self.srv_aanvraag_result.call_count, 1)
         self.assertEqual(
             self.srv_aanvraag_result.call_args_list,
             [
-                mock.call({"RelatieCode": "123", "Volgnummer": "1"}, _soapheaders=[]),
-                mock.call({"RelatieCode": "123", "Volgnummer": "2"}, _soapheaders=[]),
+                mock.call({**self.srv_header, "ExtraStatus": ""}, _soapheaders=[]),
             ],
         )
 
         self.assertEqual(
             content,
             [
-                {"title": "Dwangprocedure loopt", "url": "http://host/srv/123/1"},
                 {"title": "Dwangprocedure loopt", "url": "http://host/srv/123/1"},
             ],
         )
