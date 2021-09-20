@@ -145,8 +145,8 @@ class SchuldHulpTests(TestCase):
             "body": {
                 "Result": {
                     "TSRVAanvraag": {
-                        "Volgnummer": 1,
-                        "RelatieCode": "blap",
+                        "Volgnummer": "1",
+                        "RelatieCode": "123",
                         "Eindstatus": None,
                         "Status": "C",
                         "ExtraStatus": "Voorlopig afgewezen",
@@ -213,7 +213,7 @@ class SchuldHulpTests(TestCase):
         self.srv_aanvraag_result.assert_called_with(aanvraag_header, _soapheaders=[])
 
         self.assertEqual(
-            content, {"title": "Dwangprocedure loopt", "url": "http://host/srv/blap/1"}
+            content, {"title": "Dwangprocedure loopt", "url": "http://host/srv/123/1"}
         )
 
     @mock.patch(
@@ -245,8 +245,8 @@ class SchuldHulpTests(TestCase):
         self.assertEqual(
             content,
             [
-                {"title": "Dwangprocedure loopt", "url": "http://host/srv/blap/1"},
-                {"title": "Dwangprocedure loopt", "url": "http://host/srv/blap/1"},
+                {"title": "Dwangprocedure loopt", "url": "http://host/srv/123/1"},
+                {"title": "Dwangprocedure loopt", "url": "http://host/srv/123/1"},
             ],
         )
 
