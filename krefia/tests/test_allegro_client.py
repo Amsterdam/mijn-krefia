@@ -158,7 +158,14 @@ class SchuldHulpTests(TestCase):
 
     srv_overzicht_result = mock.Mock(
         return_value={
-            "body": {"Result": {"TSRVAanvraagHeader": [{"ID": 1}, {"ID": 2}]}}
+            "body": {
+                "Result": {
+                    "TSRVAanvraagHeader": [
+                        {"RelatieCode": "123", "Volgnummer": "1"},
+                        {"RelatieCode": "123", "Volgnummer": "2"},
+                    ]
+                }
+            }
         }
     )
 
@@ -200,7 +207,7 @@ class SchuldHulpTests(TestCase):
         mock_client("SchuldHulpService", [("GetSRVAanvraag", srv_aanvraag_result)]),
     )
     def test_get_schuldhulp_aanvraag(self):
-        aanvraag_header = {"Foo": "Bar"}
+        aanvraag_header = {"RelatieCode": "123", "Volgnummer": "1"}
         content = get_schuldhulp_aanvraag(aanvraag_header)
 
         self.srv_aanvraag_result.assert_called_with(aanvraag_header, _soapheaders=[])
@@ -230,8 +237,8 @@ class SchuldHulpTests(TestCase):
         self.assertEqual(
             self.srv_aanvraag_result.call_args_list,
             [
-                mock.call({"ID": 1}, _soapheaders=[]),
-                mock.call({"ID": 2}, _soapheaders=[]),
+                mock.call({"RelatieCode": "123", "Volgnummer": "1"}, _soapheaders=[]),
+                mock.call({"RelatieCode": "123", "Volgnummer": "2"}, _soapheaders=[]),
             ],
         )
 
