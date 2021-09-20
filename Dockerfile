@@ -1,6 +1,7 @@
 FROM amsterdam/python:3.8-buster as base-app
 
 LABEL maintainer=datapunt@amsterdam.nl
+USER datapunt
 
 ENV PYTHONUNBUFFERED 1
 
@@ -23,4 +24,5 @@ COPY krefia /app/krefia
 FROM base-app as prod-app
 
 COPY docker-entrypoint.sh /app/
+
 ENTRYPOINT /app/docker-entrypoint.sh
