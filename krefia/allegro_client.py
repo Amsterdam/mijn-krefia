@@ -381,11 +381,11 @@ def get_all(bsn: str):
 
         if fibu_relatie_code:
             if login_allowed(fibu_relatie_code):
-                schuldhulp = get_schuldhulp_aanvragen(fibu_relatie_code)
                 budgetbeheer = get_budgetbeheer(fibu_relatie_code)
 
         if kredietbank_relatie_code:
             if login_allowed(kredietbank_relatie_code):
+                schuldhulp = get_schuldhulp_aanvragen(kredietbank_relatie_code)
                 lening = get_leningen(kredietbank_relatie_code)
 
         notification_triggers = get_notification_triggers(relaties)
