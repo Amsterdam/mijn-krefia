@@ -24,5 +24,4 @@ FROM base-app as prod-app
 
 COPY docker-entrypoint.sh /app/
 
-USER datapunt
 ENTRYPOINT /app/docker-entrypoint.sh
