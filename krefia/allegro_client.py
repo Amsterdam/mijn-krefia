@@ -215,8 +215,9 @@ def get_result(response_body: dict, key: str = None, return_default: Any = None)
 
 
 def get_schuldhulp_aanvraag(aanvraag_header: dict):
+    aanvraag_header_clean = {k: v for k, v in aanvraag_header.items() if v is not None}
     response_body = call_service_method(
-        "SchuldHulpService.GetSRVAanvraag", aanvraag_header
+        "SchuldHulpService.GetSRVAanvraag", aanvraag_header_clean
     )
     aanvraag_source = get_result(response_body, "TSRVAanvraag")
     aanvraag = None
