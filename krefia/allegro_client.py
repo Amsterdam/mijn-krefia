@@ -2,7 +2,7 @@ from datetime import date
 from typing import Any
 
 from requests import ConnectionError
-from zeep import Client
+from zeep import Client, xsd
 from zeep.settings import Settings
 from zeep.transports import Transport
 
@@ -215,10 +215,13 @@ def get_result(response_body: dict, key: str = None, return_default: Any = None)
 
 
 def get_schuldhulp_aanvraag(aanvraag_header: dict):
-    aanvraag_header_clean = {k: v for k, v in aanvraag_header.items() if v is not None}
+    aanvraag_header_clean = aanvraag_header
+    aanvraag_header_clean.ExtraStatus = xsd.SkipValue
+
     response_body = call_service_method(
         "SchuldHulpService.GetSRVAanvraag", aanvraag_header_clean
     )
+
     aanvraag_source = get_result(response_body, "TSRVAanvraag")
     aanvraag = None
 
