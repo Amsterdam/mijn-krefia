@@ -230,8 +230,10 @@ def get_schuldhulp_aanvraag(aanvraag_header: dict):
         "ExtraStatus": value_or_default(aanvraag_header, "ExtraStatus", ""),
     }
 
+    TSRV_Header = get_client("SchuldHulpService").get_element("ns0:TSRVAanvraagHeader")
+
     response_body = call_service_method(
-        "SchuldHulpService.GetSRVAanvraag", aanvraag_header_clean
+        "SchuldHulpService.GetSRVAanvraag", TSRV_Header(**aanvraag_header_clean)
     )
 
     aanvraag_source = get_result(response_body, "TSRVAanvraag")

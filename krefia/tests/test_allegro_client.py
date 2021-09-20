@@ -219,9 +219,9 @@ class SchuldHulpTests(TestCase):
     def test_get_schuldhulp_aanvraag(self):
         content = get_schuldhulp_aanvraag(self.srv_header)
 
-        self.srv_aanvraag_result.assert_called_with(
-            {**self.srv_header, "ExtraStatus": ""}, _soapheaders=[]
-        )
+        tsrv_header = self.srv_aanvraag_result.call_args[0][0]
+        self.assertTrue("Volgnummer" in tsrv_header.__dict__)
+        self.assertEqual(tsrv_header.Volgnummer, 2)
 
         self.assertEqual(
             content, {"title": "Dwangprocedure loopt", "url": "http://host/srv/123/1"}
@@ -245,12 +245,10 @@ class SchuldHulpTests(TestCase):
 
         self.srv_overzicht_result.assert_called_with(relatiecode_fibu, _soapheaders=[])
         self.assertEqual(self.srv_aanvraag_result.call_count, 1)
-        self.assertEqual(
-            self.srv_aanvraag_result.call_args_list,
-            [
-                mock.call({**self.srv_header, "ExtraStatus": ""}, _soapheaders=[]),
-            ],
-        )
+
+        tsrv_header = self.srv_aanvraag_result.call_args[0][0]
+        self.assertTrue("Volgnummer" in tsrv_header.__dict__)
+        self.assertEqual(tsrv_header.Volgnummer, 2)
 
         self.assertEqual(
             content,
