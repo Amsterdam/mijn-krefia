@@ -117,6 +117,9 @@ class MockClient:
     def get_element(self, el_name: str, *args):
         return MockElement
 
+    def get_type(self, el_name: str, *args):
+        return MockElement
+
 
 def mock_client(
     service_name: str, method_names: List[Union[str, Tuple[str, FunctionType]]]

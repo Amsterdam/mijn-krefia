@@ -181,34 +181,34 @@ class SchuldHulpTests(TestCase):
 
     def test_get_schuldhulp_title(self):
         aanvraag_source = {
-            "Eindstatus": None,
-            "Status": None,
-            "ExtraStatus": None,
+            "eind_status": None,
+            "status": None,
+            "extra_status": None,
         }
-        title = get_schuldhulp_title(aanvraag_source)
+        title = get_schuldhulp_title(**aanvraag_source)
 
         aanvraag_source = {
-            "Eindstatus": "Z",
-            "Status": "E",
-            "ExtraStatus": "Voorlopig afgewezen",
+            "eind_status": "Z",
+            "status": "E",
+            "extra_status": "Voorlopig afgewezen",
         }
-        title = get_schuldhulp_title(aanvraag_source)
+        title = get_schuldhulp_title(**aanvraag_source)
 
         aanvraag_source = {
-            "Eindstatus": None,
-            "Status": "C",
-            "ExtraStatus": "Voorlopig afgewezen",
+            "eind_status": None,
+            "status": "C",
+            "extra_status": "Voorlopig afgewezen",
         }
-        title = get_schuldhulp_title(aanvraag_source)
+        title = get_schuldhulp_title(**aanvraag_source)
 
         self.assertEqual(title, "Dwangprocedure loopt")
 
         aanvraag_source = {
-            "Eindstatus": None,
-            "Status": "C",
-            "ExtraStatus": "Aanvraag beperkt",
+            "eind_status": None,
+            "status": "C",
+            "extra_status": "Aanvraag beperkt",
         }
-        title = get_schuldhulp_title(aanvraag_source)
+        title = get_schuldhulp_title(**aanvraag_source)
 
         self.assertEqual(title, "Schuldhoogte wordt opgevraagd")
 
@@ -224,7 +224,11 @@ class SchuldHulpTests(TestCase):
         self.assertEqual(tsrv_header.Volgnummer, 2)
 
         self.assertEqual(
-            content, {"title": "Dwangprocedure loopt", "url": "http://host/srv/123/1"}
+            content,
+            {
+                "title": "Afkoopvoorstellen zijn verstuurd",
+                "url": "http://host/srv/2442531/2",
+            },
         )
 
     @mock.patch(
@@ -253,7 +257,10 @@ class SchuldHulpTests(TestCase):
         self.assertEqual(
             content,
             [
-                {"title": "Dwangprocedure loopt", "url": "http://host/srv/123/1"},
+                {
+                    "title": "Afkoopvoorstellen zijn verstuurd",
+                    "url": "http://host/srv/2442531/2",
+                },
             ],
         )
 
@@ -404,7 +411,10 @@ class ClientTests2(TestCase):
                     "title": "Kredietsom €1.689,12  met openstaand termijnbedrag €79,66",
                     "url": "http://host/pl/321321/1",
                 },
-                "schuldhulp": None,
+                "schuldhulp": {
+                    "title": "Afkoopvoorstellen zijn verstuurd",
+                    "url": "http://host/srv/321321/2",
+                },
             },
             "notificationTriggers": {
                 "fibu": {

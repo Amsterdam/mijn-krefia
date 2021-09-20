@@ -1,4 +1,5 @@
 from datetime import date
+from pprint import pprint
 from typing import Any
 
 from requests import ConnectionError
@@ -160,11 +161,8 @@ def login_allowed(relatiecode: str):
     return is_allowed
 
 
-def get_schuldhulp_title(aanvraag_source: dict):
+def get_schuldhulp_title(status: str, extra_status: str, eind_status: str):
     title = ""
-    eind_status = aanvraag_source["Eindstatus"]
-    status = aanvraag_source["Status"]
-    extra_status = aanvraag_source["ExtraStatus"]
 
     if eind_status == "I":
         title = "Schuldeisers akkoord"
@@ -230,21 +228,25 @@ def get_schuldhulp_aanvraag(aanvraag_header: dict):
         "ExtraStatus": value_or_default(aanvraag_header, "ExtraStatus", ""),
     }
 
-    TSRV_Header = get_client("SchuldHulpService").get_element("ns0:TSRVAanvraagHeader")
+    TSRV_Header = get_client("SchuldHulpService").get_type("ns0:TSRVAanvraagHeader")
 
-    response_body = call_service_method(
-        "SchuldHulpService.GetSRVAanvraag", TSRV_Header(**aanvraag_header_clean)
-    )
+    tsrv_header = TSRV_Header(**aanvraag_header_clean)
+
+    response_body = call_service_method("SchuldHulpService.GetSRVAanvraag", tsrv_header)
 
     aanvraag_source = get_result(response_body, "TSRVAanvraag")
     aanvraag = None
 
     if aanvraag_source:
-        title = get_schuldhulp_title(aanvraag_source)
+        title = get_schuldhulp_title(
+            aanvraag_header["Status"],
+            aanvraag_header["ExtraStatus"],
+            aanvraag_source["Eindstatus"],
+        )
         aanvraag = {
             "title": title,
             "url": SRV_DETAIL_URL
-            % (aanvraag_source["RelatieCode"], aanvraag_source["Volgnummer"]),
+            % (aanvraag_header["RelatieCode"], aanvraag_header["Volgnummer"]),
         }
 
     return aanvraag

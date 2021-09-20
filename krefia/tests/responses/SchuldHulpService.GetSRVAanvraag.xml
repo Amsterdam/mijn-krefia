@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SOAP-ENV:Envelope xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:HNS="http://tempuri.org/"
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:v1="http://tempuri.org/">
+    <SOAP-ENV:Header>
+        <ROClientIDHeader SOAP-ENV:mustUnderstand="0"
+            xmlns="http://tempuri.org/">
+            <ID>{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}</ID>
+        </ROClientIDHeader>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body xmlns:ro="http://tempuri.org/">
+        <v1:SchuldHulpService___GetSRVAanvraagResponse>
+            <v1:Result>
+                <v1:InfoHeader>
+                    <v1:RelatieCode>2442531</v1:RelatieCode>
+                    <v1:Volgnummer>2</v1:Volgnummer>
+                    <v1:IsNPS>false</v1:IsNPS>
+                    <v1:Status>E</v1:Status>
+                    <v1:Statustekst>Derde fiattering akkoord- wacht op accoord client.</v1:Statustekst>
+                    <v1:Aanvraagdatum>2020-06-22T00:00:00</v1:Aanvraagdatum>
+                    <v1:ExtraStatus></v1:ExtraStatus>
+                </v1:InfoHeader>
+                <v1:Startdatum>2020-06-22T00:00:00</v1:Startdatum>
+                <v1:Einddatum>2020-10-20T00:00:00</v1:Einddatum>
+                <v1:Eindstatus></v1:Eindstatus>
+                <v1:Medewerker>GKA1           </v1:Medewerker>
+                <v1:Opdrachtgever>2120712</v1:Opdrachtgever>
+                <v1:OpdrachtgeverContact>0</v1:OpdrachtgeverContact>
+                <v1:VTLB>953.13</v1:VTLB>
+                <v1:DatumBerekening>2021-01-13T00:00:00</v1:DatumBerekening>
+                <v1:BrutoAfloscapaciteit>0</v1:BrutoAfloscapaciteit>
+                <v1:KostenFinancieelBeheer>6</v1:KostenFinancieelBeheer>
+                <v1:KostenSchuldhulpverlening>-0.5</v1:KostenSchuldhulpverlening>
+                <v1:NettoAfloscapaciteit>-5.5</v1:NettoAfloscapaciteit>
+                <v1:TotaalAangemeldeSchuld>3</v1:TotaalAangemeldeSchuld>
+                <v1:TotaalTeruggemeldeSchuld>5410.55</v1:TotaalTeruggemeldeSchuld>
+                <v1:PartnerCode>0</v1:PartnerCode>
+                <v1:Aanvraagdatum>2020-06-22T00:00:00</v1:Aanvraagdatum>
+                <v1:RedenOpschorting></v1:RedenOpschorting>
+                <v1:ExtraInleg>0</v1:ExtraInleg>
+            </v1:Result>
+        </v1:SchuldHulpService___GetSRVAanvraagResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
