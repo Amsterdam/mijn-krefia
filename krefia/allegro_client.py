@@ -215,10 +215,10 @@ def get_result(response_body: dict, key: str = None, return_default: Any = None)
 
 
 def get_schuldhulp_aanvraag(aanvraag_header: dict):
-    aanvraag_header_clean = aanvraag_header
-
-    if "ExtraStatus" in aanvraag_header and aanvraag_header["ExtraStatus"] is None:
-        aanvraag_header_clean["ExtraStatus"] = xsd.SkipValue
+    aanvraag_header_clean = {
+        "RelatieCode": aanvraag_header["RelatieCode"],
+        "Volgnummer": aanvraag_header["Volgnummer"],
+    }
 
     response_body = call_service_method(
         "SchuldHulpService.GetSRVAanvraag", aanvraag_header_clean
