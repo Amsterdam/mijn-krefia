@@ -258,7 +258,7 @@ class LeningBudgetbeheerTests(TestCase):
         content = get_lening(tpl_header)
 
         content_expected = {
-            "title": "Kredietsom 1689.12  met openstaand termijnbedrag 79.66",
+            "title": "Kredietsom €1.689,12  met openstaand termijnbedrag €79,66",
             "url": "http://host/pl/321321/1",
         }
         self.assertEqual(content, content_expected)
@@ -279,11 +279,11 @@ class LeningBudgetbeheerTests(TestCase):
 
         content_expected = [
             {
-                "title": "Kredietsom 1689.12  met openstaand termijnbedrag 79.66",
+                "title": "Kredietsom €1.689,12  met openstaand termijnbedrag €79,66",
                 "url": "http://host/pl/321321/1",
             },
             {
-                "title": "Kredietsom 1689.12  met openstaand termijnbedrag 79.66",
+                "title": "Kredietsom €1.689,12  met openstaand termijnbedrag €79,66",
                 "url": "http://host/pl/321321/1",
             },
         ]
@@ -387,7 +387,7 @@ class ClientTests2(TestCase):
                     "url": "http://host/bbr/123123123/3",
                 },
                 "lening": {
-                    "title": "Kredietsom 1689.12  met openstaand termijnbedrag 79.66",
+                    "title": "Kredietsom €1.689,12  met openstaand termijnbedrag €79,66",
                     "url": "http://host/pl/321321/1",
                 },
                 "schuldhulp": None,

@@ -7,7 +7,7 @@ from zeep.settings import Settings
 from zeep.transports import Transport
 
 from krefia.config import get_allegro_service_description, logger
-from krefia.helpers import dotdict
+from krefia.helpers import dotdict, format_currency
 
 session_id = None
 allegro_client = {}
@@ -253,8 +253,8 @@ def get_lening(tpl_header: dict):
     lening = None
 
     if lening_source:
-        total = lening_source["BrutoKredietsom"]
-        current = lening_source["OpenstaandeKredietvergoeding"]
+        total = format_currency(lening_source["BrutoKredietsom"])
+        current = format_currency(lening_source["OpenstaandeKredietvergoeding"])
         title = f"Kredietsom {total}  met openstaand termijnbedrag {current}"
 
         lening = {
