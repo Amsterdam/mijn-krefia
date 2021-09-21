@@ -376,6 +376,9 @@ def get_notification_triggers(relaties: dict):
             relaties[bedrijf.KREDIETBANK], bedrijf.KREDIETBANK
         )
 
+    if not (fibu_notification or kredietbank_notification):
+        return None
+
     return {
         "fibu": fibu_notification,
         "krediet": kredietbank_notification,
@@ -394,6 +397,7 @@ def get_all(bsn: str):
         notification_triggers = None
 
         if not relaties:
+            logger.info("No relaties for this user.")
             return None
 
         fibu_relatie_code = relaties.get(bedrijf.FIBU)
@@ -409,6 +413,9 @@ def get_all(bsn: str):
                 lening = get_leningen(kredietbank_relatie_code)
 
         notification_triggers = get_notification_triggers(relaties)
+
+        if not (budgetbeheer or schuldhulp or lening or notification_triggers):
+            return None
 
         return {
             "deepLinks": {

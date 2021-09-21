@@ -430,7 +430,7 @@ class ClientTests2(TestCase):
 
         self.assertEqual(content, content_expected)
 
-    mag_aanmelden = mock.Mock(return_value={"body": {"Result": False}})
+    mag_aanmelden_nee = mock.Mock(return_value={"body": {"Result": False}})
 
     def get_berichten(*args, **kwargs):
         return None
@@ -444,7 +444,7 @@ class ClientTests2(TestCase):
                     [
                         "AllegroWebLoginTijdelijk",
                         "BSNNaarRelatieMetBedrijf",
-                        ("AllegroWebMagAanmelden", mag_aanmelden),
+                        ("AllegroWebMagAanmelden", mag_aanmelden_nee),
                     ],
                 ),
                 (
@@ -460,16 +460,58 @@ class ClientTests2(TestCase):
         bsn = "_1_2_3_4_5_6_"
         content = get_all(bsn)
 
+        expected_content = None
+
+        self.assertEqual(content, expected_content)
+
+    mag_aanmelden_ja = mock.Mock(return_value={"body": {"Result": True}})
+
+    def mock_no_result(*args, **kwargs):
+        return {"body": {"Result": None}}
+
+    @mock.patch(
+        "krefia.allegro_client.allegro_client",
+        mock_clients(
+            [
+                (
+                    "LoginService",
+                    [
+                        "AllegroWebMagAanmelden",
+                        "BSNNaarRelatieMetBedrijf",
+                        "AllegroWebLoginTijdelijk",
+                    ],
+                ),
+                (
+                    "SchuldHulpService",
+                    [
+                        ("GetSRVAanvraag", mock_no_result),
+                        ("GetSRVOverzicht", mock_no_result),
+                    ],
+                ),
+                (
+                    "FinancieringService",
+                    [("GetPLOverzicht", mock_no_result), ("GetPL", mock_no_result)],
+                ),
+                ("BBRService", ["GetBBROverzicht"]),
+                ("BerichtenBoxService", [("GetBerichten", mock_no_result)]),
+            ]
+        ),
+    )
+    def test_get_all_happy_some_item(self):
+        config.set_debug(True)
+        bsn = "_1_2_3_4_5_6_"
+        content = get_all(bsn)
+
         expected_content = {
             "deepLinks": {
                 "schuldhulp": None,
                 "lening": None,
-                "budgetbeheer": None,
+                "budgetbeheer": {
+                    "title": "Beheer uw budget op FiBu",
+                    "url": "http://host/bbr/123123123/3",
+                },
             },
-            "notificationTriggers": {
-                "fibu": None,
-                "krediet": None,
-            },
+            "notificationTriggers": None,
         }
 
         self.assertEqual(content, expected_content)
