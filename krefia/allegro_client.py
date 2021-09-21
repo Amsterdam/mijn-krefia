@@ -73,9 +73,6 @@ def get_service(service_name: str):
 
 def set_session_id(id: str):
     global session_id
-
-    logger.info(f"Set session-id {id}")
-
     session_id = id
 
 
