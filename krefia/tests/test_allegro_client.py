@@ -430,17 +430,29 @@ class ClientTests2(TestCase):
 
         self.assertEqual(content, content_expected)
 
-    def mock_content(*args, **kwargs):
-        return {"body": {"FOo": "Barrr"}}
+    mag_aanmelden = mock.Mock(return_value={"body": {"Result": False}})
+
+    def get_berichten(*args, **kwargs):
+        return None
 
     @mock.patch(
         "krefia.allegro_client.allegro_client",
-        mock_client(
-            "LoginService",
+        mock_clients(
             [
-                "AllegroWebLoginTijdelijk",
-                "BSNNaarRelatieMetBedrijf",
-                "AllegroWebMagAanmelden",
+                (
+                    "LoginService",
+                    [
+                        "AllegroWebLoginTijdelijk",
+                        "BSNNaarRelatieMetBedrijf",
+                        ("AllegroWebMagAanmelden", mag_aanmelden),
+                    ],
+                ),
+                (
+                    "BerichtenBoxService",
+                    [
+                        ("GetBerichten", get_berichten),
+                    ],
+                ),
             ],
         ),
     )
@@ -461,6 +473,9 @@ class ClientTests2(TestCase):
         }
 
         self.assertEqual(content, expected_content)
+
+    def mock_content(*args, **kwargs):
+        return {"body": {"FOo": "Barrr"}}
 
     @mock.patch(
         "krefia.allegro_client.allegro_client",

@@ -56,6 +56,18 @@ class ApiTests(FlaskServerTMATestCase):
         self.assertEqual(data["status"], "OK")
         self.assertEqual(data["content"], expected_content)
 
+    def no_login(*args, **kwargs):
+        return None
+
+    @mock.patch(
+        "krefia.allegro_client.allegro_client",
+        mock_client(
+            "LoginService",
+            [
+                ("AllegroWebLoginTijdelijk", no_login),
+            ],
+        ),
+    )
     def test_get_all_no_login(self):
         response = self.get_secure("/krefia/all")
         self.assertEqual(response.status_code, 500)
