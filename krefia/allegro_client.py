@@ -15,7 +15,9 @@ session_id = None
 allegro_client = {}
 
 bedrijf = dotdict({"FIBU": "FIBU", "KREDIETBANK": "KREDIETBANK"})
-bedrijf_code = dotdict({bedrijf.FIBU: "10", bedrijf.KREDIETBANK: "2"})
+bedrijf_code = dotdict(
+    {bedrijf.FIBU: "10", bedrijf.KREDIETBANK: "2"}
+)  # Make availabile in ENV, these are not constant
 
 SRV_DETAIL_URL = "http://host/srv/%s/%s"
 PL_DETAIL_URL = "http://host/pl/%s/%s"
