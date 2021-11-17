@@ -9,5 +9,5 @@ flake8
 echo "Running coverage tests"
 export COVERAGE_FILE=/tmp/.coverage
 coverage erase
-coverage run --include=app/test_*.py  -m unittest
+coverage run --source=app --omit=*/test_*.py  -m unittest
 coverage report --fail-under=90
