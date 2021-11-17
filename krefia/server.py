@@ -23,7 +23,7 @@ app = Flask(__name__)
 app.json_encoder = CustomJSONEncoder
 
 sentry_dsn = get_sentry_dsn()
-if sentry_dsn:  # pragma: no cover
+if sentry_dsn:
     sentry_sdk.init(
         dsn=sentry_dsn, integrations=[FlaskIntegration()], with_locals=False
     )
