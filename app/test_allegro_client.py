@@ -2,8 +2,8 @@ import datetime
 import pprint
 from unittest import TestCase, mock
 
-from krefia import config
-from krefia.allegro_client import (
+from app import config
+from app.allegro_client import (
     bedrijf,
     call_service_method,
     get_all,
@@ -25,8 +25,8 @@ from krefia.allegro_client import (
     notification_urls,
     set_session_id,
 )
-from krefia.helpers import dotdict
-from krefia.tests.mocks import mock_client, mock_clients
+from app.helpers import dotdict
+from app.fixtures.mocks import mock_client, mock_clients
 
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -44,13 +44,13 @@ class ClientTests(TestCase):
             "service2": dotdict({"service": "Bar"}),
         }
 
-    @mock.patch("krefia.allegro_client.allegro_client", get_service_mocks())
+    @mock.patch("app.allegro_client.allegro_client", get_service_mocks())
     def test_get_service(self):
         self.assertEqual(get_service("service1"), "Foo")
         self.assertEqual(get_service("service2"), "Bar")
 
     @mock.patch(
-        "krefia.allegro_client.allegro_client",
+        "app.allegro_client.allegro_client",
         mock_client("FakeService", ["fake_method"]),
     )
     def test_session_id(self):
@@ -74,8 +74,8 @@ class ClientTests(TestCase):
         }
     )
 
-    @mock.patch("krefia.allegro_client.logger")
-    @mock.patch("krefia.allegro_client.allegro_client", fake_client)
+    @mock.patch("app.allegro_client.logger")
+    @mock.patch("app.allegro_client.allegro_client", fake_client)
     def test_call_service_method(self, logger_mock):
         content = call_service_method("service3.method1", "bar")
 
@@ -96,7 +96,7 @@ class ClientTests(TestCase):
         self.assertIsNone(content)
 
     @mock.patch(
-        "krefia.allegro_client.allegro_client",
+        "app.allegro_client.allegro_client",
         mock_client("LoginService", ["AllegroWebLoginTijdelijk"]),
     )
     def test_login_tijdelijk(self):
@@ -105,7 +105,7 @@ class ClientTests(TestCase):
         self.assertEqual(get_session_id(), "{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}")
 
     @mock.patch(
-        "krefia.allegro_client.allegro_client",
+        "app.allegro_client.allegro_client",
         mock_client("LoginService", ["BSNNaarRelatieMetBedrijf"]),
     )
     def test_get_relatiecode_bedrijf(self):
@@ -117,7 +117,7 @@ class ClientTests(TestCase):
         self.assertEqual(content, content_expected)
 
     @mock.patch(
-        "krefia.allegro_client.allegro_client",
+        "app.allegro_client.allegro_client",
         mock_client("LoginService", ["AllegroWebMagAanmelden"]),
     )
     def test_login_allowed(self):
@@ -213,7 +213,7 @@ class SchuldHulpTests(TestCase):
         self.assertEqual(title, "Schuldhoogte wordt opgevraagd")
 
     @mock.patch(
-        "krefia.allegro_client.allegro_client",
+        "app.allegro_client.allegro_client",
         mock_client("SchuldHulpService", [("GetSRVAanvraag", srv_aanvraag_result)]),
     )
     def test_get_schuldhulp_aanvraag(self):
@@ -232,7 +232,7 @@ class SchuldHulpTests(TestCase):
         )
 
     @mock.patch(
-        "krefia.allegro_client.allegro_client",
+        "app.allegro_client.allegro_client",
         mock_client(
             "SchuldHulpService",
             [
@@ -271,7 +271,7 @@ class LeningBudgetbeheerTests(TestCase):
     )
 
     @mock.patch(
-        "krefia.allegro_client.allegro_client",
+        "app.allegro_client.allegro_client",
         mock_client("FinancieringService", ["GetPL"]),
     )
     def test_get_lening(self):
@@ -279,13 +279,13 @@ class LeningBudgetbeheerTests(TestCase):
         content = get_lening(tpl_header)
 
         content_expected = {
-            "title": "Kredietsom €1.689,12  met openstaand termijnbedrag €79,66",
+            "title": "Kredietsom €1.689,12 met openstaand termijnbedrag €79,66",
             "url": "http://host/pl/321321/1",
         }
         self.assertEqual(content, content_expected)
 
     @mock.patch(
-        "krefia.allegro_client.allegro_client",
+        "app.allegro_client.allegro_client",
         mock_client(
             "FinancieringService", [("GetPLOverzicht", pl_overzicht_result), "GetPL"]
         ),
@@ -300,18 +300,18 @@ class LeningBudgetbeheerTests(TestCase):
 
         content_expected = [
             {
-                "title": "Kredietsom €1.689,12  met openstaand termijnbedrag €79,66",
+                "title": "Kredietsom €1.689,12 met openstaand termijnbedrag €79,66",
                 "url": "http://host/pl/321321/1",
             },
             {
-                "title": "Kredietsom €1.689,12  met openstaand termijnbedrag €79,66",
+                "title": "Kredietsom €1.689,12 met openstaand termijnbedrag €79,66",
                 "url": "http://host/pl/321321/1",
             },
         ]
         self.assertEqual(content, content_expected)
 
     @mock.patch(
-        "krefia.allegro_client.allegro_client",
+        "app.allegro_client.allegro_client",
         mock_client("BBRService", ["GetBBROverzicht"]),
     )
     def test_get_budgetbeheer(self):
@@ -343,7 +343,7 @@ class ClientTests2(TestCase):
     }
 
     @mock.patch(
-        "krefia.allegro_client.allegro_client",
+        "app.allegro_client.allegro_client",
         mock_client("BerichtenBoxService", ["GetBerichten"]),
     )
     def test_get_notification(self):
@@ -358,7 +358,7 @@ class ClientTests2(TestCase):
         self.assertEqual(content, self.trigger_kredietbank)
 
     @mock.patch(
-        "krefia.allegro_client.allegro_client",
+        "app.allegro_client.allegro_client",
         mock_client("BerichtenBoxService", ["GetBerichten"]),
     )
     def test_get_notification_triggers(self):
@@ -376,7 +376,7 @@ class ClientTests2(TestCase):
         self.assertEqual(content, content_expected)
 
     @mock.patch(
-        "krefia.allegro_client.allegro_client",
+        "app.allegro_client.allegro_client",
         mock_clients(
             [
                 (
@@ -408,7 +408,7 @@ class ClientTests2(TestCase):
                     "url": "http://host/bbr/123123123/3",
                 },
                 "lening": {
-                    "title": "Kredietsom €1.689,12  met openstaand termijnbedrag €79,66",
+                    "title": "Kredietsom €1.689,12 met openstaand termijnbedrag €79,66",
                     "url": "http://host/pl/321321/1",
                 },
                 "schuldhulp": {
@@ -436,7 +436,7 @@ class ClientTests2(TestCase):
         return None
 
     @mock.patch(
-        "krefia.allegro_client.allegro_client",
+        "app.allegro_client.allegro_client",
         mock_clients(
             [
                 (
@@ -470,7 +470,7 @@ class ClientTests2(TestCase):
         return {"body": {"Result": None}}
 
     @mock.patch(
-        "krefia.allegro_client.allegro_client",
+        "app.allegro_client.allegro_client",
         mock_clients(
             [
                 (
@@ -520,7 +520,7 @@ class ClientTests2(TestCase):
         return {"body": {"FOo": "Barrr"}}
 
     @mock.patch(
-        "krefia.allegro_client.allegro_client",
+        "app.allegro_client.allegro_client",
         mock_client(
             "LoginService",
             [

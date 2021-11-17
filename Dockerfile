@@ -1,4 +1,4 @@
-FROM amsterdam/python:3.8-buster as base-app
+FROM amsterdam/python as base-app
 
 LABEL maintainer=datapunt@amsterdam.nl
 
@@ -11,14 +11,14 @@ RUN pip install uwsgi
 
 WORKDIR /app
 
-COPY /requirements.txt /app/
-COPY uwsgi.ini /app/
-RUN pip install --no-cache-dir -r /app/requirements.txt
+COPY requirements.txt .
+COPY uwsgi.ini .
+COPY test.sh .
+COPY .flake8 .
 
-COPY test.sh /app/
-COPY .flake8 /app/
+COPY app ./app
 
-COPY krefia /app/krefia
+RUN pip install --no-cache-dir -r ./requirements.txt
 
 FROM base-app as prod-app
 

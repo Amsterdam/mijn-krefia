@@ -1,16 +1,16 @@
-from krefia import config
+from app import config
 from unittest import mock
-from krefia.tests.mocks import mock_client
+from app.fixtures.mocks import mock_client
 from unittest.mock import patch
 
-from krefia.server import app
-from tma_saml import FlaskServerTMATestCase, UserType
+from app.server import app
+from tma_saml import FlaskServerTMATestCase
 from tma_saml.for_tests.cert_and_key import server_crt
 
 config.ALLEGRO_SOAP_ENDPOINT = "https://localhost/SOAP"
 
 
-@patch("krefia.helpers.get_tma_certificate", lambda: server_crt)
+@patch("app.helpers.get_tma_certificate", lambda: server_crt)
 class ApiTests(FlaskServerTMATestCase):
     TEST_BSN = "111222333"
 
@@ -36,7 +36,7 @@ class ApiTests(FlaskServerTMATestCase):
         return {"body": {"FOo": "Barrr"}}
 
     @mock.patch(
-        "krefia.allegro_client.allegro_client",
+        "app.allegro_client.allegro_client",
         mock_client(
             "LoginService",
             [
@@ -60,7 +60,7 @@ class ApiTests(FlaskServerTMATestCase):
         return None
 
     @mock.patch(
-        "krefia.allegro_client.allegro_client",
+        "app.allegro_client.allegro_client",
         mock_client(
             "LoginService",
             [

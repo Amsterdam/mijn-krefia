@@ -8,8 +8,8 @@ from zeep.settings import Settings
 from zeep.transports import Transport
 from zeep.xsd.elements.element import Element
 
-from krefia.config import get_allegro_service_description, logger
-from krefia.helpers import dotdict, format_currency
+from app.config import get_allegro_service_description, logger
+from app.helpers import dotdict, format_currency
 
 session_id = None
 allegro_client = {}

@@ -1,9 +1,9 @@
 import logging
-from krefia import config
+from app import config
 import sys
 from pprint import pprint
 
-from krefia.allegro_client import (
+from app.allegro_client import (
     get_all,
     get_relatiecode_bedrijf,
     login_allowed,

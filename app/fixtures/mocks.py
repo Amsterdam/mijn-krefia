@@ -7,11 +7,11 @@ from typing import List, Tuple, Union
 from unittest.mock import Mock
 from lxml import etree
 
-from krefia.config import BASE_PATH
+from app.config import BASE_PATH
 
 pp = pprint.PrettyPrinter(indent=4)
 
-RESPONSES_PATH = os.path.join(BASE_PATH, "tests", "responses")
+FIXTURES_PATH = os.path.join(BASE_PATH, "fixtures")
 
 # From https://github.com/CRiva/lxml_to_dict
 # modified slightly
@@ -55,7 +55,7 @@ def load_xml(xml):
 
 
 def load_response_file(service_name: str, method_name: str):
-    file_name = os.path.join(RESPONSES_PATH, f"{service_name}.{method_name}.xml")
+    file_name = os.path.join(FIXTURES_PATH, f"{service_name}.{method_name}.xml")
     with open(file_name) as fp:
         return bytes(fp.read(), encoding="utf8")
 

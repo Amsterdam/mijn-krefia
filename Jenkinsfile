@@ -1,98 +1,75 @@
 #!groovy
 
-def tryStep(String message, Closure block, Closure tearDown = null) {
-    try {
-        block()
-    }
-    catch (Throwable t) {
-        slackSend message: "${env.JOB_NAME}: ${message} failure ${env.BUILD_URL}", channel: "#ci-channel", color: "danger"
-
-        throw t
-    }
-    finally {
-        if (tearDown) {
-            tearDown()
-        }
-    }
-}
-
 def retagAndPush(String imageName, String currentTag, String newTag)
 {
     def regex = ~"^https?://"
-    def dockerReg = "${DOCKER_REGISTRY_HOST}" - regex
+    def dockerReg = DOCKER_REGISTRY_HOST - regex
     sh "docker tag ${dockerReg}/${imageName}:${currentTag} ${dockerReg}/${imageName}:${newTag}"
     sh "docker push ${dockerReg}/${imageName}:${newTag}"
 }
+
+String BRANCH = "${env.BRANCH_NAME}"
+String IMAGE_NAME = "mijnams/krefia"
+String IMAGE_TAG = "${IMAGE_NAME}:${env.BUILD_NUMBER}"
+String CMDB_ID = "app_mijn-krefia"
 
 node {
     stage("Checkout") {
         checkout scm
     }
 
-    stage("Test") {
-        tryStep "test", {
-            docker.withRegistry("${DOCKER_REGISTRY_HOST}", "docker_registry_auth") {
-                docker.build("mijnams/krefia:${env.BUILD_NUMBER}", "--target=base-app .")
-                sh "docker run --rm mijnams/krefia:${env.BUILD_NUMBER} /app/test.sh"
-            }
+    stage("Build image") {
+        docker.withRegistry(DOCKER_REGISTRY_HOST, "docker_registry_auth") {
+            def image = docker.build(IMAGE_TAG)
+            image.push()
         }
     }
+}
 
-
-    stage("Build image") {
-        tryStep "build", {
-            docker.withRegistry("${DOCKER_REGISTRY_HOST}", "docker_registry_auth") {
-                def image = docker.build("mijnams/krefia:${env.BUILD_NUMBER}")
-                image.push()
+// Skipping tests for the test branch
+if (BRANCH != "test-acc") {
+    node {
+        stage("Test") {
+            docker.withRegistry(DOCKER_REGISTRY_HOST, "docker_registry_auth") {
+                docker.image(IMAGE_TAG).pull()
+                sh "docker run --rm mijnams/krefia:${env.BUILD_NUMBER} --target=base-app /app/test.sh"
             }
         }
     }
 }
 
-String BRANCH = "${env.BRANCH_NAME}"
-
-if (BRANCH == "main" || BRANCH == "test-acc") {
-
+if (BRANCH == "test-acc" || BRANCH == "master") {
     node {
         stage("Push acceptance image") {
-            tryStep "image tagging", {
-                docker.withRegistry("${DOCKER_REGISTRY_HOST}", "docker_registry_auth") {
-                    docker.image("mijnams/krefia:${env.BUILD_NUMBER}").pull()
-                    retagAndPush("mijnams/krefia", "${env.BUILD_NUMBER}", "acceptance")
-                }
+            docker.withRegistry(DOCKER_REGISTRY_HOST, "docker_registry_auth") {
+                docker.image(IMAGE_TAG).pull()
+                retagAndPush(IMAGE_NAME, env.BUILD_NUMBER, "acceptance")
             }
         }
     }
 
     node {
         stage("Deploy to ACC") {
-            tryStep "deployment", {
-                build job: "Subtask_Openstack_Playbook",
-                    parameters: [
-                        [$class: "StringParameterValue", name: "INVENTORY", value: "acceptance"],
-                        [$class: "StringParameterValue", name: "PLAYBOOK", value: "deploy.yml"],
-                        [$class: "StringParameterValue", name: "PLAYBOOKPARAMS", value: "-e cmdb_id=app_mijn-krefia"]
-                    ]
-            }
+            build job: "Subtask_Openstack_Playbook",
+                parameters: [
+                    [$class: "StringParameterValue", name: "INVENTORY", value: "acceptance"],
+                    [$class: "StringParameterValue", name: "PLAYBOOK", value: "deploy.yml"],
+                    [$class: "StringParameterValue", name: "PLAYBOOKPARAMS", value: "-e cmdb_id=${CMDB_ID}"]
+                ]
         }
     }
-
 }
 
 if (BRANCH == "production-release") {
     stage("Waiting for approval") {
-        slackSend channel: "#ci-channel", color: "warning", message: "Mijn Krefia-api is waiting for Production Release - please confirm"
         input "Deploy to Production?"
     }
 
     node {
         stage("Push production image") {
-            tryStep "image tagging", {
-                docker.withRegistry("${DOCKER_REGISTRY_HOST}", "docker_registry_auth") {
-                    docker.image("mijnams/krefia:${env.BUILD_NUMBER}").pull()
-                    retagAndPush("mijnams/krefia", "${env.BUILD_NUMBER}", "production")
-                    retagAndPush("mijnams/krefia", "${env.BUILD_NUMBER}", "latest")
-                }
+            docker.withRegistry(DOCKER_REGISTRY_HOST, "docker_registry_auth") {
+                docker.image(IMAGE_TAG).pull()
+                retagAndPush(IMAGE_NAME, env.BUILD_NUMBER, "production")
             }
         }
     }
@@ -104,7 +81,7 @@ if (BRANCH == "production-release") {
                     parameters: [
                         [$class: "StringParameterValue", name: "INVENTORY", value: "production"],
                         [$class: "StringParameterValue", name: "PLAYBOOK", value: "deploy.yml"],
-                        [$class: "StringParameterValue", name: "PLAYBOOKPARAMS", value: "-e cmdb_id=app_mijn-krefia"]
+                        [$class: "StringParameterValue", name: "PLAYBOOKPARAMS", value: "-e cmdb_id=${CMDB_ID}"]
                     ]
             }
         }
