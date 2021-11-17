@@ -74,25 +74,25 @@ class ClientTests(TestCase):
         }
     )
 
-    @mock.patch("app.allegro_client.logger")
+    @mock.patch("app.allegro_client.logging")
     @mock.patch("app.allegro_client.allegro_client", fake_client)
-    def test_call_service_method(self, logger_mock):
+    def test_call_service_method(self, logging_mock):
         content = call_service_method("service3.method1", "bar")
 
         self.assertEqual(content, "foo")
         self.fake_client.service3.service.method1.assert_called_with(
             "bar", _soapheaders=[]
         )
-        logger_mock.debug.assert_called_with({"body": "foo"})
+        logging_mock.debug.assert_called_with({"body": "foo"})
 
         content = call_service_method("service3.method2", "bar")
-        logger_mock.error.assert_called_with(
+        logging_mock.error.assert_called_with(
             "Could not execute service method: 'NoneType' object is not callable"
         )
         self.assertIsNone(content)
 
         content = call_service_method("service3b.method2")
-        logger_mock.error.assert_called_with("service3b.method2, no service.")
+        logging_mock.error.assert_called_with("service3b.method2, no service.")
         self.assertIsNone(content)
 
     @mock.patch(
