@@ -30,9 +30,9 @@ node {
 if (BRANCH != "test-acc") {
     node {
         stage("Test") {
-            docker.withRegistry(DOCKER_REGISTRY_HOST, "docker_registry_auth") {
-                docker.image(IMAGE_TAG).pull()
-                sh "docker run --rm mijnams/krefia:${env.BUILD_NUMBER} --target=base-app /app/test.sh"
+            docker.withRegistry("${DOCKER_REGISTRY_HOST}", "docker_registry_auth") {
+                docker.build("${IMAGE_TAG}:test", "--target=base-app .")
+                sh "docker run --rm ${IMAGE_TAG}:test /app/test.sh"
             }
         }
     }
