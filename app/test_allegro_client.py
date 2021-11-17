@@ -1,8 +1,14 @@
 import datetime
+import logging
 import pprint
 from unittest import TestCase, mock
 
 from app import config
+
+config.KREFIA_SSO_KREDIETBANK = "https://localhost/kredietbank/sso-login"
+config.KREFIA_SSO_FIBU = "https://localhost/fibu/sso-login"
+config.ALLEGRO_SOAP_ENDPOINT = "https://localhost/SOAP"
+
 from app.allegro_client import (
     bedrijf,
     call_service_method,
@@ -29,8 +35,6 @@ from app.helpers import dotdict
 from app.fixtures.mocks import mock_client, mock_clients
 
 pp = pprint.PrettyPrinter(indent=4)
-
-config.ALLEGRO_SOAP_ENDPOINT = "https://localhost/SOAP"
 
 
 class ClientTests(TestCase):
@@ -227,7 +231,7 @@ class SchuldHulpTests(TestCase):
             content,
             {
                 "title": "Afkoopvoorstellen zijn verstuurd",
-                "url": "http://host/srv/2442531/2",
+                "url": config.KREFIA_SSO_KREDIETBANK,
             },
         )
 
@@ -259,7 +263,7 @@ class SchuldHulpTests(TestCase):
             [
                 {
                     "title": "Afkoopvoorstellen zijn verstuurd",
-                    "url": "http://host/srv/2442531/2",
+                    "url": config.KREFIA_SSO_KREDIETBANK,
                 },
             ],
         )
@@ -280,7 +284,7 @@ class LeningBudgetbeheerTests(TestCase):
 
         content_expected = {
             "title": "Kredietsom €1.689,12 met openstaand termijnbedrag €79,66",
-            "url": "http://host/pl/321321/1",
+            "url": config.KREFIA_SSO_KREDIETBANK,
         }
         self.assertEqual(content, content_expected)
 
@@ -301,11 +305,11 @@ class LeningBudgetbeheerTests(TestCase):
         content_expected = [
             {
                 "title": "Kredietsom €1.689,12 met openstaand termijnbedrag €79,66",
-                "url": "http://host/pl/321321/1",
+                "url": config.KREFIA_SSO_KREDIETBANK,
             },
             {
                 "title": "Kredietsom €1.689,12 met openstaand termijnbedrag €79,66",
-                "url": "http://host/pl/321321/1",
+                "url": config.KREFIA_SSO_KREDIETBANK,
             },
         ]
         self.assertEqual(content, content_expected)
@@ -321,7 +325,7 @@ class LeningBudgetbeheerTests(TestCase):
         content_expected = [
             {
                 "title": "Beheer uw budget op FiBu",
-                "url": "http://host/bbr/123123123/3",
+                "url": config.KREFIA_SSO_FIBU,
             }
         ]
         self.assertEqual(content, content_expected)
@@ -405,25 +409,25 @@ class ClientTests2(TestCase):
             "deepLinks": {
                 "budgetbeheer": {
                     "title": "Beheer uw budget op FiBu",
-                    "url": "http://host/bbr/123123123/3",
+                    "url": config.KREFIA_SSO_FIBU,
                 },
                 "lening": {
                     "title": "Kredietsom €1.689,12 met openstaand termijnbedrag €79,66",
-                    "url": "http://host/pl/321321/1",
+                    "url": config.KREFIA_SSO_KREDIETBANK,
                 },
                 "schuldhulp": {
                     "title": "Afkoopvoorstellen zijn verstuurd",
-                    "url": "http://host/srv/321321/2",
+                    "url": config.KREFIA_SSO_KREDIETBANK,
                 },
             },
             "notificationTriggers": {
                 "fibu": {
                     "datePublished": "2021-07-14T12:34:17",
-                    "url": "http://host/berichten/fibu",
+                    "url": config.KREFIA_SSO_FIBU,
                 },
                 "krediet": {
                     "datePublished": "2021-07-14T12:34:17",
-                    "url": "http://host/berichten/kredietbank",
+                    "url": config.KREFIA_SSO_KREDIETBANK,
                 },
             },
         }
@@ -507,7 +511,7 @@ class ClientTests2(TestCase):
                 "lening": None,
                 "budgetbeheer": {
                     "title": "Beheer uw budget op FiBu",
-                    "url": "http://host/bbr/123123123/3",
+                    "url": config.KREFIA_SSO_FIBU,
                 },
             },
             "notificationTriggers": None,

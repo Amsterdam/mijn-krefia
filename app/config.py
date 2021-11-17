@@ -38,8 +38,8 @@ def set_debug(enabled: bool = False):
 ALLEGRO_SOAP_ENDPOINT = os.getenv("ALLEGRO_SOAP_ENDPOINT", None)
 ALLEGRO_SOAP_UA_STRING = "Mijn Amsterdam Krefia API"
 
-KREFIA_SSO_KREDIETBANK = os.getenv("KREFIA_SSO_KREDIETBANK", None)
-KREFIA_SSO_FIBU = os.getenv("KREFIA_SSO_FIBU", None)
+KREFIA_SSO_KREDIETBANK = os.getenv("KREFIA_SSO_KREDIETBANK", "")
+KREFIA_SSO_FIBU = os.getenv("KREFIA_SSO_FIBU", "")
 
 
 def get_allegro_service_description(service_name: str):

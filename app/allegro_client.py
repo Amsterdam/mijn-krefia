@@ -250,7 +250,7 @@ def get_schuldhulp_aanvraag(aanvraag_header: dict):
         aanvraag = {
             "title": title,
             "url": SRV_DETAIL_URL
-            % (aanvraag_header["RelatieCode"], aanvraag_header["Volgnummer"]),
+            # % (aanvraag_header["RelatieCode"], aanvraag_header["Volgnummer"]),
         }
 
     return aanvraag
@@ -284,10 +284,10 @@ def get_lening(tpl_header: dict):
         lening = {
             "title": title,
             "url": PL_DETAIL_URL
-            % (
-                lening_source["InfoHeader"]["RelatieCode"],
-                lening_source["InfoHeader"]["Volgnummer"],
-            ),
+            # % (
+            #     lening_source["InfoHeader"]["RelatieCode"],
+            #     lening_source["InfoHeader"]["Volgnummer"],
+            # ),
         }
 
     return lening
@@ -319,10 +319,10 @@ def get_budgetbeheer(relatiecode_fibu: str):
         budgetbeheer_link = {
             "title": title,
             "url": BBR_DETAIL_URL
-            % (
-                tbbr_header["RelatieCode"],
-                tbbr_header["Volgnummer"],
-            ),
+            # % (
+            #     tbbr_header["RelatieCode"],
+            #     tbbr_header["Volgnummer"],
+            # ),
         }
         budgetbeheer.append(budgetbeheer_link)
 
