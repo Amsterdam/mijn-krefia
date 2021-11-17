@@ -1,5 +1,5 @@
 from datetime import date
-from pprint import pprint
+import logging
 from typing import Any
 
 from requests import ConnectionError
@@ -8,7 +8,7 @@ from zeep.settings import Settings
 from zeep.transports import Transport
 from zeep.xsd.elements.element import Element
 
-from app.config import get_allegro_service_description, logger
+from app.config import get_allegro_service_description
 from app.helpers import dotdict, format_currency
 
 session_id = None
@@ -35,7 +35,7 @@ def get_client(service_name: str):
     global allegro_client
 
     if service_name not in allegro_client:
-        logger.info(f"Establishing a connection with Allegro service {service_name}")
+        logging.info(f"Establishing a connection with Allegro service {service_name}")
         timeout = 9  # Timeout period for getting WSDL and operations in seconds
 
         try:
@@ -50,12 +50,12 @@ def get_client(service_name: str):
             return client
         except ConnectionError as e:
             # do not rethrow the error, because the error has a object address in it, it is a new error every time.
-            logger.error(
+            logging.error(
                 f"Failed to establish a connection with Allegro: Connection Timeout ({type(e)})"
             )
             return None
         except Exception as error:
-            logger.error(
+            logging.error(
                 "Failed to establish a connection with Allegro: {} {}".format(
                     type(error), str(error)
                 )
@@ -100,7 +100,7 @@ def call_service_method(operation: str, *args):
     service = get_service(service_name)
 
     if not service:
-        logger.error(f"{operation}, no service.")
+        logging.error(f"{operation}, no service.")
         return
 
     try:
@@ -109,16 +109,16 @@ def call_service_method(operation: str, *args):
         )
 
         if not response or "body" not in response:
-            logger.error("Unexpected response for %s", operation)
+            logging.error("Unexpected response for %s", operation)
             return None
         else:
 
-            logger.debug("\n\nResponse for %s", operation)
-            logger.debug(response)
+            logging.debug("\n\nResponse for %s", operation)
+            logging.debug(response)
 
             return response["body"]
     except Exception as error:
-        logger.error(f"Could not execute service method: {error}")
+        logging.error(f"Could not execute service method: {error}")
 
     return None
 
@@ -145,7 +145,7 @@ def get_relatiecode_bedrijf(bsn: str):
         elif str(relatie["Bedrijfscode"]) == bedrijf_code.KREDIETBANK:
             relatiecodes[bedrijf.KREDIETBANK] = relatie["Relatiecode"]
 
-    logger.debug(relatiecodes)
+    logging.debug(relatiecodes)
 
     return relatiecodes
 
@@ -206,7 +206,7 @@ def get_result(response_body: dict, key: str = None, return_default: Any = None)
         ):
             result = [result]
     except Exception:
-        logger.error("Unexpected result for key: %s", key)
+        logging.error("Unexpected result for key: %s", key)
         pass
 
     return result
@@ -396,7 +396,7 @@ def get_all(bsn: str):
         notification_triggers = None
 
         if not relaties:
-            logger.info("No relaties for this user.")
+            logging.info("No relaties for this user.")
             return None
 
         fibu_relatie_code = relaties.get(bedrijf.FIBU)

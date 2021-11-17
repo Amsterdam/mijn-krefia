@@ -1,19 +1,14 @@
+import logging
+
 import sentry_sdk
 from flask import Flask
 from requests.exceptions import HTTPError
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 from app import allegro_client
-from app.config import (
-    IS_DEV,
-    CustomJSONEncoder,
-    TMAException,
-    get_sentry_dsn,
-    logger,
-)
+from app.config import IS_DEV, CustomJSONEncoder, TMAException, get_sentry_dsn, logger
 from app.helpers import (
     error_response_json,
-    get_connection,
     get_tma_user,
     success_response_json,
     verify_tma_user,
@@ -56,7 +51,7 @@ def handle_error(error):
     msg_server_error = "Server error occurred"
 
     if not app.config["TESTING"]:
-        logger.exception(
+        logging.exception(
             error, extra={"error_message_original": error_message_original}
         )
 

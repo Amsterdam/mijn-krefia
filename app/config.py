@@ -1,8 +1,6 @@
 import logging
 import logging.config
 import os
-import sys
-import os.path
 from datetime import date, time
 
 from flask.json import JSONEncoder
@@ -19,18 +17,17 @@ IS_PRODUCTION = os.getenv("SENTRY_ENVIRONMENT") == "production"
 IS_ACCEPTANCE = os.getenv("SENTRY_ENVIRONMENT") == "acceptance"
 IS_AP = IS_PRODUCTION or IS_ACCEPTANCE
 IS_DEV = os.getenv("FLASK_ENV") == "development" and not IS_AP
-LOG_LEVEL = logging.DEBUG if IS_DEV else logging.ERROR
 
 
 TMAException = (SamlVerificationException, InvalidBSNException, SamlExpiredException)
 
 
-logger = logging.getLogger(__name__)
-stdout_handler = logging.StreamHandler(sys.stdout)
+# Set-up logging
+LOG_LEVEL = os.getenv("LOG_LEVEL", "ERROR").upper()
 logging.basicConfig(
+    format="%(asctime)s,%(msecs)d %(levelname)-8s [%(pathname)s:%(lineno)d in function %(funcName)s] %(message)s",
+    datefmt="%Y-%m-%d:%H:%M:%S",
     level=LOG_LEVEL,
-    format="[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s",
-    handlers=[stdout_handler],
 )
 
 

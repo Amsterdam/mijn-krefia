@@ -498,7 +498,6 @@ class ClientTests2(TestCase):
         ),
     )
     def test_get_all_happy_some_item(self):
-        config.set_debug(True)
         bsn = "_1_2_3_4_5_6_"
         content = get_all(bsn)
 
