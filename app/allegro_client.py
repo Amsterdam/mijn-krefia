@@ -8,7 +8,11 @@ from zeep.settings import Settings
 from zeep.transports import Transport
 from zeep.xsd.elements.element import Element
 
-from app.config import get_allegro_service_description
+from app.config import (
+    KREFIA_SSO_FIBU,
+    KREFIA_SSO_KREDIETBANK,
+    get_allegro_service_description,
+)
 from app.helpers import dotdict, format_currency
 
 session_id = None
@@ -19,11 +23,12 @@ bedrijf_code = dotdict(
     {bedrijf.FIBU: "10", bedrijf.KREDIETBANK: "2"}
 )  # Make availabile in ENV, these are not constant
 
-SRV_DETAIL_URL = "http://host/srv/%s/%s"
-PL_DETAIL_URL = "http://host/pl/%s/%s"
-BBR_DETAIL_URL = "http://host/bbr/%s/%s"
-FIBU_NOTIFICATION_URL = "http://host/berichten/fibu"
-KREDIETBANK_NOTIFICATION_URL = "http://host/berichten/kredietbank"
+# The Krefia platform doesn't support true deeplinks at the moment so we supply a few generic SSO endpoints.
+SRV_DETAIL_URL = KREFIA_SSO_KREDIETBANK
+PL_DETAIL_URL = KREFIA_SSO_KREDIETBANK
+BBR_DETAIL_URL = KREFIA_SSO_FIBU
+FIBU_NOTIFICATION_URL = KREFIA_SSO_FIBU
+KREDIETBANK_NOTIFICATION_URL = KREFIA_SSO_KREDIETBANK
 
 notification_urls = {
     bedrijf.FIBU: FIBU_NOTIFICATION_URL,
