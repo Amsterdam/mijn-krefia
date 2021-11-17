@@ -31,8 +31,8 @@ if (BRANCH != "test-acc") {
     node {
         stage("Test") {
             docker.withRegistry("${DOCKER_REGISTRY_HOST}", "docker_registry_auth") {
-                docker.build("${IMAGE_TAG}:test", "--target=base-app .")
-                sh "docker run --rm ${IMAGE_TAG}:test /app/test.sh"
+                docker.build("${IMAGE_TAG}-test", "--target=base-app .")
+                sh "docker run --rm ${IMAGE_TAG}-test /app/test.sh"
             }
         }
     }
