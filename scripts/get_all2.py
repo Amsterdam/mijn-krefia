@@ -1,24 +1,22 @@
 import logging
-from app import config
 import sys
 from pprint import pprint
 
+from app.config import set_debug
 from app.allegro_client import (
-    get_all,
-    get_relatiecode_bedrijf,
-    login_allowed,
-    login_tijdelijk,
-    get_schuldhulp_aanvragen,
     bedrijf,
     get_leningen,
     get_notification_triggers,
+    get_relatiecode_bedrijf,
+    get_schuldhulp_aanvragen,
+    login_tijdelijk,
 )
 
 bsn = None
 if len(sys.argv) >= 2:
     bsn = sys.argv[1]
 
-config.set_debug(True)
+set_debug(True)
 wdsl = logging.getLogger("zeep.wsdl.wsdl")
 schema = logging.getLogger("zeep.xsd.schema")
 wdsl.setLevel(logging.ERROR)
