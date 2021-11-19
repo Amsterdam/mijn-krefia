@@ -15,7 +15,7 @@ COPY requirements.txt .
 COPY uwsgi.ini .
 COPY test.sh .
 COPY .flake8 .
-
+COPY scripts ./scripts
 COPY app ./app
 
 RUN pip install --no-cache-dir -r ./requirements.txt
