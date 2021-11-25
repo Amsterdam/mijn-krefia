@@ -3,7 +3,7 @@ import logging
 from typing import Any
 
 from requests import ConnectionError
-from zeep import Client, xsd
+from zeep import Client
 from zeep.settings import Settings
 from zeep.transports import Transport
 from zeep.xsd.elements.element import Element
