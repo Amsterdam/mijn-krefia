@@ -313,7 +313,7 @@ def get_budgetbeheer(relatiecode_fibu: str):
     tbbr_headers = get_result(response_body, "TBBRHeader", [])
     budgetbeheer = []
 
-    title = "Beheer uw budget op FiBu"
+    title = "Lopend"
 
     for tbbr_header in tbbr_headers:
         budgetbeheer_link = {

@@ -323,7 +323,7 @@ class LeningBudgetbeheerTests(TestCase):
 
         content_expected = [
             {
-                "title": "Beheer uw budget op FiBu",
+                "title": "Lopend",
                 "url": config.KREFIA_SSO_FIBU,
             }
         ]
@@ -407,7 +407,7 @@ class ClientTests2(TestCase):
         content_expected = {
             "deepLinks": {
                 "budgetbeheer": {
-                    "title": "Beheer uw budget op FiBu",
+                    "title": "Lopend",
                     "url": config.KREFIA_SSO_FIBU,
                 },
                 "lening": {
@@ -509,7 +509,7 @@ class ClientTests2(TestCase):
                 "schuldhulp": None,
                 "lening": None,
                 "budgetbeheer": {
-                    "title": "Beheer uw budget op FiBu",
+                    "title": "Lopend",
                     "url": config.KREFIA_SSO_FIBU,
                 },
             },
