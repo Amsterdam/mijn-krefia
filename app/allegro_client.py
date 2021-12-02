@@ -277,9 +277,10 @@ def get_lening(tpl_header: dict):
     lening = None
 
     if lening_source:
-        total = format_currency(lening_source["BrutoKredietsom"])
-        current = format_currency(lening_source["OpenstaandeKredietvergoeding"])
-        title = f"Kredietsom {total} met openstaand termijnbedrag {current}"
+        total = format_currency(lening_source["NettoKredietsom"])
+        current = format_currency(lening_source["MaandTermijn"])
+
+        title = f"{total} geleend met {current} maandelijks af te lossen"
 
         lening = {
             "title": title,

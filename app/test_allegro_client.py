@@ -282,7 +282,7 @@ class LeningBudgetbeheerTests(TestCase):
         content = get_lening(tpl_header)
 
         content_expected = {
-            "title": "Kredietsom €1.689,12 met openstaand termijnbedrag €79,66",
+            "title": "€1.600,00 geleend met €46,92 maandelijks af te lossen",
             "url": config.KREFIA_SSO_KREDIETBANK,
         }
         self.assertEqual(content, content_expected)
@@ -303,11 +303,11 @@ class LeningBudgetbeheerTests(TestCase):
 
         content_expected = [
             {
-                "title": "Kredietsom €1.689,12 met openstaand termijnbedrag €79,66",
+                "title": "€1.600,00 geleend met €46,92 maandelijks af te lossen",
                 "url": config.KREFIA_SSO_KREDIETBANK,
             },
             {
-                "title": "Kredietsom €1.689,12 met openstaand termijnbedrag €79,66",
+                "title": "€1.600,00 geleend met €46,92 maandelijks af te lossen",
                 "url": config.KREFIA_SSO_KREDIETBANK,
             },
         ]
@@ -411,7 +411,7 @@ class ClientTests2(TestCase):
                     "url": config.KREFIA_SSO_FIBU,
                 },
                 "lening": {
-                    "title": "Kredietsom €1.689,12 met openstaand termijnbedrag €79,66",
+                    "title": "€1.600,00 geleend met €46,92 maandelijks af te lossen",
                     "url": config.KREFIA_SSO_KREDIETBANK,
                 },
                 "schuldhulp": {
