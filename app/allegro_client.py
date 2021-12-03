@@ -405,6 +405,8 @@ def get_all(bsn: str):
             logging.info("No relaties for this user.")
             return None
 
+        logging.error("Relaties %s", relaties, {"extra": {"test": relaties}})
+
         fibu_relatie_code = relaties.get(bedrijf.FIBU)
         kredietbank_relatie_code = relaties.get(bedrijf.KREDIETBANK)
 
