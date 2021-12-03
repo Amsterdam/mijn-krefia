@@ -142,11 +142,9 @@ def get_relatiecode_bedrijf(bsn: str):
     response_body = call_service_method("LoginService.BSNNaarRelatieMetBedrijf", bsn)
 
     tr_relatiecodes = get_result(response_body, "TRelatiecodeBedrijfcode", [])
-    relatiecodes = None
+    relatiecodes = {}
 
     for relatie in tr_relatiecodes:
-        if not relatiecodes:
-            relatiecodes = {}
         if str(relatie["Bedrijfscode"]) == bedrijf_code.FIBU:
             relatiecodes[bedrijf.FIBU] = relatie["Relatiecode"]
         elif str(relatie["Bedrijfscode"]) == bedrijf_code.KREDIETBANK:
@@ -419,7 +417,8 @@ def get_all(bsn: str):
                 schuldhulp = get_schuldhulp_aanvragen(kredietbank_relatie_code)
                 lening = get_leningen(kredietbank_relatie_code)
 
-        notification_triggers = get_notification_triggers(relaties)
+        if fibu_relatie_code or kredietbank_relatie_code:
+            notification_triggers = get_notification_triggers(relaties)
 
         if not (budgetbeheer or schuldhulp or lening or notification_triggers):
             return None
