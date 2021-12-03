@@ -1,8 +1,9 @@
-from datetime import date
 import logging
+from datetime import date
 from typing import Any
 
 from requests import ConnectionError
+from sentry_sdk import capture_message
 from zeep import Client
 from zeep.settings import Settings
 from zeep.transports import Transport
@@ -211,7 +212,7 @@ def get_result(response_body: dict, key: str = None, return_default: Any = None)
         ):
             result = [result]
     except Exception:
-        logging.error("Unexpected result for key: %s", key, {"extra": result})
+        logging.error("Unexpected result for key: %s", key, extra={"result": result})
         pass
 
     return result
@@ -405,8 +406,6 @@ def get_all(bsn: str):
             logging.info("No relaties for this user.")
             return None
 
-        logging.error("Relaties %s", relaties, {"extra": {"test": relaties}})
-
         fibu_relatie_code = relaties.get(bedrijf.FIBU)
         kredietbank_relatie_code = relaties.get(bedrijf.KREDIETBANK)
 
@@ -420,7 +419,11 @@ def get_all(bsn: str):
                 lening = get_leningen(kredietbank_relatie_code)
 
         if fibu_relatie_code or kredietbank_relatie_code:
-            notification_triggers = get_notification_triggers(relaties)
+            try:
+                notification_triggers = get_notification_triggers(relaties)
+            except Exception as error:
+                capture_message(f"Relaties {relaties}, error {error} ")
+                logging.error(error, extra={"test": relaties})
 
         if not (budgetbeheer or schuldhulp or lening or notification_triggers):
             return None
