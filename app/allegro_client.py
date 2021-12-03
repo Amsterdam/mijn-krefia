@@ -212,7 +212,10 @@ def get_result(response_body: dict, key: str = None, return_default: Any = None)
         ):
             result = [result]
     except Exception as error:
-        logging.error("Unexpected result for key: %s", key, extra={"result": result})
+        logging.error(
+            f"Unexpected result for key: {key}, error: {error}",
+            extra={"result": result},
+        )
         pass
 
     return result
