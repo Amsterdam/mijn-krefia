@@ -118,7 +118,6 @@ def call_service_method(operation: str, *args):
             logging.error("Unexpected response for %s", operation)
             return None
         else:
-
             logging.debug("\n\nResponse for %s", operation)
             logging.debug(response)
 
@@ -370,27 +369,6 @@ def get_notification(relatiecode: str, bedrijf: str):
     return notification
 
 
-def get_notification_triggers(relaties: dict):
-    fibu_notification = None
-    kredietbank_notification = None
-
-    if bedrijf.FIBU in relaties:
-        fibu_notification = get_notification(relaties[bedrijf.FIBU], bedrijf.FIBU)
-
-    if bedrijf.KREDIETBANK in relaties:
-        kredietbank_notification = get_notification(
-            relaties[bedrijf.KREDIETBANK], bedrijf.KREDIETBANK
-        )
-
-    if not (fibu_notification or kredietbank_notification):
-        return None
-
-    return {
-        "fibu": fibu_notification,
-        "krediet": kredietbank_notification,
-    }
-
-
 def get_all(bsn: str):
     is_logged_in = login_tijdelijk()
 
@@ -401,6 +379,8 @@ def get_all(bsn: str):
         budgetbeheer = None
         lening = None
         notification_triggers = None
+        fibu_notification = None
+        kredietbank_notification = None
 
         if not relaties:
             logging.info("No relaties for this user.")
@@ -412,21 +392,35 @@ def get_all(bsn: str):
         if fibu_relatie_code:
             if login_allowed(fibu_relatie_code):
                 budgetbeheer = get_budgetbeheer(fibu_relatie_code)
+                fibu_notification = get_notification(
+                    relaties[bedrijf.FIBU], bedrijf.FIBU
+                )
 
         if kredietbank_relatie_code:
             if login_allowed(kredietbank_relatie_code):
                 schuldhulp = get_schuldhulp_aanvragen(kredietbank_relatie_code)
                 lening = get_leningen(kredietbank_relatie_code)
+                kredietbank_notification = get_notification(
+                    relaties[bedrijf.KREDIETBANK], bedrijf.KREDIETBANK
+                )
 
-        if fibu_relatie_code or kredietbank_relatie_code:
-            try:
-                notification_triggers = get_notification_triggers(relaties)
-            except Exception as error:
-                capture_message(f"Relaties {relaties}, error {error} ")
-                logging.error(error, extra={"test": relaties})
-
-        if not (budgetbeheer or schuldhulp or lening or notification_triggers):
+        if not (
+            budgetbeheer
+            or schuldhulp
+            or lening
+            or fibu_notification
+            or kredietbank_notification
+        ):
             return None
+
+        if fibu_notification or kredietbank_notification:
+            notification_triggers = {}
+
+            if fibu_notification:
+                notification_triggers["fibu"] = fibu_notification
+
+            if kredietbank_notification:
+                notification_triggers["krediet"] = kredietbank_notification
 
         return {
             "deepLinks": {

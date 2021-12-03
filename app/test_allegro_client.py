@@ -16,7 +16,6 @@ from app.allegro_client import (
     get_lening,
     get_leningen,
     get_notification,
-    get_notification_triggers,
     get_relatiecode_bedrijf,
     get_result,
     get_schuldhulp_aanvraag,
@@ -359,24 +358,6 @@ class ClientTests2(TestCase):
         content = get_notification(relatiecode_kredietbank, bedrijf.KREDIETBANK)
 
         self.assertEqual(content, self.trigger_kredietbank)
-
-    @mock.patch(
-        "app.allegro_client.allegro_client",
-        mock_client("BerichtenBoxService", ["GetBerichten"]),
-    )
-    def test_get_notification_triggers(self):
-        relaties = {
-            bedrijf.FIBU: "123123",
-            bedrijf.KREDIETBANK: "890678",
-        }
-        content = get_notification_triggers(relaties)
-
-        content_expected = {
-            "fibu": self.trigger_fibu,
-            "krediet": self.trigger_kredietbank,
-        }
-
-        self.assertEqual(content, content_expected)
 
     @mock.patch(
         "app.allegro_client.allegro_client",
