@@ -282,7 +282,7 @@ class LeningBudgetbeheerTests(TestCase):
         content = get_lening(tpl_header)
 
         content_expected = {
-            "title": "€1.600,00 geleend met €46,92 maandelijks af te lossen",
+            "title": "U hebt € 1.600,- geleend. Hierop moet u iedere maand € 46,92 aflossen.",
             "url": config.KREFIA_SSO_KREDIETBANK,
         }
         self.assertEqual(content, content_expected)
@@ -303,11 +303,11 @@ class LeningBudgetbeheerTests(TestCase):
 
         content_expected = [
             {
-                "title": "€1.600,00 geleend met €46,92 maandelijks af te lossen",
+                "title": "U hebt € 1.600,- geleend. Hierop moet u iedere maand € 46,92 aflossen.",
                 "url": config.KREFIA_SSO_KREDIETBANK,
             },
             {
-                "title": "€1.600,00 geleend met €46,92 maandelijks af te lossen",
+                "title": "U hebt € 1.600,- geleend. Hierop moet u iedere maand € 46,92 aflossen.",
                 "url": config.KREFIA_SSO_KREDIETBANK,
             },
         ]
@@ -411,7 +411,7 @@ class ClientTests2(TestCase):
                     "url": config.KREFIA_SSO_FIBU,
                 },
                 "lening": {
-                    "title": "€1.600,00 geleend met €46,92 maandelijks af te lossen",
+                    "title": "U hebt € 1.600,- geleend. Hierop moet u iedere maand € 46,92 aflossen.",
                     "url": config.KREFIA_SSO_KREDIETBANK,
                 },
                 "schuldhulp": {

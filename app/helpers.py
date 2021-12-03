@@ -109,4 +109,9 @@ class dotdict(dict):
 
 
 def format_currency(fval: str):
-    return "€{:_.2f}".format(float(fval)).replace(".", ",").replace("_", ".")
+    return (
+        "€ {:_.2f}".format(float(fval))
+        .replace(".", ",")
+        .replace("_", ".")
+        .replace(",00", ",-")
+    )
