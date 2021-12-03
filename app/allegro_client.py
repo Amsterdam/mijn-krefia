@@ -144,13 +144,14 @@ def get_relatiecode_bedrijf(bsn: str):
     tr_relatiecodes = get_result(response_body, "TRelatiecodeBedrijfcode", [])
     relatiecodes = {}
 
-    for relatie in tr_relatiecodes:
-        if str(relatie["Bedrijfscode"]) == bedrijf_code.FIBU:
-            relatiecodes[bedrijf.FIBU] = relatie["Relatiecode"]
-        elif str(relatie["Bedrijfscode"]) == bedrijf_code.KREDIETBANK:
-            relatiecodes[bedrijf.KREDIETBANK] = relatie["Relatiecode"]
+    if isinstance(tr_relatiecodes, list):
+        for relatie in tr_relatiecodes:
+            if str(relatie["Bedrijfscode"]) == bedrijf_code.FIBU:
+                relatiecodes[bedrijf.FIBU] = relatie["Relatiecode"]
+            elif str(relatie["Bedrijfscode"]) == bedrijf_code.KREDIETBANK:
+                relatiecodes[bedrijf.KREDIETBANK] = relatie["Relatiecode"]
 
-    logging.debug(relatiecodes)
+        logging.debug(relatiecodes)
 
     return relatiecodes
 
@@ -210,7 +211,7 @@ def get_result(response_body: dict, key: str = None, return_default: Any = None)
             and not isinstance(result, type(return_default))
         ):
             result = [result]
-    except Exception:
+    except Exception as error:
         logging.error("Unexpected result for key: %s", key, extra={"result": result})
         pass
 
@@ -238,7 +239,7 @@ def get_schuldhulp_aanvraag(aanvraag_header: dict):
 
     response_body = call_service_method("SchuldHulpService.GetSRVAanvraag", tsrv_header)
 
-    aanvraag_source = get_result(response_body, "TSRVAanvraag")
+    aanvraag_source = get_result(response_body)
     aanvraag = None
 
     if aanvraag_source:

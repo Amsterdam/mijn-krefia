@@ -147,13 +147,7 @@ class SchuldHulpTests(TestCase):
         return_value={
             "body": {
                 "Result": {
-                    "TSRVAanvraag": {
-                        "Volgnummer": "1",
-                        "RelatieCode": "123",
-                        "Eindstatus": None,
-                        "Status": "C",
-                        "ExtraStatus": "Voorlopig afgewezen",
-                    }
+                    "Eindstatus": None,
                 }
             }
         }
@@ -500,7 +494,7 @@ class ClientTests2(TestCase):
         self.assertEqual(content, expected_content)
 
     def mock_content(*args, **kwargs):
-        return {"body": {"FOo": "Barrr"}}
+        return {"body": {"Result": {"FOo": "Barrr"}}}
 
     @mock.patch(
         "app.allegro_client.allegro_client",
