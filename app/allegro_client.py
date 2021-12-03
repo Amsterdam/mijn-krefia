@@ -142,9 +142,11 @@ def get_relatiecode_bedrijf(bsn: str):
     response_body = call_service_method("LoginService.BSNNaarRelatieMetBedrijf", bsn)
 
     tr_relatiecodes = get_result(response_body, "TRelatiecodeBedrijfcode", [])
-    relatiecodes = {}
+    relatiecodes = None
 
     for relatie in tr_relatiecodes:
+        if not relatiecodes:
+            relatiecodes = {}
         if str(relatie["Bedrijfscode"]) == bedrijf_code.FIBU:
             relatiecodes[bedrijf.FIBU] = relatie["Relatiecode"]
         elif str(relatie["Bedrijfscode"]) == bedrijf_code.KREDIETBANK:
