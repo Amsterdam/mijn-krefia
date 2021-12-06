@@ -1,7 +1,7 @@
 import datetime
 import pprint
 from unittest import TestCase, mock
-
+from freezegun import freeze_time
 from app import config
 
 config.KREFIA_SSO_KREDIETBANK = "https://localhost/kredietbank/sso-login"
@@ -330,14 +330,15 @@ class ClientTests2(TestCase):
 
     trigger_fibu = {
         "url": notification_urls[bedrijf.FIBU],
-        "datePublished": "2021-07-14T12:34:17",
+        "datePublished": "2021-11-03",
     }
 
     trigger_kredietbank = {
         "url": notification_urls[bedrijf.KREDIETBANK],
-        "datePublished": "2021-07-14T12:34:17",
+        "datePublished": "2021-11-03",
     }
 
+    @freeze_time("2021-11-03")
     @mock.patch(
         "app.allegro_client.allegro_client",
         mock_client("BerichtenBoxService", ["GetBerichten"]),
@@ -372,6 +373,7 @@ class ClientTests2(TestCase):
             ]
         ),
     )
+    @freeze_time("2021-11-03")
     def test_get_all1(self):
 
         self.maxDiff = None
@@ -396,11 +398,11 @@ class ClientTests2(TestCase):
             },
             "notificationTriggers": {
                 "fibu": {
-                    "datePublished": "2021-07-14T12:34:17",
+                    "datePublished": "2021-11-03",
                     "url": config.KREFIA_SSO_FIBU,
                 },
                 "krediet": {
-                    "datePublished": "2021-07-14T12:34:17",
+                    "datePublished": "2021-11-03",
                     "url": config.KREFIA_SSO_KREDIETBANK,
                 },
             },

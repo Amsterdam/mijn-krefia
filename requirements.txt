@@ -12,6 +12,7 @@ eight==1.0.1
 flake8==3.9.2
 Flask==2.0.1
 Flask-Testing==0.8.1
+freezegun==1.1.0
 future==0.18.2
 idna==3.2
 isodate==0.6.0

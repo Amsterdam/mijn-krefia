@@ -6,6 +6,7 @@ Flask-Testing
 flake8
 coverage
 black
+freezegun
 
 # error reporting
 sentry-sdk[flask]

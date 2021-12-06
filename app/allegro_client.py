@@ -172,7 +172,7 @@ def get_schuldhulp_title(status: str, extra_status: str, eind_status: str):
     if eind_status == "I":
         title = "Schuldeisers akkoord"
 
-    elif eind_status == "Z":
+    elif eind_status in ["T", "U", "V", "W", "X", "Y", "Z"]:
         title = "Aanvraag afgewezen"
 
     elif extra_status == "Voorlopig afgewezen":
@@ -352,7 +352,7 @@ def get_notification(relatiecode: str, bedrijf: str):
             relatiecode,
             date(2020, 1, 1),
             date.today(),
-            "ovBeide",
+            "ovOntvangen",
             "Nee",
             "Nee",
             "Oplopend",
@@ -360,10 +360,8 @@ def get_notification(relatiecode: str, bedrijf: str):
 
         tbbox_headers = get_result(response_body, "TBBoxHeader", [])
 
-        # TODO: Which notification to take?
         if tbbox_headers:
-            trigger = tbbox_headers[0]
-            date_published = trigger["Tijdstip"]
+            date_published = date.today().strftime("%Y-%m-%d")
 
             notification = {
                 "url": notification_urls[bedrijf],
