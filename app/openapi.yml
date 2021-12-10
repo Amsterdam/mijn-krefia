@@ -7,13 +7,6 @@ info:
     email: datapunt@amsterdam.nl
     name: Datapunt Support
     url: https://data.amsterdam.nl/
-servers:
-  - url: http://localhost
-    description: Development server
-  - url: https://mijn.acc.amsterdam.nl/api
-    description: Acceptance server
-  - url: https://mijn.amsterdam.nl/api
-    description: Production server
 paths:
   /status/health:
     get:
