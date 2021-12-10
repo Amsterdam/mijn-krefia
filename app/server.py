@@ -11,6 +11,7 @@ from app.helpers import (
     error_response_json,
     get_tma_user,
     success_response_json,
+    validate_openapi,
     verify_tma_user,
 )
 
@@ -26,12 +27,10 @@ if sentry_dsn:
 
 @app.route("/krefia/all", methods=["GET"])
 @verify_tma_user
+@validate_openapi
 def get_all():
     user = get_tma_user()
     content = allegro_client.get_all(user["id"])
-
-    if content is None:
-        return success_response_json(None)
 
     return success_response_json(content)
 

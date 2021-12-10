@@ -10,9 +10,9 @@ info:
 servers:
   - url: http://localhost
     description: Development server
-  - url: https://mijn.acc.amsterdam.nl/api
+  - url: https://mijn.acc.amsterdam.nl
     description: Acceptance server
-  - url: https://mijn.amsterdam.nl/api
+  - url: https://mijn.amsterdam.nl
     description: Production server
 paths:
   /status/health:
@@ -35,8 +35,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AllResponse"
-        "400":
-          description: Bad request
+        default:
+          description: Unexpected error
           content:
             application/json:
               schema:
@@ -79,26 +79,26 @@ components:
         lening:
           nullable: true
           $ref: "#/components/schemas/LinkProps"
-    KrefiaContent:
+    NotificationTriggers:
       type: object
       properties:
-        deepLinks:
-          $ref: "#/components/schemas/DeepLinks"
-        notificationTriggers:
-          type: object
-          properties:
-            fibu:
-              nullable: true
-              $ref: "#/components/schemas/NotificationTrigger"
-            krediet:
-              nullable: true
-              $ref: "#/components/schemas/NotificationTrigger"
+        fibu:
+          nullable: true
+          $ref: "#/components/schemas/NotificationTrigger"
+        krediet:
+          nullable: true
+          $ref: "#/components/schemas/NotificationTrigger"
     AllResponse:
       type: object
       properties:
         content:
           nullable: true
-          $ref: "#/components/schemas/KrefiaContent"
+          type: object
+          properties:
+            deepLinks:
+              $ref: "#/components/schemas/DeepLinks"
+            notificationTriggers:
+              $ref: "#/components/schemas/NotificationTriggers"
         status:
           type: string
           enum:
