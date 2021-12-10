@@ -49,10 +49,7 @@ def handle_error(error):
     msg_request_http_error = "Request error occurred"
     msg_server_error = "Server error occurred"
 
-    if not app.config["TESTING"]:
-        logging.exception(
-            error, extra={"error_message_original": error_message_original}
-        )
+    logging.exception(error, extra={"error_message_original": error_message_original})
 
     if IS_DEV:
         msg_tma_exception = error_message_original
