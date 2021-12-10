@@ -10,9 +10,9 @@ info:
 servers:
   - url: http://localhost
     description: Development server
-  - url: https://mijn.acc.amsterdam.nl
+  - url: https://mijn.acc.amsterdam.nl/api
     description: Acceptance server
-  - url: https://mijn.amsterdam.nl
+  - url: https://mijn.amsterdam.nl/api
     description: Production server
 paths:
   /status/health:
