@@ -1,7 +1,5 @@
-import inspect
 import os
 from functools import wraps
-from pprint import pprint
 
 from flask import g, request
 from tma_saml import (
@@ -79,25 +77,12 @@ def verify_tma_user(function):
     return verify
 
 
-def get_connection():
-    """Creates a DecosJoin connection instance if there is none yet for the
-    current application context.
-    """
-
-    return None
-
-
 def success_response_json(response_content, response_code=200):
     return {"status": "OK", "content": response_content}, response_code
 
 
-def error_response_json(message: str, code: int = 500):
-    return {"status": "ERROR", "message": message}, code
-
-
-def get_user_attributes(cls):
-    boring = dir(type("dummy", (object,), {}))
-    return [item for item in inspect.getmembers(cls) if item[0] not in boring]
+def error_response_json(message: str, response_code: int = 500):
+    return {"status": "ERROR", "message": message}, response_code
 
 
 class dotdict(dict):

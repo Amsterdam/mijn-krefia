@@ -182,13 +182,24 @@ class SchuldHulpTests(TestCase):
             "extra_status": None,
         }
         title = get_schuldhulp_title(**aanvraag_source)
+        self.assertEqual(title, "Lopend")
 
         aanvraag_source = {
-            "eind_status": "Z",
+            "eind_status": "I",
             "status": "E",
             "extra_status": "Voorlopig afgewezen",
         }
         title = get_schuldhulp_title(**aanvraag_source)
+        self.assertEqual(title, "Schuldeisers akkoord")
+
+        for eind_status in ["T", "U", "V", "W", "X", "Y", "Z"]:
+            aanvraag_source = {
+                "eind_status": eind_status,
+                "status": "E",
+                "extra_status": "Voorlopig afgewezen",
+            }
+            title = get_schuldhulp_title(**aanvraag_source)
+            self.assertEqual(title, "Aanvraag afgewezen")
 
         aanvraag_source = {
             "eind_status": None,
@@ -196,17 +207,34 @@ class SchuldHulpTests(TestCase):
             "extra_status": "Voorlopig afgewezen",
         }
         title = get_schuldhulp_title(**aanvraag_source)
-
         self.assertEqual(title, "Dwangprocedure loopt")
 
-        aanvraag_source = {
-            "eind_status": None,
-            "status": "C",
-            "extra_status": "Aanvraag beperkt",
-        }
-        title = get_schuldhulp_title(**aanvraag_source)
+        for status in ["A"]:
+            aanvraag_source = {
+                "eind_status": None,
+                "status": status,
+                "extra_status": None,
+            }
+            title = get_schuldhulp_title(**aanvraag_source)
+            self.assertEqual(title, "Inventariseren ingediende aanvraag")
 
-        self.assertEqual(title, "Schuldhoogte wordt opgevraagd")
+        for status in ["B", "C", "D"]:
+            aanvraag_source = {
+                "eind_status": None,
+                "status": status,
+                "extra_status": None,
+            }
+            title = get_schuldhulp_title(**aanvraag_source)
+            self.assertEqual(title, "Schuldhoogte wordt opgevraagd")
+
+        for status in ["E", "F", "G"]:
+            aanvraag_source = {
+                "eind_status": None,
+                "status": status,
+                "extra_status": None,
+            }
+            title = get_schuldhulp_title(**aanvraag_source)
+            self.assertEqual(title, "Afkoopvoorstellen zijn verstuurd")
 
     @mock.patch(
         "app.allegro_client.allegro_client",

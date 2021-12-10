@@ -167,7 +167,7 @@ def login_allowed(relatiecode: str):
 
 
 def get_schuldhulp_title(status: str, extra_status: str, eind_status: str):
-    title = ""
+    title = "Lopend"
 
     if eind_status == "I":
         title = "Schuldeisers akkoord"
