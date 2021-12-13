@@ -1,13 +1,18 @@
-from app import config
 from unittest import mock
-from app.fixtures.mocks import mock_client
+from app.fixtures.mocks import mock_client, mock_clients
 from unittest.mock import patch
 
-from app.server import app
+
 from tma_saml import FlaskServerTMATestCase
 from tma_saml.for_tests.cert_and_key import server_crt
 
+from app import config
+
+config.KREFIA_SSO_KREDIETBANK = "https://localhost/kredietbank/sso-login"
+config.KREFIA_SSO_FIBU = "https://localhost/fibu/sso-login"
 config.ALLEGRO_SOAP_ENDPOINT = "https://localhost/SOAP"
+
+from app.server import app
 
 
 @patch("app.helpers.get_tma_certificate", lambda: server_crt)
@@ -75,6 +80,61 @@ class ApiTests(FlaskServerTMATestCase):
 
         self.assertEqual(data["status"], "ERROR")
         self.assertFalse("content" in data)
+
+    def mock_no_result(*args, **kwargs):
+        return {"body": {"Result": None}}
+
+    @mock.patch(
+        "app.allegro_client.allegro_client",
+        mock_clients(
+            [
+                (
+                    "LoginService",
+                    [
+                        "AllegroWebMagAanmelden",
+                        "BSNNaarRelatieMetBedrijf",
+                        "AllegroWebLoginTijdelijk",
+                    ],
+                ),
+                (
+                    "SchuldHulpService",
+                    [
+                        "GetSRVAanvraag",
+                        "GetSRVOverzicht",
+                    ],
+                ),
+                (
+                    "FinancieringService",
+                    ["GetPLOverzicht", "GetPL"],
+                ),
+                ("BBRService", [("GetBBROverzicht", mock_no_result)]),
+                ("BerichtenBoxService", [("GetBerichten", mock_no_result)]),
+            ]
+        ),
+    )
+    def test_get_all_response_variations(self):
+        response = self.get_secure("/krefia/all")
+        data = response.get_json()
+
+        expected = {
+            "content": {
+                "deepLinks": {
+                    "budgetbeheer": None,
+                    "lening": {
+                        "title": "U hebt € 1.600,- geleend. Hierop moet u iedere maand € 46,92 aflossen.",
+                        "url": "https://localhost/kredietbank/sso-login",
+                    },
+                    "schuldhulp": {
+                        "title": "Afkoopvoorstellen zijn verstuurd",
+                        "url": "https://localhost/kredietbank/sso-login",
+                    },
+                },
+                "notificationTriggers": None,
+            },
+            "status": "OK",
+        }
+
+        self.assertEqual(data, expected)
 
     def test_not_authenticated(self):
         response = self.client.get("/krefia/all")

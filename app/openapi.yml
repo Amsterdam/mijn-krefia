@@ -74,6 +74,7 @@ components:
           $ref: "#/components/schemas/LinkProps"
     NotificationTriggers:
       type: object
+      nullable: true
       properties:
         fibu:
           nullable: true
@@ -91,6 +92,7 @@ components:
             deepLinks:
               $ref: "#/components/schemas/DeepLinks"
             notificationTriggers:
+              nullable: true
               $ref: "#/components/schemas/NotificationTriggers"
         status:
           type: string
@@ -98,18 +100,20 @@ components:
             - OK
     NotificationTrigger:
       type: object
+      nullable: true
       properties:
         datePublished:
-          $ref: "#/components/schemas/DateTime"
+          $ref: "#/components/schemas/Date"
         url:
           type: string
     LinkProps:
+      nullable: true
       type: object
       properties:
         url:
           type: string
         title:
           type: string
-    DateTime:
+    Date:
       type: string
-      format: date-time
+      format: date
