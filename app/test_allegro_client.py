@@ -89,7 +89,7 @@ class ClientTests(TestCase):
 
         content = call_service_method("service3.method2", "bar")
         logging_mock.error.assert_called_with(
-            "Could not execute service method: 'NoneType' object is not callable"
+            "Could not execute service operation: service3.method2, error: 'NoneType' object is not callable"
         )
         self.assertIsNone(content)
 
