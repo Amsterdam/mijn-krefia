@@ -42,11 +42,9 @@ def get_client(service_name: str):
 
     if service_name not in allegro_client:
         logging.info(f"Establishing a connection with Allegro service {service_name}")
-        timeout = 9  # Timeout period for getting WSDL and operations in seconds
 
         try:
-            transport = Transport(timeout=timeout, operation_timeout=timeout)
-
+            transport = Transport()
             client = Client(
                 wsdl=get_allegro_service_description(service_name),
                 transport=transport,
@@ -123,7 +121,9 @@ def call_service_method(operation: str, *args):
 
             return response["body"]
     except Exception as error:
-        logging.error(f"Could not execute service method: {error}")
+        logging.error(
+            f"Could not execute service operation: {operation}, error: {error}"
+        )
 
     return None
 
