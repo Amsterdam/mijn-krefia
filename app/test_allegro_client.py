@@ -1,6 +1,7 @@
 import datetime
 import pprint
 from unittest import TestCase, mock
+from flask import Flask
 from freezegun import freeze_time
 from app import config
 
@@ -35,10 +36,18 @@ from app.fixtures.mocks import mock_client, mock_clients
 pp = pprint.PrettyPrinter(indent=4)
 
 
-class ClientTests(TestCase):
+class FlaskTestCase(TestCase):
+    app = Flask(__name__)
+
+    def setUp(self) -> None:
+        self.app.config["TESTING"] = True
+
+
+class ClientTests(FlaskTestCase):
     @classmethod
-    def tearDownClass(cls):
-        set_session_id(None)
+    def tearDownClass(self):
+        with self.app.test_request_context():
+            set_session_id(None)
 
     def get_service_mocks():
         return {
@@ -48,8 +57,9 @@ class ClientTests(TestCase):
 
     @mock.patch("app.allegro_client.allegro_client", get_service_mocks())
     def test_get_service(self):
-        self.assertEqual(get_service("service1"), "Foo")
-        self.assertEqual(get_service("service2"), "Bar")
+        with self.app.test_request_context():
+            self.assertEqual(get_service("service1"), "Foo")
+            self.assertEqual(get_service("service2"), "Bar")
 
     @mock.patch(
         "app.allegro_client.allegro_client",
@@ -57,12 +67,16 @@ class ClientTests(TestCase):
     )
     def test_session_id(self):
         session_id = "__test-session-id__"
-        set_session_id(session_id)
-        self.assertEqual(get_session_id(), session_id)
 
-        header = get_session_header("FakeService")[0]
-        self.assertTrue("ID" in header.__dict__)
-        self.assertEqual(header.ID, session_id)
+        with self.app.test_request_context():
+            set_session_id(session_id)
+            sess_id = get_session_id()
+
+            self.assertEqual(sess_id, session_id)
+            header = get_session_header("FakeService")[0]
+
+            self.assertTrue("ID" in header.__dict__)
+            self.assertEqual(header.ID, session_id)
 
     fake_client = dotdict(
         {
@@ -79,7 +93,8 @@ class ClientTests(TestCase):
     @mock.patch("app.allegro_client.logging")
     @mock.patch("app.allegro_client.allegro_client", fake_client)
     def test_call_service_method(self, logging_mock):
-        content = call_service_method("service3.method1", "bar")
+        with self.app.test_request_context():
+            content = call_service_method("service3.method1", "bar")
 
         self.assertEqual(content, "foo")
         self.fake_client.service3.service.method1.assert_called_with(
@@ -87,13 +102,17 @@ class ClientTests(TestCase):
         )
         logging_mock.debug.assert_called_with({"body": "foo"})
 
-        content = call_service_method("service3.method2", "bar")
+        with self.app.test_request_context():
+            content = call_service_method("service3.method2", "bar")
+
         logging_mock.error.assert_called_with(
             "Could not execute service operation: service3.method2, error: 'NoneType' object is not callable"
         )
         self.assertIsNone(content)
 
-        content = call_service_method("service3b.method2")
+        with self.app.test_request_context():
+            content = call_service_method("service3b.method2")
+
         logging_mock.error.assert_called_with("service3b.method2, no service.")
         self.assertIsNone(content)
 
@@ -102,9 +121,10 @@ class ClientTests(TestCase):
         mock_client("LoginService", ["AllegroWebLoginTijdelijk"]),
     )
     def test_login_tijdelijk(self):
-        content = login_tijdelijk()
-        self.assertEqual(content, True)
-        self.assertEqual(get_session_id(), "{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}")
+        with self.app.test_request_context():
+            content = login_tijdelijk()
+            self.assertEqual(content, True)
+            self.assertEqual(get_session_id(), "{43B7DD35-848E-4F52-B90A-6D2E4071D9C6}")
 
     @mock.patch(
         "app.allegro_client.allegro_client",
@@ -112,7 +132,8 @@ class ClientTests(TestCase):
     )
     def test_get_relatiecode_bedrijf(self):
         bsn = "__test_bsn_123__"
-        content = get_relatiecode_bedrijf(bsn)
+        with self.app.test_request_context():
+            content = get_relatiecode_bedrijf(bsn)
 
         content_expected = {"FIBU": "321321", "KREDIETBANK": "123123"}
 
@@ -124,7 +145,8 @@ class ClientTests(TestCase):
     )
     def test_login_allowed(self):
         relatiecode = "123__123"
-        content = login_allowed(relatiecode)
+        with self.app.test_request_context():
+            content = login_allowed(relatiecode)
 
         self.assertEqual(content, True)
 
@@ -142,7 +164,7 @@ class ClientTests(TestCase):
         self.assertEqual(result, "Bar")
 
 
-class SchuldHulpTests(TestCase):
+class SchuldHulpTests(FlaskTestCase):
     srv_aanvraag_result = mock.Mock(
         return_value={
             "body": {
@@ -241,7 +263,8 @@ class SchuldHulpTests(TestCase):
         mock_client("SchuldHulpService", [("GetSRVAanvraag", srv_aanvraag_result)]),
     )
     def test_get_schuldhulp_aanvraag(self):
-        content = get_schuldhulp_aanvraag(self.srv_header)
+        with self.app.test_request_context():
+            content = get_schuldhulp_aanvraag(self.srv_header)
 
         tsrv_header = self.srv_aanvraag_result.call_args[0][0]
         self.assertTrue("Volgnummer" in tsrv_header.__dict__)
@@ -269,7 +292,8 @@ class SchuldHulpTests(TestCase):
         self.srv_aanvraag_result.reset_mock()
 
         relatiecode_fibu = "__456__456__"
-        content = get_schuldhulp_aanvragen(relatiecode_fibu)
+        with self.app.test_request_context():
+            content = get_schuldhulp_aanvragen(relatiecode_fibu)
 
         self.srv_overzicht_result.assert_called_with(relatiecode_fibu, _soapheaders=[])
         self.assertEqual(self.srv_aanvraag_result.call_count, 1)
@@ -289,7 +313,7 @@ class SchuldHulpTests(TestCase):
         )
 
 
-class LeningBudgetbeheerTests(TestCase):
+class LeningBudgetbeheerTests(FlaskTestCase):
     pl_overzicht_result = mock.Mock(
         return_value={"body": {"Result": {"TPLHeader": [{"ID": 99}, {"ID": 88}]}}}
     )
@@ -300,7 +324,8 @@ class LeningBudgetbeheerTests(TestCase):
     )
     def test_get_lening(self):
         tpl_header = {}
-        content = get_lening(tpl_header)
+        with self.app.test_request_context():
+            content = get_lening(tpl_header)
 
         content_expected = {
             "title": "U hebt € 1.600,- geleend. Hierop moet u iedere maand € 46,92 aflossen.",
@@ -316,7 +341,8 @@ class LeningBudgetbeheerTests(TestCase):
     )
     def test_get_leningen(self):
         relatiecode_kredietbank = "__777__888__"
-        content = get_leningen(relatiecode_kredietbank)
+        with self.app.test_request_context():
+            content = get_leningen(relatiecode_kredietbank)
 
         self.pl_overzicht_result.assert_called_with(
             relatiecode_kredietbank, _soapheaders=[]
@@ -340,7 +366,9 @@ class LeningBudgetbeheerTests(TestCase):
     )
     def test_get_budgetbeheer(self):
         relatiecode_fibu = "__456__456__"
-        content = get_budgetbeheer(relatiecode_fibu)
+
+        with self.app.test_request_context():
+            content = get_budgetbeheer(relatiecode_fibu)
 
         content_expected = [
             {
@@ -351,10 +379,11 @@ class LeningBudgetbeheerTests(TestCase):
         self.assertEqual(content, content_expected)
 
 
-class ClientTests2(TestCase):
+class ClientTests2(FlaskTestCase):
     @classmethod
-    def tearDownClass(cls):
-        set_session_id(None)
+    def tearDownClass(self):
+        with self.app.test_request_context():
+            set_session_id(None)
 
     trigger_fibu = {
         "url": notification_urls[bedrijf.FIBU],
@@ -373,12 +402,16 @@ class ClientTests2(TestCase):
     )
     def test_get_notification(self):
         relatiecode_fibu = "__123_fibu__"
-        content = get_notification(relatiecode_fibu, bedrijf.FIBU)
+
+        with self.app.test_request_context():
+            content = get_notification(relatiecode_fibu, bedrijf.FIBU)
 
         self.assertEqual(content, self.trigger_fibu)
 
         relatiecode_kredietbank = "__123_kredietbank__"
-        content = get_notification(relatiecode_kredietbank, bedrijf.KREDIETBANK)
+
+        with self.app.test_request_context():
+            content = get_notification(relatiecode_kredietbank, bedrijf.KREDIETBANK)
 
         self.assertEqual(content, self.trigger_kredietbank)
 
@@ -407,7 +440,8 @@ class ClientTests2(TestCase):
         self.maxDiff = None
 
         bsn = "_1_2_3_4_5_6_"
-        content = get_all(bsn)
+        with self.app.test_request_context():
+            content = get_all(bsn)
 
         content_expected = {
             "deepLinks": {
@@ -466,7 +500,9 @@ class ClientTests2(TestCase):
     )
     def test_get_all_happy_no_items(self):
         bsn = "_1_2_3_4_5_6_"
-        content = get_all(bsn)
+
+        with self.app.test_request_context():
+            content = get_all(bsn)
 
         expected_content = None
 
@@ -507,7 +543,8 @@ class ClientTests2(TestCase):
     )
     def test_get_all_happy_some_item(self):
         bsn = "_1_2_3_4_5_6_"
-        content = get_all(bsn)
+        with self.app.test_request_context():
+            content = get_all(bsn)
 
         expected_content = {
             "deepLinks": {
@@ -539,7 +576,8 @@ class ClientTests2(TestCase):
     )
     def test_get_all_no_relaties(self):
         bsn = "_1_2_3_4_5_6_"
-        content = get_all(bsn)
+        with self.app.test_request_context():
+            content = get_all(bsn)
 
         expected_content = None
 

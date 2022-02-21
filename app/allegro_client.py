@@ -1,6 +1,7 @@
 import logging
 from datetime import date
 from typing import Any
+from flask import g
 
 from requests import ConnectionError
 from sentry_sdk import capture_message
@@ -16,7 +17,6 @@ from app.config import (
 )
 from app.helpers import dotdict, format_currency
 
-session_id = None
 allegro_client = {}
 
 bedrijf = dotdict({"FIBU": "FIBU", "KREDIETBANK": "KREDIETBANK"})
@@ -78,22 +78,22 @@ def get_service(service_name: str):
 
 
 def set_session_id(id: str):
-    global session_id
-    session_id = id
+    g.session_id = id
 
 
 def get_session_id():
+    session_id = getattr(g, "session_id", None)
     return session_id
 
 
 def get_session_header(service_name: str):
-    if not session_id:
+    if not get_session_id():
         return []
 
     client = get_client(service_name)
     header = client.get_element("ns0:ROClientIDHeader")
     session_header = header(
-        ID=session_id,
+        ID=get_session_id(),
     )
 
     return [session_header]
