@@ -45,7 +45,7 @@ def get_client(service_name: str):
         logging.info(f"Establishing a connection with Allegro service {service_name}")
 
         try:
-            transport = Transport()
+            transport = Transport(timeout=ALLEGRO_REQUEST_TIMEOUT)
             client = Client(
                 wsdl=get_allegro_service_description(service_name),
                 transport=transport,
@@ -55,9 +55,7 @@ def get_client(service_name: str):
             return client
         except ConnectionError as e:
             # do not rethrow the error, because the error has a object address in it, it is a new error every time.
-            logging.error(
-                f"Failed to establish a connection with Allegro: Connection Timeout ({type(e)})"
-            )
+            logging.error(f"Failed to establish a connection with Allegro: ({type(e)})")
             return None
         except Exception as error:
             logging.error(
