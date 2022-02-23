@@ -174,6 +174,16 @@ class SchuldHulpTests(FlaskTestCase):
             }
         }
     )
+    srv_aanvraag_result2 = mock.Mock(
+        return_value={
+            "body": {
+                "Result": {
+                    "Eindstatus": None,
+                    "Opdrachtgever": "123123123",
+                }
+            }
+        }
+    )
 
     srv_header = {
         "RelatieCode": 2442531,
@@ -276,6 +286,27 @@ class SchuldHulpTests(FlaskTestCase):
                 "title": "Afkoopvoorstellen zijn verstuurd",
                 "url": config.KREFIA_SSO_KREDIETBANK,
             },
+        )
+
+    @mock.patch(
+        "app.allegro_client.allegro_client",
+        mock_client("SchuldHulpService", [("GetSRVAanvraag", srv_aanvraag_result2)]),
+    )
+    @mock.patch(
+        "app.allegro_client.ALLEGRO_EXCLUDE_OPDRACHTGEVER",
+        ["123123123"],
+    )
+    def test_get_schuldhulp_aanvraag_exclude_opdrachtgever(self):
+        with self.app.test_request_context():
+            content = get_schuldhulp_aanvraag(self.srv_header)
+
+        tsrv_header = self.srv_aanvraag_result2.call_args[0][0]
+        self.assertTrue("Volgnummer" in tsrv_header.__dict__)
+        self.assertEqual(tsrv_header.Volgnummer, 2)
+
+        self.assertEqual(
+            content,
+            None,
         )
 
     @mock.patch(

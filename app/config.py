@@ -37,6 +37,9 @@ def set_debug(enabled: bool = False):
 
 ALLEGRO_SOAP_ENDPOINT = os.getenv("ALLEGRO_SOAP_ENDPOINT", None)
 ALLEGRO_SOAP_UA_STRING = "Mijn Amsterdam Krefia API"
+ALLEGRO_EXCLUDE_OPDRACHTGEVER = os.getenv("ALLEGRO_EXCLUDE_OPDRACHTGEVER", "").split(
+    ","
+)
 
 KREFIA_SSO_KREDIETBANK = os.getenv("KREFIA_SSO_KREDIETBANK", "")
 KREFIA_SSO_FIBU = os.getenv("KREFIA_SSO_FIBU", "")

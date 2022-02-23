@@ -11,6 +11,7 @@ from zeep.transports import Transport
 from zeep.xsd.elements.element import Element
 
 from app.config import (
+    ALLEGRO_EXCLUDE_OPDRACHTGEVER,
     KREFIA_SSO_FIBU,
     KREFIA_SSO_KREDIETBANK,
     get_allegro_service_description,
@@ -243,6 +244,13 @@ def get_schuldhulp_aanvraag(aanvraag_header: dict):
     response_body = call_service_method("SchuldHulpService.GetSRVAanvraag", tsrv_header)
 
     aanvraag_source = get_result(response_body)
+
+    if (
+        "Opdrachtgever" in aanvraag_source
+        and aanvraag_source["Opdrachtgever"] in ALLEGRO_EXCLUDE_OPDRACHTGEVER
+    ):
+        return None
+
     aanvraag = None
 
     if aanvraag_source:
