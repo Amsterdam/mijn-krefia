@@ -12,6 +12,7 @@ from zeep.xsd.elements.element import Element
 
 from app.config import (
     ALLEGRO_EXCLUDE_OPDRACHTGEVER,
+    ALLEGRO_REQUEST_TIMEOUT,
     KREFIA_SSO_FIBU,
     KREFIA_SSO_KREDIETBANK,
     get_allegro_service_description,
