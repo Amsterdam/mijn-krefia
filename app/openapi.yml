@@ -21,6 +21,13 @@ paths:
   /krefia/all:
     get:
       description: Returns a collection of items related to a BSN number
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer token
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: OK
@@ -57,7 +64,7 @@ components:
         message:
           type: string
           enum:
-            - TMA error occurred
+            - Auth error occurred
             - Server error occurred
             - Request error occurred
     DeepLinks:

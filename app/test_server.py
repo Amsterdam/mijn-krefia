@@ -1,10 +1,7 @@
 from unittest import mock
+from app.auth import FlaskServerTestCase
 from app.fixtures.mocks import mock_client, mock_clients
-from unittest.mock import patch
 
-
-from tma_saml import FlaskServerTMATestCase
-from tma_saml.for_tests.cert_and_key import server_crt
 
 from app import config
 
@@ -15,19 +12,8 @@ config.ALLEGRO_SOAP_ENDPOINT = "https://localhost/SOAP"
 from app.server import app
 
 
-@patch("app.helpers.get_tma_certificate", lambda: server_crt)
-class ApiTests(FlaskServerTMATestCase):
-    TEST_BSN = "111222333"
-
-    def setUp(self):
-        self.client = self.get_tma_test_app(app)
-        self.maxDiff = None
-
-    def get_secure(self, location):
-        return self.client.get(location, headers=self.saml_headers())
-
-    def saml_headers(self):
-        return self.add_digi_d_headers(self.TEST_BSN)
+class ApiTests(FlaskServerTestCase):
+    app = app
 
     def test_status(self):
         response = self.client.get("/status/health")
@@ -140,7 +126,7 @@ class ApiTests(FlaskServerTMATestCase):
         response = self.client.get("/krefia/all")
         data = response.get_json()
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 401)
         self.assertEqual(data["status"], "ERROR")
-        self.assertEqual(data["message"], "TMA error occurred")
+        self.assertEqual(data["message"], "Auth error occurred")
         self.assertEqual("content" not in data, True)

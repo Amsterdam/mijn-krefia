@@ -1,27 +1,22 @@
-FROM amsterdam/python as base-app
+FROM amsterdam/python:3.9.6-buster as base-app
 
-LABEL maintainer=datapunt@amsterdam.nl
+WORKDIR /api
 
-ENV PYTHONUNBUFFERED 1
+COPY app /api/app
+COPY scripts /api/scripts
+COPY requirements.txt /api
+COPY uwsgi.ini /api
 
-RUN apt-get update && apt-get install -y
-RUN apt-get install nano
-RUN pip install --upgrade pip
-RUN pip install uwsgi
+COPY /test.sh /api
+COPY .flake8 /api
 
-WORKDIR /app
+RUN pip install --no-cache-dir -r /api/requirements.txt
 
-COPY requirements.txt .
-COPY uwsgi.ini .
-COPY test.sh .
-COPY .flake8 .
-COPY scripts ./scripts
-COPY app ./app
-
-RUN pip install --no-cache-dir -r ./requirements.txt
+USER datapunt
+CMD uwsgi --ini /api/uwsgi.ini
 
 FROM base-app as prod-app
 
-COPY docker-entrypoint.sh /app/
+COPY docker-entrypoint.sh /api/
 
-ENTRYPOINT /app/docker-entrypoint.sh
+ENTRYPOINT /api/docker-entrypoint.sh

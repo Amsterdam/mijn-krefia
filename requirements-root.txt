@@ -1,20 +1,14 @@
-# flask and plugins
-flask
-Flask-Testing
-openapi-core
-
-# testing / formatting tools
-flake8
-coverage
 black
+coverage
+cryptography
+flake8
+flask
+flask_httpauth
 freezegun
-
-# error reporting
+openapi-core
+pycryptodome
+pyjwt
+requests
 sentry-sdk[flask]
-
-# Tma lib
-tma-saml>=0.4.2
-
-# SOAP service
-zeep
 xmltodict
+zeep
