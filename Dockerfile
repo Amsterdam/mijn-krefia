@@ -10,10 +10,7 @@ COPY uwsgi.ini /api
 COPY /test.sh /api
 COPY .flake8 /api
 
-RUN pip install --no-cache-dir -r /api/requirements.txt
-
-USER datapunt
-CMD uwsgi --ini /api/uwsgi.ini
+RUN pip install -r /api/requirements.txt
 
 FROM base-app as prod-app
 
