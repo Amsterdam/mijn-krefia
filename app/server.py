@@ -35,7 +35,6 @@ def health_check():
 
 @app.errorhandler(Exception)
 def handle_error(error):
-
     error_message_original = f"{type(error)}:{str(error)}"
 
     msg_auth_exception = "Auth error occurred"
