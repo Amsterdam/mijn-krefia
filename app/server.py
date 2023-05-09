@@ -6,11 +6,11 @@ from requests.exceptions import HTTPError
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 from app import allegro_client, auth
-from app.config import IS_DEV, SENTRY_DSN, CustomJSONEncoder
+from app.config import IS_DEV, SENTRY_DSN, UpdatedJSONProvider
 from app.helpers import error_response_json, success_response_json, validate_openapi
 
 app = Flask(__name__)
-app.json_encoder = CustomJSONEncoder
+app.json = UpdatedJSONProvider(app)
 
 if SENTRY_DSN:  # pragma: no cover
     sentry_sdk.init(
@@ -35,7 +35,6 @@ def health_check():
 
 @app.errorhandler(Exception)
 def handle_error(error):
-
     error_message_original = f"{type(error)}:{str(error)}"
 
     msg_auth_exception = "Auth error occurred"
