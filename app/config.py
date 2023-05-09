@@ -3,7 +3,7 @@ import logging.config
 import os
 from datetime import date, time
 
-from json import JSONEncoder
+from flask.json.provider import DefaultJSONProvider
 
 BASE_PATH = os.path.abspath(os.path.dirname(__file__))
 
@@ -47,11 +47,12 @@ def get_allegro_service_endpoint(service_name: str):
     return f"{ALLEGRO_SOAP_ENDPOINT}?service={service_name}"
 
 
-class CustomJSONEncoder(JSONEncoder):
+class UpdatedJSONProvider(DefaultJSONProvider):
     def default(self, obj):
         if isinstance(obj, time):
             return obj.isoformat(timespec="minutes")
+
         if isinstance(obj, date):
             return obj.isoformat()
 
-        return JSONEncoder.default(self, obj)
+        return super().default(obj)
