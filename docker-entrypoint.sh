@@ -6,4 +6,4 @@ if [ -n "$ALLEGRO_HOSTS_ENTRY" ]; then
     echo "${ALLEGRO_HOSTS_ENTRY}" >> /etc/hosts
 fi
 
-uwsgi --ini /api/uwsgi.ini
+uwsgi --uid www-data --gid www-data --ini /api/uwsgi.ini
