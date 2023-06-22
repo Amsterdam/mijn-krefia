@@ -28,6 +28,7 @@ def get_all():
     return success_response_json(content)
 
 
+@app.route("/")
 @app.route("/status/health")
 def health_check():
     return success_response_json("OK")
