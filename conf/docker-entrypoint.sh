@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+set -e
+
+# echo "Starting SSH ..."
+service ssh start
+
 echo "Start docker-entrypoint.sh"
 echo "Environment: ${SENTRY_ENVIRONMENT:=development}"
 
