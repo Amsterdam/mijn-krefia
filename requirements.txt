@@ -48,7 +48,7 @@ six==1.16.0
 tomli==2.0.1
 typing_extensions==4.5.0
 urllib3==1.26.17
-Werkzeug==2.3.4
+Werkzeug==3.0.1
 xmltodict==0.13.0
 zeep==4.2.1
 zipp==3.15.0
