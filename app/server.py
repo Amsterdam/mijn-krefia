@@ -7,7 +7,7 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 
 from app import allegro_client, auth
 from app.config import IS_DEV, SENTRY_DSN, UpdatedJSONProvider
-from app.helpers import error_response_json, success_response_json, validate_openapi
+from app.helpers import error_response_json, success_response_json
 
 app = Flask(__name__)
 app.json = UpdatedJSONProvider(app)
@@ -20,7 +20,6 @@ if SENTRY_DSN:  # pragma: no cover
 
 @app.route("/krefia/all", methods=["GET"])
 @auth.login_required
-@validate_openapi
 def get_all():
     user = auth.get_current_user()
     content = allegro_client.get_all(user["id"])
