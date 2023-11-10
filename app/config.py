@@ -11,13 +11,18 @@ BASE_PATH = os.path.abspath(os.path.dirname(__file__))
 SENTRY_DSN = os.getenv("SENTRY_DSN")
 SENTRY_ENV = os.getenv("SENTRY_ENVIRONMENT")
 
-# Use the Sentry environment
-IS_PRODUCTION = os.getenv("SENTRY_ENVIRONMENT") == "production"
-IS_ACCEPTANCE = os.getenv("SENTRY_ENVIRONMENT") == "acceptance"
-IS_AP = IS_PRODUCTION or IS_ACCEPTANCE
-IS_DEV = os.getenv("FLASK_ENV") == "development" and not IS_AP
+# Environment determination
+IS_PRODUCTION = SENTRY_ENV == "production"
+IS_ACCEPTANCE = SENTRY_ENV == "acceptance"
+IS_DEV = SENTRY_ENV == "development"
+IS_TEST = SENTRY_ENV == "test"
 
-ENABLE_OPENAPI_VALIDATION = os.getenv("ENABLE_OPENAPI_VALIDATION", not IS_AP)
+IS_TAP = IS_PRODUCTION or IS_ACCEPTANCE or IS_TEST
+IS_AP = IS_ACCEPTANCE or IS_PRODUCTION
+IS_OT = IS_DEV or IS_TEST
+
+# App constants
+VERIFY_JWT_SIGNATURE = os.getenv("VERIFY_JWT_SIGNATURE", IS_AP)
 
 ALLEGRO_SOAP_ENDPOINT = os.getenv("ALLEGRO_SOAP_ENDPOINT", None)
 ALLEGRO_SOAP_UA_STRING = "Mijn Amsterdam Krefia API"
