@@ -1,11 +1,12 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -e
 
-# echo "Starting SSH ..."
+# AZ AppService allows SSH into a App instance.
+if [ $MA_OTAP_ENV == "test" ]
+then
+ # echo "Starting SSH ..."
 service ssh start
-
-echo "Start docker-entrypoint.sh"
-echo "Environment: ${SENTRY_ENVIRONMENT:=development}"
+fi
 
 if [ -n "$ALLEGRO_HOSTS_ENTRY" ]; then
     echo "${ALLEGRO_HOSTS_ENTRY}" >> /etc/hosts
