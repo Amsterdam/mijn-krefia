@@ -3,6 +3,7 @@ trigger:
   branches:
     include:
       - testen
+      - az-acceptance
 pr:
   autoCancel: true
   branches:
@@ -63,3 +64,4 @@ jobs:
       btdTest: ${{ parameters.btdTest }}
       btdDeploy: ${{ variables.btdDeploy }}
       updateAppSettings: ${{ parameters.updateAppSettings }}
+      aquaScan: ${{ eq(variables['Build.Reason'], 'PullRequest') }}
