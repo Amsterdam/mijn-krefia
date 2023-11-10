@@ -1,9 +1,9 @@
+import os
 from unittest import mock
-from app.auth import FlaskServerTestCase
-from app.fixtures.mocks import mock_client, mock_clients
-
 
 from app import config
+from app.auth import FlaskServerTestCase
+from app.fixtures.mocks import mock_client, mock_clients
 
 config.KREFIA_SSO_KREDIETBANK = "https://localhost/kredietbank/sso-login"
 config.KREFIA_SSO_FIBU = "https://localhost/fibu/sso-login"
@@ -12,16 +12,24 @@ config.ALLEGRO_SOAP_ENDPOINT = "https://localhost/SOAP"
 from app.server import app
 
 
+@mock.patch.dict(
+    os.environ,
+    {
+        "MA_BUILD_ID": "999",
+        "MA_GIT_SHA": "abcdefghijk",
+        "MA_OTAP_ENV": "unittesting",
+    },
+)
 class ApiTests(FlaskServerTestCase):
     app = app
 
     def test_status(self):
         response = self.client.get("/status/health")
-        data = response.get_json()
-
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(data["status"], "OK")
-        self.assertEqual(data["content"], "OK")
+        self.assertEqual(
+            response.data.decode(),
+            '{"content":{"buildId":"999","gitSha":"abcdefghijk","otapEnv":"unittesting"},"status":"OK"}\n',
+        )
 
     def mock_response(*args, **kwargs):
         return {"body": {"FOo": "Barrr"}}
