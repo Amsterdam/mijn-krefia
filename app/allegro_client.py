@@ -129,7 +129,11 @@ def call_service_method(operation: str, *args):
 
 
 def login_tijdelijk():
-    response_body = call_service_method("LoginService.AllegroWebLoginTijdelijk")
+    response_body = call_service_method(
+        "LoginService.AllegroWebLoginTijdelijk",
+        AllegroAanmeldcode=None,
+        AllegroWachtwoord=None,
+    )
     result = get_result(response_body)
 
     if result:
