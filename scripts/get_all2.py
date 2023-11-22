@@ -30,8 +30,8 @@ with app.app_context():
             print("No relaties found!")
             exit(1)
 
-        fibu_relatie_code = relaties[bedrijf.FIBU]
-        kredietbank_relatie_code = relaties[bedrijf.KREDIETBANK]
+        fibu_relatie_code = relaties.get(bedrijf.FIBU)
+        kredietbank_relatie_code = relaties.get(bedrijf.KREDIETBANK)
 
         schuldhulp = None
         budgetbeheer = None

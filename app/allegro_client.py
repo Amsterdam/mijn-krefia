@@ -88,6 +88,7 @@ def get_session_id():
 
 def get_session_header(service_name: str):
     if not get_session_id():
+        logging.debug("Session id not found")
         return []
 
     client = get_client(service_name)
@@ -95,6 +96,7 @@ def get_session_header(service_name: str):
     session_header = header(
         ID=get_session_id(),
     )
+    logging.debug(session_header)
 
     return [session_header]
 
@@ -160,12 +162,17 @@ def get_relatiecode_bedrijf(bsn: str):
     return relatiecodes
 
 
-def login_allowed(relatiecode: str):
+def login_allowed(relatiecode: str, setSessionId: bool = False):
     response_body = call_service_method(
-        "LoginService.AllegroWebMagAanmelden", relatiecode
+        "LoginService.AllegroWebMagAanmelden", relatiecode, "", ""
     )
 
+    logging.debug(response_body)
+
     is_allowed = response_body["Result"]
+
+    if setSessionId and response_body and "aUserInfo" in response_body:
+        set_session_id(response_body["aUserInfo"]["SessionID"])
 
     return is_allowed
 
@@ -403,7 +410,7 @@ def get_all(bsn: str):
         kredietbank_relatie_code = relaties.get(bedrijf.KREDIETBANK)
 
         if fibu_relatie_code:
-            if login_allowed(fibu_relatie_code):
+            if login_allowed(fibu_relatie_code, True):
                 budgetbeheer = get_budgetbeheer(fibu_relatie_code)
                 fibu_notification = get_notification(
                     relaties[bedrijf.FIBU], bedrijf.FIBU
