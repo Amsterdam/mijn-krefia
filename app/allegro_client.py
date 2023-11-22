@@ -171,7 +171,7 @@ def login_allowed(relatiecode: str, setSessionId: bool = False):
 
     is_allowed = response_body["Result"]
 
-    if setSessionId and response_body["aUserInfo"]:
+    if setSessionId and response_body and "aUserInfo" in response_body:
         set_session_id(response_body["aUserInfo"]["SessionID"])
 
     return is_allowed
