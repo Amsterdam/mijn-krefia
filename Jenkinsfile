@@ -9,7 +9,7 @@ def retagAndPush(String imageName, String currentTag, String newTag)
 }
 
 String BRANCH = "${env.BRANCH_NAME}"
-String IMAGE_NAME = "mijnams/mijn-krefia"
+String IMAGE_NAME = "mijnams/krefia"
 String IMAGE_TAG = "${IMAGE_NAME}:${env.BUILD_NUMBER}"
 String IMAGE_TEST = "${IMAGE_NAME}:test-${env.BUILD_NUMBER}"
 String CMDB_ID = "app_mijn-krefia"
