@@ -4,6 +4,7 @@ trigger:
     include:
       - testen
       - az-acceptance
+      - main
 pr:
   autoCancel: true
   branches:
