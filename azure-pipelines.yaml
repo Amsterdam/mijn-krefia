@@ -5,6 +5,7 @@ trigger:
       - testen
       - az-acceptance
       - main
+      - production-release-v*
 pr:
   autoCancel: true
   branches:
