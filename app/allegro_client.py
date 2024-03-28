@@ -270,7 +270,7 @@ def get_schuldhulp_aanvraag(aanvraag_header: dict):
         )
         aanvraag = {
             "title": title,
-            "url": SRV_DETAIL_URL
+            "url": SRV_DETAIL_URL,
             # % (aanvraag_header["RelatieCode"], aanvraag_header["Volgnummer"]),
         }
 
@@ -305,7 +305,7 @@ def get_lening(tpl_header: dict):
 
         lening = {
             "title": title,
-            "url": PL_DETAIL_URL
+            "url": PL_DETAIL_URL,
             # % (
             #     lening_source["InfoHeader"]["RelatieCode"],
             #     lening_source["InfoHeader"]["Volgnummer"],
@@ -340,7 +340,7 @@ def get_budgetbeheer(relatiecode_fibu: str):
     for tbbr_header in tbbr_headers:
         budgetbeheer_link = {
             "title": title,
-            "url": BBR_DETAIL_URL
+            "url": BBR_DETAIL_URL,
             # % (
             #     tbbr_header["RelatieCode"],
             #     tbbr_header["Volgnummer"],
@@ -417,6 +417,7 @@ def get_all(bsn: str):
 
         if kredietbank_relatie_code:
             if login_allowed(kredietbank_relatie_code, fibu_relatie_code is None):
+                login_tijdelijk()
                 schuldhulp = get_schuldhulp_aanvragen(kredietbank_relatie_code)
                 lening = get_leningen(kredietbank_relatie_code)
                 kredietbank_notification = get_notification(
