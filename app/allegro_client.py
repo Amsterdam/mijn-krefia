@@ -416,8 +416,8 @@ def get_all(bsn: str):
                 )
 
         if kredietbank_relatie_code:
+            login_tijdelijk()
             if login_allowed(kredietbank_relatie_code, fibu_relatie_code is None):
-                login_tijdelijk()
                 schuldhulp = get_schuldhulp_aanvragen(kredietbank_relatie_code)
                 lening = get_leningen(kredietbank_relatie_code)
                 kredietbank_notification = get_notification(
