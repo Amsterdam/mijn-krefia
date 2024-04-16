@@ -8,6 +8,6 @@ freezegun
 pycryptodome
 pyjwt
 requests
-sentry-sdk[flask]
+azure-monitor-opentelemetry
 xmltodict
 zeep
