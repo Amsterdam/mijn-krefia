@@ -7,7 +7,7 @@ from flask.json.provider import DefaultJSONProvider
 
 BASE_PATH = os.path.abspath(os.path.dirname(__file__))
 
-OTAP_ENV = os.getenv("SENTRY_ENVIRONMENT")
+OTAP_ENV = os.getenv("OTAP_ENV")
 
 # Environment determination
 IS_PRODUCTION = OTAP_ENV == "production"
