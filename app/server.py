@@ -72,7 +72,10 @@ def handle_error(error):
     elif auth.is_auth_exception(error):
         return error_response_json(msg_auth_exception, 401)
 
-    return error_response_json(msg_server_error, 500)
+    return error_response_json(
+        msg_server_error,
+        error.code if hasattr(error, "code") else 500,
+    )
 
 
 if __name__ == "__main__":  # pragma: no cover
