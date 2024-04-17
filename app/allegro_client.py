@@ -1,10 +1,9 @@
 import logging
 from datetime import date
 from typing import Any
-from flask import g
 
+from flask import g
 from requests import ConnectionError
-from sentry_sdk import capture_message
 from zeep import Client
 from zeep.settings import Settings
 from zeep.transports import Transport

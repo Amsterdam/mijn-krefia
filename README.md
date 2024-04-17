@@ -7,6 +7,22 @@ Krefia API
 - Overzicht leningen
 - Overzciht shldhulpdossiers
 
+### Local env
+```
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements-root.txt
+
+// unittest
+python -m unittest
+
+// requirements.txt maken
+make requirements
+
+// dev server
+sh scripts/run-dev.sh
+```
+
 ### Kenmerken
 - Het bronsysteem is Allegro
 - Het bronsysteem wordt bevraagd op basis van een BSN.
