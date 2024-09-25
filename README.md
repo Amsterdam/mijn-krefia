@@ -39,5 +39,5 @@ sh scripts/run-dev.sh
 ### Release to production
 ```
 ~ cd scripts
-~ sh release.sh --minor [--major [--patch]]
+~ ./release.sh --minor [--major [--patch]]
 ```
