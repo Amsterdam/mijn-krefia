@@ -8,7 +8,7 @@ asgiref==3.8.1
     # via opentelemetry-instrumentation-asgi
 attrs==24.2.0
     # via zeep
-azure-core==1.30.2
+azure-core==1.31.0
     # via
     #   azure-core-tracing-opentelemetry
     #   azure-monitor-opentelemetry
@@ -16,29 +16,29 @@ azure-core==1.30.2
     #   msrest
 azure-core-tracing-opentelemetry==1.0.0b11
     # via azure-monitor-opentelemetry
-azure-monitor-opentelemetry==1.6.1
+azure-monitor-opentelemetry==1.6.2
     # via -r requirements-root.txt
-azure-monitor-opentelemetry-exporter==1.0.0b28
+azure-monitor-opentelemetry-exporter==1.0.0b31
     # via azure-monitor-opentelemetry
-black==24.8.0
+black==24.10.0
     # via -r requirements-root.txt
 blinker==1.8.2
     # via flask
-certifi==2024.7.4
+certifi==2024.8.30
     # via
     #   msrest
     #   requests
-cffi==1.17.0
+cffi==1.17.1
     # via cryptography
-charset-normalizer==3.3.2
+charset-normalizer==3.4.0
     # via requests
 click==8.1.7
     # via
     #   black
     #   flask
-coverage==7.6.1
+coverage==7.6.2
     # via -r requirements-root.txt
-cryptography==43.0.0
+cryptography==43.0.1
     # via -r requirements-root.txt
 deprecated==1.2.14
     # via
@@ -56,13 +56,13 @@ flask-httpauth==4.8.0
     # via -r requirements-root.txt
 freezegun==1.5.1
     # via -r requirements-root.txt
-idna==3.8
+idna==3.10
     # via requests
 importlib-metadata==8.4.0
     # via
     #   opentelemetry-api
     #   opentelemetry-instrumentation-flask
-isodate==0.6.1
+isodate==0.7.2
     # via
     #   msrest
     #   zeep
@@ -72,7 +72,7 @@ jinja2==3.1.4
     # via flask
 lxml==5.3.0
     # via zeep
-markupsafe==2.1.5
+markupsafe==3.0.1
     # via
     #   jinja2
     #   werkzeug
@@ -170,7 +170,7 @@ packaging==24.1
     #   opentelemetry-instrumentation-flask
 pathspec==0.12.1
     # via black
-platformdirs==4.2.2
+platformdirs==4.3.6
     # via
     #   black
     #   zeep
@@ -180,7 +180,7 @@ pycodestyle==2.12.1
     # via flake8
 pycparser==2.22
     # via cffi
-pycryptodome==3.20.0
+pycryptodome==3.21.0
     # via -r requirements-root.txt
 pyflakes==3.2.0
     # via flake8
@@ -188,7 +188,7 @@ pyjwt==2.9.0
     # via -r requirements-root.txt
 python-dateutil==2.9.0.post0
     # via freezegun
-pytz==2024.1
+pytz==2024.2
     # via zeep
 requests==2.32.3
     # via
@@ -208,9 +208,8 @@ requests-toolbelt==1.0.0
 six==1.16.0
     # via
     #   azure-core
-    #   isodate
     #   python-dateutil
-tomli==2.0.1
+tomli==2.0.2
     # via black
 typing-extensions==4.12.2
     # via
@@ -218,7 +217,7 @@ typing-extensions==4.12.2
     #   azure-core
     #   black
     #   opentelemetry-sdk
-urllib3==2.2.2
+urllib3==2.2.3
     # via requests
 werkzeug==3.0.4
     # via flask
@@ -228,11 +227,11 @@ wrapt==1.16.0
     #   opentelemetry-instrumentation
     #   opentelemetry-instrumentation-dbapi
     #   opentelemetry-instrumentation-urllib3
-xmltodict==0.13.0
+xmltodict==0.14.1
     # via -r requirements-root.txt
 zeep==4.2.1
     # via -r requirements-root.txt
-zipp==3.20.1
+zipp==3.20.2
     # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
