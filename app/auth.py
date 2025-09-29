@@ -115,7 +115,8 @@ def get_verified_token_data(token):
         algorithms=["RS256"],
         audience=audience,
         # SEE MIJN-11298 For more details
-        options={"verify_nbf": False},
+        # SEE MIJN-12161 For more details
+        options={"verify_nbf": False, "verify_iat": False},
     )
 
     return token_data

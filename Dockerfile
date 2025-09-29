@@ -1,4 +1,4 @@
-FROM python:3.11-bookworm as base
+FROM python:3.14-bookworm AS base
 
 ENV TZ=Europe/Amsterdam
 ENV PYTHONUNBUFFERED=1
@@ -22,7 +22,7 @@ COPY ./scripts /api/scripts
 COPY ./app /api/app
 
 
-FROM base as tests
+FROM base AS tests
 
 COPY conf/test.sh /api/
 COPY .flake8 /api/
@@ -31,7 +31,7 @@ RUN chmod u+x /api/test.sh
 
 ENTRYPOINT [ "/bin/sh", "/api/test.sh"]
 
-FROM base as publish
+FROM base AS publish
 
 # ssh ( see also: https://github.com/Azure-Samples/docker-django-webapp-linux )
 ARG SSH_PASSWD
@@ -62,4 +62,4 @@ RUN chmod u+x /api/docker-entrypoint.sh \
 
 ENTRYPOINT [ "/bin/sh", "/api/docker-entrypoint.sh"]
 
-FROM publish as publish-final
+FROM publish AS publish-final
