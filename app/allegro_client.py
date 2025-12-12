@@ -39,7 +39,7 @@ notification_urls = {
 
 
 def get_client(service_name: str):
-    global allegro_client  # flake8 error says it is unused but it is clearly used. # noqa: F824
+    global allegro_client
 
     if service_name not in allegro_client:
         logging.info(f"Establishing a connection with Allegro service {service_name}")
