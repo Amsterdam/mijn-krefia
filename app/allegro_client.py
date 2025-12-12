@@ -112,6 +112,7 @@ def call_service_method(operation: str, *args):
         response = getattr(service, method_name)(
             _soapheaders=get_session_header(service_name), *args
         )
+        logging.error(response)
 
         if not response or "body" not in response:
             logging.error("Unexpected response for %s", operation)
