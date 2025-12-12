@@ -54,7 +54,6 @@ ENV MA_CONTAINER_SSH_ENABLED=$MA_CONTAINER_SSH_ENABLED
 
 
 COPY conf/uwsgi.ini /api/
-COPY conf/docker-entrypoint.sh /api/
 COPY conf/sshd_config /etc/ssh/
 
 RUN <<EOF
