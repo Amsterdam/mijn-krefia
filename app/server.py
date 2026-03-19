@@ -2,7 +2,7 @@ import logging
 import os
 
 from azure.monitor.opentelemetry import configure_azure_monitor
-from flask import Flask
+from flask import Flask, request
 from opentelemetry import trace
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.trace import get_tracer_provider
@@ -11,6 +11,7 @@ from requests.exceptions import HTTPError
 from app import allegro_client, auth
 from app.config import (
     IS_DEV,
+    API_KEY,
     UpdatedJSONProvider,
     get_application_insights_connection_string,
 )
@@ -27,12 +28,23 @@ app.json = UpdatedJSONProvider(app)
 FlaskInstrumentor.instrument_app(app)
 
 
-@app.route("/krefia/all", methods=["GET"])
-@auth.login_required
+@app.route("/krefia/all", methods=["POST"])
 def get_all():
+    try:
+        incoming_api_key = request.headers["x-api-key"]
+    except KeyError:
+        return error_response_json("required header x-api-key not found.")
+    if incoming_api_key != API_KEY:
+        return error_response_json("header 'x-api-key' is wrong.", code=401)
+
+    data = request.get_json(force=True)
+    try:
+        bsn = data["bsn"]
+    except KeyError:
+        return error_response_json("required field bsn not found.")
+
     with tracer.start_as_current_span("/all"):
-        user = auth.get_current_user()
-        content = allegro_client.get_all(user["id"])
+        content = allegro_client.get_all(bsn)
 
         return success_response_json(content)
 
@@ -69,8 +81,6 @@ def handle_error(error):
             msg_request_http_error,
             error.response.status_code,
         )
-    elif auth.is_auth_exception(error):
-        return error_response_json(msg_auth_exception, 401)
 
     return error_response_json(
         msg_server_error,

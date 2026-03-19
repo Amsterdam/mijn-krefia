@@ -15,13 +15,15 @@ IS_ACCEPTANCE = OTAP_ENV == "acceptance"
 IS_DEV = OTAP_ENV == "development"
 IS_TEST = OTAP_ENV == "test"
 
+if IS_DEV:
+    API_KEY = os.getenv("MA_API_KEY")
+else:
+    API_KEY = "dev-api-key"
+
 IS_TAP = IS_PRODUCTION or IS_ACCEPTANCE or IS_TEST
 IS_AP = IS_ACCEPTANCE or IS_PRODUCTION
 IS_OT = IS_DEV or IS_TEST
 IS_AZ = os.getenv("IS_AZ", False)
-
-# App constants
-VERIFY_JWT_SIGNATURE = os.getenv("VERIFY_JWT_SIGNATURE", IS_AP)
 
 ALLEGRO_SOAP_ENDPOINT = os.getenv("ALLEGRO_SOAP_ENDPOINT", None)
 ALLEGRO_SOAP_UA_STRING = "Mijn Amsterdam Krefia API"
