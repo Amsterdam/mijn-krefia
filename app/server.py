@@ -35,7 +35,7 @@ def get_all():
     except KeyError:
         return error_response_json("required header x-api-key not found.", code=401)
     if incoming_api_key != API_KEY:
-        return error_response_json("header 'x-api-key' is wrong.", code=401)
+        return error_response_json("Value of header 'x-api-key' is invalid.", code=401)
 
     data = request.get_json(force=True)
     try:
