@@ -8,7 +8,7 @@ from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.trace import get_tracer_provider
 from requests.exceptions import HTTPError
 
-from app import allegro_client, auth
+from app import allegro_client
 from app.config import (
     IS_DEV,
     API_KEY,
@@ -33,7 +33,7 @@ def get_all():
     try:
         incoming_api_key = request.headers["x-api-key"]
     except KeyError:
-        return error_response_json("required header x-api-key not found.")
+        return error_response_json("required header x-api-key not found.", code=401)
     if incoming_api_key != API_KEY:
         return error_response_json("header 'x-api-key' is wrong.", code=401)
 
