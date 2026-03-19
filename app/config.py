@@ -7,7 +7,9 @@ from flask.json.provider import DefaultJSONProvider
 
 BASE_PATH = os.path.abspath(os.path.dirname(__file__))
 
-OTAP_ENV = os.getenv("MA_OTAP_ENV")
+OTAP_ENV = os.getenv("MA_OTAP_ENV", "development")
+DEV_API_KEY = "dev-api-key"
+API_KEY = os.getenv("MA_API_KEY", DEV_API_KEY)
 
 # Environment determination
 IS_PRODUCTION = OTAP_ENV == "production"
@@ -15,10 +17,8 @@ IS_ACCEPTANCE = OTAP_ENV == "acceptance"
 IS_DEV = OTAP_ENV == "development"
 IS_TEST = OTAP_ENV == "test"
 
-if IS_DEV:
-    API_KEY = os.getenv("MA_API_KEY")
-else:
-    API_KEY = "dev-api-key"
+if not IS_DEV and API_KEY == DEV_API_KEY:
+    raise Exception("DEV_API_KEY is used as API_KEY outside of development")
 
 IS_TAP = IS_PRODUCTION or IS_ACCEPTANCE or IS_TEST
 IS_AP = IS_ACCEPTANCE or IS_PRODUCTION
