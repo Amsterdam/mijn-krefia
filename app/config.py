@@ -17,9 +17,6 @@ IS_ACCEPTANCE = OTAP_ENV == "acceptance"
 IS_DEV = OTAP_ENV == "development"
 IS_TEST = OTAP_ENV == "test"
 
-if not IS_DEV and API_KEY == DEV_API_KEY:
-    raise Exception("DEV_API_KEY is used as API_KEY outside of development")
-
 IS_TAP = IS_PRODUCTION or IS_ACCEPTANCE or IS_TEST
 IS_AP = IS_ACCEPTANCE or IS_PRODUCTION
 IS_OT = IS_DEV or IS_TEST

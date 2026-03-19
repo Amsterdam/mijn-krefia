@@ -11,11 +11,15 @@ from requests.exceptions import HTTPError
 from app import allegro_client
 from app.config import (
     IS_DEV,
+    DEV_API_KEY,
     API_KEY,
     UpdatedJSONProvider,
     get_application_insights_connection_string,
 )
 from app.helpers import error_response_json, success_response_json
+
+if not IS_DEV and API_KEY == DEV_API_KEY:
+    raise Exception("DEV_API_KEY is used as API_KEY outside of development")
 
 # See also: https://medium.com/@tedisaacs/auto-instrumenting-python-fastapi-and-monitoring-with-azure-application-insights-768a59d2f4b9
 if get_application_insights_connection_string():

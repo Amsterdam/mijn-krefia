@@ -60,7 +60,7 @@ class ApiTests(unittest.TestCase):
         response = self.client.post(
             "/krefia/all",
             headers=get_api_key_headers(),
-            json=create_bsn_body(bsn="123")
+            json=create_bsn_body(bsn="123"),
         )
         self.assertEqual(response.status_code, 200)
         data = response.get_json()
