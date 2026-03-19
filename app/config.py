@@ -7,7 +7,7 @@ from flask.json.provider import DefaultJSONProvider
 
 BASE_PATH = os.path.abspath(os.path.dirname(__file__))
 
-OTAP_ENV = os.getenv("MA_OTAP_ENV", "development")
+OTAP_ENV = os.getenv("MA_OTAP_ENV", "production")
 DEV_API_KEY = "dev-api-key"
 API_KEY = os.getenv("MA_API_KEY", DEV_API_KEY)
 
