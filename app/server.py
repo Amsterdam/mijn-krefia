@@ -65,7 +65,6 @@ def health_check():
 def handle_error(error):
     error_message_original = f"{type(error)}:{str(error)}"
 
-    msg_auth_exception = "Auth error occurred"
     msg_request_http_error = "Request error occurred"
     msg_server_error = "Server error occurred"
 
