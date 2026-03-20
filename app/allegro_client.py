@@ -39,8 +39,6 @@ notification_urls = {
 
 
 def get_client(service_name: str):
-    global allegro_client
-
     if service_name not in allegro_client:
         logging.info(f"Establishing a connection with Allegro service {service_name}")
 
