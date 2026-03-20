@@ -45,7 +45,7 @@ def get_all():
     try:
         bsn = data["bsn"]
     except KeyError:
-        return error_response_json("required field bsn not found.")
+        return error_response_json("required field bsn not found.", 400)
 
     with tracer.start_as_current_span("/all"):
         content = allegro_client.get_all(bsn)
