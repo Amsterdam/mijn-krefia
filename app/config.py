@@ -7,7 +7,9 @@ from flask.json.provider import DefaultJSONProvider
 
 BASE_PATH = os.path.abspath(os.path.dirname(__file__))
 
-OTAP_ENV = os.getenv("MA_OTAP_ENV")
+OTAP_ENV = os.getenv("MA_OTAP_ENV", "production")
+DEV_API_KEY = "dev-api-key"
+API_KEY = os.getenv("MA_API_KEY", DEV_API_KEY)
 
 # Environment determination
 IS_PRODUCTION = OTAP_ENV == "production"
@@ -19,9 +21,6 @@ IS_TAP = IS_PRODUCTION or IS_ACCEPTANCE or IS_TEST
 IS_AP = IS_ACCEPTANCE or IS_PRODUCTION
 IS_OT = IS_DEV or IS_TEST
 IS_AZ = os.getenv("IS_AZ", False)
-
-# App constants
-VERIFY_JWT_SIGNATURE = os.getenv("VERIFY_JWT_SIGNATURE", IS_AP)
 
 ALLEGRO_SOAP_ENDPOINT = os.getenv("ALLEGRO_SOAP_ENDPOINT", None)
 ALLEGRO_SOAP_UA_STRING = "Mijn Amsterdam Krefia API"

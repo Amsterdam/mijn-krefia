@@ -39,8 +39,6 @@ notification_urls = {
 
 
 def get_client(service_name: str):
-    global allegro_client
-
     if service_name not in allegro_client:
         logging.info(f"Establishing a connection with Allegro service {service_name}")
 
@@ -270,7 +268,7 @@ def get_schuldhulp_aanvraag(aanvraag_header: dict):
         )
         aanvraag = {
             "title": title,
-            "url": SRV_DETAIL_URL
+            "url": SRV_DETAIL_URL,
             # % (aanvraag_header["RelatieCode"], aanvraag_header["Volgnummer"]),
         }
 
@@ -305,7 +303,7 @@ def get_lening(tpl_header: dict):
 
         lening = {
             "title": title,
-            "url": PL_DETAIL_URL
+            "url": PL_DETAIL_URL,
             # % (
             #     lening_source["InfoHeader"]["RelatieCode"],
             #     lening_source["InfoHeader"]["Volgnummer"],
@@ -340,7 +338,7 @@ def get_budgetbeheer(relatiecode_fibu: str):
     for tbbr_header in tbbr_headers:
         budgetbeheer_link = {
             "title": title,
-            "url": BBR_DETAIL_URL
+            "url": BBR_DETAIL_URL,
             # % (
             #     tbbr_header["RelatieCode"],
             #     tbbr_header["Volgnummer"],

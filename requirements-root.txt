@@ -6,7 +6,6 @@ flask
 flask_httpauth
 freezegun
 pycryptodome
-pyjwt
 requests
 azure-monitor-opentelemetry
 xmltodict

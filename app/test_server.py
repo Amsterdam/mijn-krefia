@@ -1,15 +1,25 @@
 import os
+import unittest
 from unittest import mock
 
 from app import config
-from app.auth import FlaskServerTestCase
+from app.allegro_client import allegro_client
 from app.fixtures.mocks import mock_client, mock_clients
 
 config.KREFIA_SSO_KREDIETBANK = "https://localhost/kredietbank/sso-login"
 config.KREFIA_SSO_FIBU = "https://localhost/fibu/sso-login"
 config.ALLEGRO_SOAP_ENDPOINT = "https://localhost/SOAP"
+config.API_KEY = "test-api-key"
 
 from app.server import app
+
+
+def create_bsn_body(bsn):
+    return {"bsn": bsn}
+
+
+def get_api_key_headers(api_key: str = config.API_KEY):
+    return {"x-api-key": api_key}
 
 
 @mock.patch.dict(
@@ -20,8 +30,9 @@ from app.server import app
         "MA_OTAP_ENV": "unittesting",
     },
 )
-class ApiTests(FlaskServerTestCase):
-    app = app
+class ApiTests(unittest.TestCase):
+    def setUp(self):
+        self.client = app.test_client()
 
     def test_status(self):
         response = self.client.get("/status/health")
@@ -46,7 +57,11 @@ class ApiTests(FlaskServerTestCase):
         ),
     )
     def test_get_all_no_relaties(self):
-        response = self.get_secure("/krefia/all")
+        response = self.client.post(
+            "/krefia/all",
+            headers=get_api_key_headers(),
+            json=create_bsn_body(bsn="123"),
+        )
         self.assertEqual(response.status_code, 200)
         data = response.get_json()
 
@@ -67,9 +82,13 @@ class ApiTests(FlaskServerTestCase):
             ],
         ),
     )
-    def test_get_all_no_login(self):
-        response = self.get_secure("/krefia/all")
-        self.assertEqual(response.status_code, 500)
+    def test_get_all_invalid_api_key(self):
+        response = self.client.post(
+            "/krefia/all",
+            headers=get_api_key_headers(api_key="invalid-api-key"),
+            json=create_bsn_body(bsn="123"),
+        )
+        self.assertEqual(response.status_code, 401)
         data = response.get_json()
 
         self.assertEqual(data["status"], "ERROR")
@@ -107,7 +126,11 @@ class ApiTests(FlaskServerTestCase):
         ),
     )
     def test_get_all_response_variations(self):
-        response = self.get_secure("/krefia/all")
+        response = self.client.post(
+            "/krefia/all",
+            headers=get_api_key_headers(),
+            json=create_bsn_body(bsn="123"),
+        )
         data = response.get_json()
 
         expected = {
@@ -130,11 +153,18 @@ class ApiTests(FlaskServerTestCase):
 
         self.assertEqual(data, expected)
 
+    def test_invalid_post_body_returns_error(self):
+        response = self.client.post("/krefia/all", json={})
+        data = response.get_json()
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(data["status"], "ERROR")
+        self.assertFalse("content" in data)
+
     def test_not_authenticated(self):
-        response = self.client.get("/krefia/all")
+        response = self.client.post("/krefia/all", json=create_bsn_body(bsn="123"))
         data = response.get_json()
 
         self.assertEqual(response.status_code, 401)
         self.assertEqual(data["status"], "ERROR")
-        self.assertEqual(data["message"], "Auth error occurred")
-        self.assertEqual("content" not in data, True)
+        self.assertEqual(data["message"], "required header x-api-key not found.")
+        self.assertFalse("content" in data)
