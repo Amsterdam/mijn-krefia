@@ -1,3 +1,4 @@
+import functools
 import logging
 import os
 
@@ -32,24 +33,43 @@ app.json = UpdatedJSONProvider(app)
 FlaskInstrumentor.instrument_app(app)
 
 
+def api_key_auth(fn):
+    @functools.wraps(fn)
+    def inner(*args, **kwargs):
+        try:
+            incoming_api_key = request.headers["x-api-key"]
+        except KeyError:
+            return error_response_json("required header x-api-key not found.", code=401)
+        if incoming_api_key != API_KEY:
+            return error_response_json(
+                "Value of header 'x-api-key' is invalid.", code=401
+            )
+
+        return fn(*args, **kwargs)
+
+    return inner
+
+
+def ensure_bsn(fn):
+    @functools.wraps(fn)
+    def inner(*args, **kwargs):
+        data = request.get_json(force=True)
+        try:
+            bsn = data["bsn"]
+        except KeyError:
+            return error_response_json("required field bsn not found.", code=400)
+        request.bsn = bsn
+        return fn(*args, **kwargs)
+
+    return inner
+
+
 @app.route("/krefia/all", methods=["POST"])
+@api_key_auth
+@ensure_bsn
 def get_all():
-    try:
-        incoming_api_key = request.headers["x-api-key"]
-    except KeyError:
-        return error_response_json("required header x-api-key not found.", code=401)
-    if incoming_api_key != API_KEY:
-        return error_response_json("Value of header 'x-api-key' is invalid.", code=401)
-
-    data = request.get_json(force=True)
-    try:
-        bsn = data["bsn"]
-    except KeyError:
-        return error_response_json("required field bsn not found.", code=400)
-
     with tracer.start_as_current_span("/all"):
-        content = allegro_client.get_all(bsn)
-
+        content = allegro_client.get_all(request.bsn)
         return success_response_json(content)
 
 
