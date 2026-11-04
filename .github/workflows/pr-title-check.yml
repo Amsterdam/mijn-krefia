@@ -1,27 +1,61 @@
 # Taken from: https://levelup.gitconnected.com/enforcing-jira-ticket-formatting-in-github-pr-titles-and-commit-messages-78d9755568df
-name: 'PR Title Check'
+name: "PR Title Check and Format"
+permissions:
+  contents: read
+  pull-requests: write
 on:
   pull_request:
-    types: [opened, edited, synchronize]
+    types: [ opened, edited, synchronize ]
 jobs:
   check-title:
     runs-on: ubuntu-latest
     steps:
-      - name: Check PR title
+      - name: Check and format PR title
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const payload = context.payload
-            const prTitle = payload.pull_request.title
+            const pr = payload.pull_request
 
-            // Titel moet beginnen met mijn-xxxx of Bump!
-            const jiraPattern = /(mijn-\d+|bump!)/gi
-            if (!jiraPattern.test(prTitle)) {
-              console.log('The PR title does not match JIRA ticket format!')
-              // Fails the workflow
-              core.setFailed('PR title does not match JIRA ticket format!')
-            } else {
-              console.log('PR title format is correct.')
+            // Titel moet beginnen met mijn-xxxx-chore
+            const ticketPattern = /^MIJN[\-_ ]\d+[\-_ ](CHORE|FEATURE|BUG)/i
+            const dependabotPattern = /^Build\(deps(-dev)?\): bump/i
+            const dependabotMaintenancePattern = /^Maintenance run/i
+
+            const hasValidPrefix = (str) => ticketPattern.test(prTitle) || dependabotPattern.test(prTitle) || dependabotMaintenancePattern.test(prTitle)
+
+            let prTitle = pr.title
+            if (!hasValidPrefix(prTitle)) {
+              const branchName = pr.head.ref
+              prTitle = branchName
             }
 
+            if (!hasValidPrefix(prTitle)) {
+              console.log('The PR title does not match JIRA ticket format!')
+              core.setFailed('PR title not valid. Please make sure this PR uses the JIRA ticket or dependabot format.')
+
+              return
+            }
+            console.log('PR title format is correct.')
+
+            if (dependabotPattern.test(prTitle) || dependabotMaintenancePattern.test(prTitle)) {
+              return
+            }
+
+            const [prefix] = prTitle.match(ticketPattern)
+            const normalizedPrefix = prefix.replace(/[\s_]+/g, '-').toUpperCase()
+            const normalizedTitle = prTitle.slice(prefix.length).replace(/^[^a-zA-Z0-9]+/, '').replace(/[-_ ]+/g, ' ')
+
+            const capitalize = (str) => `${str.charAt(0).toUpperCase()}${str.slice(1)}`
+            const prTitleNew = `${normalizedPrefix}: ${capitalize(normalizedTitle)}`
+
+            if (prTitle !== prTitleNew) {
+              await github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number,
+                title: prTitleNew
+              })
+              console.log(`PR title updated from ${prTitle} to ${prTitleNew}.`)
+            }
