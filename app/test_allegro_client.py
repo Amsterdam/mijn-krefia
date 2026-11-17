@@ -43,89 +43,89 @@ pp = pprint.PrettyPrinter(indent=4)
 
 
 class AllegroTransportTests(TestCase):
-        wsdl = b"""<wsdl:definitions
-                xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-                xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:tns="http://tempuri.org/">
-            <wsdl:types>
-                <xs:schema targetNamespace="http://tempuri.org/" elementFormDefault="qualified">
-                    <xs:complexType name="AWUserInfo">
-                        <xs:complexContent>
-                            <xs:extension base="tns:UserInfo">
-                                <xs:sequence><xs:element name="Naam" type="xs:string"/></xs:sequence>
-                            </xs:extension>
-                        </xs:complexContent>
-                    </xs:complexType>
-                    <xs:element name="LoginResponse">
-                        <xs:complexType><xs:sequence>
-                            <xs:element name="Result" type="xs:boolean"/>
-                            <xs:element name="aUserInfo" type="tns:AWUserInfo"/>
-                        </xs:sequence></xs:complexType>
-                    </xs:element>
-                </xs:schema>
-            </wsdl:types>
-        </wsdl:definitions>"""
+    wsdl = b"""<wsdl:definitions
+            xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="http://tempuri.org/">
+        <wsdl:types>
+            <xs:schema targetNamespace="http://tempuri.org/" elementFormDefault="qualified">
+                <xs:complexType name="AWUserInfo">
+                    <xs:complexContent>
+                        <xs:extension base="tns:UserInfo">
+                            <xs:sequence><xs:element name="Naam" type="xs:string"/></xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+                <xs:element name="LoginResponse">
+                    <xs:complexType><xs:sequence>
+                        <xs:element name="Result" type="xs:boolean"/>
+                        <xs:element name="aUserInfo" type="tns:AWUserInfo"/>
+                    </xs:sequence></xs:complexType>
+                </xs:element>
+            </xs:schema>
+        </wsdl:types>
+    </wsdl:definitions>"""
 
-        @mock.patch("app.allegro_client.allegro_client", {})
-        def test_missing_userinfo_is_patched_and_response_can_be_parsed(self):
-                with mock.patch.object(Transport, "load", return_value=self.wsdl):
-                        with self.assertRaises(ZeepLookupError):
-                                Client("https://localhost/SOAP?service=LoginService")
-                        with self.assertLogs(level="WARNING") as logs:
-                                client = get_client("LoginService")
-                self.assertIsNotNone(client)
-                self.assertIn("missing UserInfo", logs.output[0])
-                response = etree.fromstring(b"""
-                        <LoginResponse xmlns="http://tempuri.org/">
-                            <Result>true</Result>
-                            <aUserInfo>
-                                <SessionID>test-session</SessionID>
-                                <UserID>AnonymousLoginNA</UserID>
-                                <Naam>Tijdelijke Login</Naam>
-                            </aUserInfo>
-                        </LoginResponse>
-                """)
-                parsed = client.get_element("ns0:LoginResponse").parse(
-                        response, client.wsdl.types
-                )
-                self.assertIs(parsed.Result, True)
-                self.assertEqual(parsed.aUserInfo.SessionID, "test-session")
-                self.assertEqual(parsed.aUserInfo.UserID, "AnonymousLoginNA")
-                self.assertEqual(parsed.aUserInfo.Naam, "Tijdelijke Login")
+    @mock.patch("app.allegro_client.allegro_client", {})
+    def test_missing_userinfo_is_patched_and_response_can_be_parsed(self):
+        with mock.patch.object(Transport, "load", return_value=self.wsdl):
+            with self.assertRaises(ZeepLookupError):
+                    Client("https://localhost/SOAP?service=LoginService")
+            with self.assertLogs(level="WARNING") as logs:
+                    client = get_client("LoginService")
+        self.assertIsNotNone(client)
+        self.assertIn("missing UserInfo", logs.output[0])
+        response = etree.fromstring(b"""
+            <LoginResponse xmlns="http://tempuri.org/">
+                <Result>true</Result>
+                <aUserInfo>
+                    <SessionID>test-session</SessionID>
+                    <UserID>AnonymousLoginNA</UserID>
+                    <Naam>Tijdelijke Login</Naam>
+                </aUserInfo>
+            </LoginResponse>
+        """)
+        parsed = client.get_element("ns0:LoginResponse").parse(
+            response, client.wsdl.types
+        )
+        self.assertIs(parsed.Result, True)
+        self.assertEqual(parsed.aUserInfo.SessionID, "test-session")
+        self.assertEqual(parsed.aUserInfo.UserID, "AnonymousLoginNA")
+        self.assertEqual(parsed.aUserInfo.Naam, "Tijdelijke Login")
 
-        def test_existing_userinfo_is_unchanged(self):
-                content = self.wsdl.replace(
-                        b'<xs:complexType name="AWUserInfo">',
-                        b'<xs:complexType name="UserInfo"/><xs:complexType name="AWUserInfo">',
-                )
+    def test_existing_userinfo_is_unchanged(self):
+        content = self.wsdl.replace(
+            b'<xs:complexType name="AWUserInfo">',
+            b'<xs:complexType name="UserInfo"/><xs:complexType name="AWUserInfo">',
+        )
+        with mock.patch.object(Transport, "load", return_value=content):
+            self.assertEqual(AllegroTransport().load("https://localhost/SOAP"), content)
+
+    def test_unrelated_or_imported_schemas_are_unchanged(self):
+        contents = [
+            self.wsdl.replace(b'base="tns:UserInfo"', b'base="tns:OtherType"'),
+            self.wsdl.replace(
+                b'xmlns:tns="http://tempuri.org/"',
+                b'xmlns:tns="http://example.org/"',
+            ),
+            self.wsdl.replace(
+                b'<xs:complexType name="AWUserInfo">',
+                b'<xs:include schemaLocation="base.xsd"/>'
+                b'<xs:complexType name="AWUserInfo">',
+            ),
+                b"not xml",
+        ]
+        for content in contents:
+            with self.subTest(content=content):
                 with mock.patch.object(Transport, "load", return_value=content):
-                        self.assertEqual(AllegroTransport().load("https://localhost/SOAP"), content)
+                    self.assertEqual(
+                        AllegroTransport().load("https://localhost/SOAP"), content
+                    )
 
-        def test_unrelated_or_imported_schemas_are_unchanged(self):
-                contents = [
-                        self.wsdl.replace(b'base="tns:UserInfo"', b'base="tns:OtherType"'),
-                    self.wsdl.replace(
-                        b'xmlns:tns="http://tempuri.org/"',
-                        b'xmlns:tns="http://example.org/"',
-                    ),
-                    self.wsdl.replace(
-                        b'<xs:complexType name="AWUserInfo">',
-                        b'<xs:include schemaLocation="base.xsd"/>'
-                        b'<xs:complexType name="AWUserInfo">',
-                    ),
-                        b"not xml",
-                ]
-                for content in contents:
-                        with self.subTest(content=content):
-                                with mock.patch.object(Transport, "load", return_value=content):
-                                        self.assertEqual(
-                                                AllegroTransport().load("https://localhost/SOAP"), content
-                                        )
-
-        def test_download_errors_are_not_swallowed(self):
-                with mock.patch.object(Transport, "load", side_effect=ConnectionError):
-                        with self.assertRaises(ConnectionError):
-                                AllegroTransport().load("https://localhost/SOAP")
+    def test_download_errors_are_not_swallowed(self):
+        with mock.patch.object(Transport, "load", side_effect=ConnectionError):
+            with self.assertRaises(ConnectionError):
+                AllegroTransport().load("https://localhost/SOAP")
 
 
 class FlaskTestCase(TestCase):
