@@ -3,6 +3,7 @@ from datetime import date
 from typing import Any
 
 from flask import g
+from lxml import etree
 from requests import ConnectionError
 from zeep import Client
 from zeep.settings import Settings
@@ -38,12 +39,66 @@ notification_urls = {
 }
 
 
+class AllegroTransport(Transport):
+    def load(self, url):
+        content = super().load(url)
+        try:
+            root = etree.fromstring(
+                content,
+                parser=etree.XMLParser(resolve_entities=False, no_network=True),
+            )
+        except etree.XMLSyntaxError:
+            return content
+
+        namespaces = {
+            "xs": "http://www.w3.org/2001/XMLSchema",
+            "wsdl": "http://schemas.xmlsoap.org/wsdl/",
+        }
+        if root.xpath(
+            "//xs:include | //xs:import | //wsdl:import", namespaces=namespaces
+        ):
+            return content
+        schemas = root.xpath(
+            "//xs:schema[@targetNamespace='http://tempuri.org/']",
+            namespaces=namespaces,
+        )
+        if len(schemas) != 1:
+            return content
+        schema = schemas[0]
+        if schema.xpath("./xs:complexType[@name='UserInfo']", namespaces=namespaces):
+            return content
+        extensions = schema.xpath(
+            "./xs:complexType[@name='AWUserInfo']/xs:complexContent/xs:extension",
+            namespaces=namespaces,
+        )
+        if len(extensions) != 1:
+            return content
+        extension = extensions[0]
+        prefix, _, type_name = extension.get("base", "").rpartition(":")
+        if (
+            type_name != "UserInfo"
+            or extension.nsmap.get(prefix or None) != "http://tempuri.org/"
+        ):
+            return content
+
+        schema.append(etree.fromstring(b"""
+            <xs:complexType xmlns:xs="http://www.w3.org/2001/XMLSchema" name="UserInfo">
+              <xs:sequence>
+                <xs:element name="SessionID" type="xs:string"/>
+                <xs:element name="UserID" type="xs:string"/>
+              </xs:sequence>
+            </xs:complexType>
+        """))
+        logging.warning("Applying temporary Allegro WSDL workaround: missing UserInfo")
+        return etree.tostring(root, encoding="utf-8", xml_declaration=True)
+
+
 def get_client(service_name: str):
     if service_name not in allegro_client:
         logging.info(f"Establishing a connection with Allegro service {service_name}")
 
         try:
-            transport = Transport(timeout=ALLEGRO_REQUEST_TIMEOUT)
+            transport = AllegroTransport(timeout=ALLEGRO_REQUEST_TIMEOUT)
             client = Client(
                 wsdl=get_allegro_service_description(service_name),
                 transport=transport,
