@@ -70,9 +70,9 @@ class AllegroTransportTests(TestCase):
     def test_missing_userinfo_is_patched_and_response_can_be_parsed(self):
         with mock.patch.object(Transport, "load", return_value=self.wsdl):
             with self.assertRaises(ZeepLookupError):
-                    Client("https://localhost/SOAP?service=LoginService")
+                Client("https://localhost/SOAP?service=LoginService")
             with self.assertLogs(level="WARNING") as logs:
-                    client = get_client("LoginService")
+                client = get_client("LoginService")
         self.assertIsNotNone(client)
         self.assertIn("missing UserInfo", logs.output[0])
         response = etree.fromstring(b"""
@@ -113,7 +113,7 @@ class AllegroTransportTests(TestCase):
                 b'<xs:include schemaLocation="base.xsd"/>'
                 b'<xs:complexType name="AWUserInfo">',
             ),
-                b"not xml",
+            b"not xml",
         ]
         for content in contents:
             with self.subTest(content=content):
